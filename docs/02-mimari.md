@@ -63,6 +63,8 @@ Picovoice Porcupine elendi: Türkçe modeli yok ve ücretsiz katmanı 30 Haziran
 
 Yanlış tetiklemeyi azaltmak için: tetiklemeden sonra 1,5 sn içinde konuşma başlamazsa adacık sessizce kapanır ve "Efendim?" tekrar edilmez.
 
+**Tek nefeste çağırma:** uyandırma dinleyicisi son birkaç saniyeyi bir halka tamponda tutar. "Optik" yakalandığında (kelime bittikten ~0,3–0,5 sn sonra) konuşma sürüyorsa "Efendim?" çalınmaz; konuşma algılama tampondaki sesle, kelimenin bittiği yerden başlar ve yazıya çevirmeden önce baştaki "Optik" atılır. Uyandırma dinleyicisi ile konuşma sırasındaki yankı gidermeli yakalama arasında geçiş ses kaybetmemeli. **Ölç:** "Optik"ten sonra durmadan konuşulduğunda yakalama oranı (model kelimeden sonra kısa bir boşluk bekliyor).
+
 ### 3.2 Konuşmayı yazıya çevirme
 
 - **Birincil: WhisperKit** (Argmax, MIT). Whisper modellerini Core ML ile Apple Silicon'da çalıştırır, çok dilli. macOS 14+ ve Apple Silicon ister. Paket `argmax-oss-swift` deposundaki `WhisperKit` ürünü, 1.1.1'e sabit.
@@ -168,7 +170,8 @@ log show --last 10m --info --predicate 'subsystem == "io.github.rivalth.optik" A
 - Anahtarlar (Claude, konuşma sentezi, uyandırma kelimesi) Keychain'de. İlk açılışta ayarlar ekranından girilir.
 - Ses verisi diske yazılmaz, ağa çıkmaz. Hata ayıklama kaydı varsayılan kapalı ve ayrı bir ayarın arkasında.
 - Günlüklerde kişi adı, tutar, not metni yok. Yalnızca tür ve süre.
-- Erişilebilirlik izni gerekmiyor. İstenen izinler: mikrofon (aşama 2) ve ⌘ ⌘ kısayolu için Girdi İzleme. Girdi İzleme verilmezse ek kısayol ve menüden çağırma yine çalışır.
+- Erişilebilirlik izni gerekmiyor. İstenen izinler: mikrofon (aşama 2) ve ⌘ ⌘ kısayolu için Girdi İzleme. Girdi İzleme verilmezse ek kısayol ve menüden çağırma yine çalışır. Aşama 4'te: Kişiler, Mail ve Mesajlar için Otomasyon, kullanıcının açtığı klasörlere erişim.
+- Mesajlar ve e-posta (aşama 4, `docs/01-urun.md` bölüm 6): gönderme aracı yalnızca kullanıcının adacıkta onayladığı taslağı gönderir, LLM taslağı kendisi gönderemez. E-posta ve mesaj içeriği LLM'e veri olarak, ayrı bir blokta gider; içindeki talimatlar uygulanmaz. **Doğrula:** sandbox içinden Mail ve Mesajlar'a Apple Events ile gönderme (`com.apple.security.automation.apple-events` ve hedef uygulama yetkileri), WhatsApp için `NSSharingService` ile dosya ve metin hazırlama, Spotlight'ta (`NSMetadataQuery`) sandbox sınırları.
 - LLM'e giden her istekte hangi verinin gittiği `conversation_log` içinde görülebilir.
 
 ## 8. Bağımlılıklar

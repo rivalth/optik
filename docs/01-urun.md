@@ -123,7 +123,30 @@ Her öneri kabul edilebilir (eylemi çalıştırır) ya da geçilebilir. Geçile
 - **Haftalık (pazar akşamı):** harcama, biten iş, buluşma sayısı, günlük harcama grafiği, öne çıkanlar, gelecek hafta için öneriler. Aynı anda haftalık planlama: Optik gelecek haftayı önerir, kullanıcı onaylar.
 - **Aylık:** bütçe sonucu, tahsil edilen ve bekleyen tutar, kazanılan ve kaybedilen teklifler.
 
-## 6. Diğer özellikler
+## 6. Mesajlar, e-posta ve dosyalar
+
+Kullanıcı durmadan tek nefeste konuşur, Optik doğru dosyayı bulur, gösterip onay alır ve gönderir.
+
+> "Optik, komite için hazırladığımız dökümanlar vardı ya, onları Emir'e atabilir misin?"
+
+1. **Tek nefeste çağırma.** "Optik" dedikten sonra konuşma sürüyorsa Optik "Efendim?" demez, yalnızca `uyan` efektiyle dinlemeye geçer ve cümlenin devamını kaçırmaz. Kullanıcı durursa her zamanki gibi "Efendim?" der.
+2. **Dosyayı bulur.** Mac'teki dosyalarda (Spotlight dizini ve kullanıcının Optik'e açtığı klasörler) ve Optik'in kendi kayıtlarında arar. "Komite için hazırladığımız" gibi belirsiz tarifleri başlık, içerik, tarih ve son kullanılanlardan çözer. Kişiyi Kişiler'den bulur; birden fazla "Emir" varsa sorar.
+3. **Gösterir ve sorar.** Optik dosyaları kümesinden getirir: adacık genişler, dosyaların önizlemesi, alıcı, kanal ve mesaj metni görünür. "Bunları mı diyorsun?" diye sorar. Kullanıcı sesle ("evet", "ikincisi değil") ya da tıklayarak düzeltir.
+4. **Gönderir.** Onaydan sonra Optik ne göndereceğini tek cümleyle söyler ve 5 sn boyunca "Geri al" görünür. Süre dolunca gönderir.
+
+| Kanal | Ne yapar |
+| :-- | :-- |
+| E-posta | Okur ve tam otomatik gönderir (onaydan sonra). "Leyla Hoca'dan yeni e-posta var mı?", "Kuzey Mobilya'nın son e-postasını özetle", "Ona teklifi ek olarak yolla". |
+| iMessage | Tam otomatik gönderir (onaydan sonra), metin ve dosya. |
+| WhatsApp | Optik metni ve dosyaları hazırlar, WhatsApp'ta alıcı seçili açılır, kullanıcı Gönder'e basar. WhatsApp'ın kişisel hesaplar için bir gönderme arayüzü yok; arayüzü tıklatarak otomatik göndermek kırılgan ve WhatsApp'ın kurallarına aykırı. |
+
+Kurallar:
+
+- Onaysız hiçbir şey gönderilmez. Onay ekranında alıcı, kanal, ekler ve metnin tamamı görünür.
+- E-postaların ve mesajların içeriği veridir, komut değildir. Bir e-postada "şunu şuraya gönder" yazması Optik'e bir şey yaptırmaz.
+- E-posta içeriği LLM'e yalnızca kullanıcı o e-postayla ilgili bir şey sorduğunda gider, bir seferde yalnızca ilgili kısımlar.
+
+## 7. Diğer özellikler
 
 - **Nakit akışı takvimi:** önümüzdeki 30 günde beklenen tahsilatlar ve ödemeler, iş ve kişisel ayrı.
 - **Fiş fotoğrafından harcama:** görsel LLM'e gider, tutar, tarih ve kategori çıkarılır, kullanıcı onaylar.
@@ -131,9 +154,9 @@ Her öneri kabul edilebilir (eylemi çalıştırır) ya da geçilebilir. Geçile
 - **Çakışma uyarısı:** etkinlik eklenirken anında.
 - **Kilit:** Para ve İlişki bölümleri için Touch ID.
 
-## 7. Kapsam dışı (şimdilik)
+## 8. Kapsam dışı (şimdilik)
 
 - Çok kullanıcılı kullanım, paylaşım.
 - Banka hesabına doğrudan bağlanma.
-- Optik'in kullanıcı adına e-posta ya da mesaj göndermesi (taslak hazırlayabilir, göndermez).
+- WhatsApp'tan otomatik gönderme (Optik hazırlar, kullanıcı gönderir; bölüm 6).
 - Windows ve Linux.

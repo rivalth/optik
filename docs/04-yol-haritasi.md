@@ -28,9 +28,10 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 - ✅ `SpeechSynthesizer` (ElevenLabs, Jessica): sabit cümleler dosyadan, değişken yanıt akışla. Önbellek henüz yok.
 - Ayarlarda kişiye özel ElevenLabs sesi: ses kimliği gir, sabit cümleleri yerelde yeniden üret, varsayılana dön.
 - `WakeWordDetector`: önce doğrulama (bkz. mimari 3.1), sonra bağlama.
+- Tek nefeste çağırma: "Optik" dedikten sonra konuşma sürüyorsa "Efendim?" atlanır, cümlenin devamı kayıt tamponundan alınır (`docs/01-urun.md` bölüm 6).
 - ✅ Gecikme ölçümü. Kayıt şimdilik sistem günlüğüne, aşama 3'te `conversation_log`'a.
 
-**Kabul:** "Optik" → ilk ses (`uyan` efekti) 250 ms altı, "Efendim?" hemen ardından. "Saat kaç?" gibi bir soruda konuşma sonu → ilk ses 1,5 sn altı (10 denemenin ortancası). Optik konuşurken söz kesilince susuyor. Ağ yokken anlaşılır biçimde bildiriyor. 30 dakikalık ortam sesinde en fazla 1 yanlış tetikleme.
+**Kabul:** "Optik" → ilk ses (`uyan` efekti) 250 ms altı, "Efendim?" hemen ardından. "Saat kaç?" gibi bir soruda konuşma sonu → ilk ses 1,5 sn altı (10 denemenin ortancası). Optik konuşurken söz kesilince susuyor. Ağ yokken anlaşılır biçimde bildiriyor. 30 dakikalık ortam sesinde en fazla 1 yanlış tetikleme. "Optik, yarın saat kaçta dersim var?" durmadan söylenince 10 denemenin en az 9'unda "Efendim?" araya girmiyor ve cümle eksiksiz yazıya geçiyor.
 
 ## Aşama 3: Veri ve günlük hayat
 
@@ -41,7 +42,18 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 
 **Kabul:** `docs/01-urun.md` bölüm 4'teki örnek cümlelerden para ile ilgili olmayanların hepsi doğru yere yazılıyor. Geri al çalışıyor. Bir bölümde yapılan değişiklik diğerlerine anında yansıyor.
 
-## Aşama 4: Para, ilişki, müşteriler
+## Aşama 4: Mesajlar, e-posta ve dosyalar
+
+- Dosya bulma: Spotlight dizini ve kullanıcının açtığı klasörler, Optik'in kendi kayıtları. Belirsiz tarifi ("komite için hazırladığımız") LLM araçla çözer.
+- Kişiler'den alıcı bulma, aynı adda birden fazla kişide soru.
+- Onay ekranı: adacıkta dosya önizlemeleri, alıcı, kanal, metin. Sesle ya da tıklayarak düzeltme. Optik dosyaları kümesinden getirir (yeni animasyon, karakter belgesine eklenir).
+- Gönderme: e-posta ve iMessage tam otomatik (onaydan sonra 5 sn "Geri al"), WhatsApp hazırla-ve-aç.
+- E-posta okuma: yeni e-postalar, kişiye ya da müşteriye göre arama, özet.
+- Yeni araçlar `llm/araclar.json` içine: dosya arama, kişi bulma, e-posta okuma, gönderme taslağı. Gönderme aracı yalnızca kullanıcının onayladığı taslağı gönderir.
+
+**Kabul (başarı noktası):** kullanıcı Optik'i beklemeden tek nefeste "Optik, komite için hazırladığımız dökümanlar vardı ya, onları Emir'e atabilir misin?" der. Optik doğru dosyaları bulur, önizlemeleriyle gösterip "Bunları mı diyorsun?" diye sorar, onaydan sonra seçilen kanaldan gönderir. Konuşma sonundan önizlemenin görünmesine kadar 3 sn altı. Yanlış dosyada kullanıcı tek cümleyle düzeltebiliyor. Hiçbir şey onaysız gitmiyor (testle). Bir e-postanın içindeki talimat Optik'e bir şey yaptırmıyor (testle).
+
+## Aşama 5: Para, ilişki, müşteriler
 
 - Bütçe, kategoriler, harcama, nakit akışı takvimi.
 - İlişki bölümü, önemli günler.
@@ -51,7 +63,7 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 
 **Kabul:** bölüm 4'teki para cümlelerinin hepsi doğru. Kilometre taşı tamamlanınca bağlı ödeme "vadesi geldi" oluyor, ödeme alınınca kalan tutar düşüyor. Kuruş hesabında yuvarlama hatası yok (testle). Kilitliyken LLM isteğinde bu veriler yok (testle).
 
-## Aşama 5: Optik haber verir
+## Aşama 6: Optik haber verir
 
 - Kural motoru ve ilk kural seti (bölüm 5.2).
 - Zamanlayıcı, hatırlatıcılar, haber verme önceliği.
@@ -60,14 +72,14 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 
 **Kabul:** her kuralın birim testi var. Sunum ya da tam ekranda bildirim bekliyor. Geçilen öneri 7 gün gelmiyor. Brifing 20 saniyeyi aşmıyor.
 
-## Aşama 6: Derinlik
+## Aşama 7: Derinlik
 
 - Fiş fotoğrafından harcama.
 - Hafıza araması.
 - Sistem takvimiyle iki yönlü eşleme (EventKit).
 - Yedekleme ve dışa aktarma (JSON, CSV).
 
-## Aşama 7: Mobil eşlikçi
+## Aşama 8: Mobil eşlikçi
 
 - Senkron servisi.
 - Telefon uygulaması: Bugün, Özet, hızlı kayıt, bildirimler.
@@ -89,6 +101,8 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | Sabit cümlelerin lisansı | Jessica ile ElevenLabs ücretsiz planında üretildi, `assets/sesler/konusma/` altında. CC BY 4.0 dışında: yalnızca ticari olmayan kullanım, ElevenLabs atfıyla (`LICENSE-ASSETS`, `konusma/OKU.txt`). Optik ticari bir ürün olursa ücretli planla yeniden üretilir. |
 | 2026-11-16 | Kapalı adacık | 312 × 38 pt kalır (çentikten 6 pt aşağı taşar). Renk `#000000`; LCD ekranda kamera kutusundan biraz açık görünmesi ekranın arka ışığından. |
 | 2026-11-16 | En düşük macOS | macOS 15. Uyandırma kelimesi için kullanılacak `speech-swift` macOS 15 istiyor. Optik zaten Apple Silicon şartı koyuyor ve bütün Apple Silicon Mac'ler macOS 15'e güncellenebildiği için kimse dışarıda kalmıyor. |
+| 2026-11-16 | Mesajlar ve e-posta | Optik e-postayı okur ve gönderir, iMessage gönderir: ikisi de onaydan sonra tam otomatik. WhatsApp'ta metni ve dosyaları hazırlar, kullanıcı Gönder'e basar (kişisel hesaplar için resmî arayüz yok). Önceki "Optik mesaj göndermez" kapsamı kalktı. Yeni aşama 4; sonraki aşamalar bir kaydı. |
+| 2026-11-16 | Tek nefeste çağırma | "Optik"ten sonra konuşma sürüyorsa "Efendim?" atlanır, cümle kaçırılmaz. Aşama 2'nin kabulüne eklendi. |
 
 ## Açık sorular
 
@@ -101,3 +115,4 @@ Bunlara dayanan bir iş yapmadan önce kullanıcıya sor.
 5. **Ödeme planı şablonları:** varsayılan %40 / %30 / %30 doğru mu, iş türüne göre değişiyor mu?
 6. **Para birimi:** yalnızca TL mi, döviz teklifleri var mı?
 7. **Brifing saatleri:** 08.30 ve 21.30 uygun mu?
+8. **E-posta hesabı:** Apple Mail üzerinden mi (Mac'te kurulu hesaplar), yoksa doğrudan Gmail / IMAP mi? Gönderme ve okuma yolu buna göre seçilir.
