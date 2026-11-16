@@ -179,7 +179,7 @@ final class OptikCharacterView: NSView {
             setFrame(backSway, CharacterGeometry.swayFrame, anchor: CGPoint(x: 0.5, y: 1))
             body.addSublayer(backSway)
             innerWall.frame = CharacterGeometry.innerWallFrame
-            innerWall.path = CGPath(ellipseIn: CGRect(origin: .zero, size: CharacterGeometry.innerWallFrame.size), transform: nil)
+            innerWall.path = CharacterGeometry.innerWallPath
             innerWall.fillColor = NSColor(DesignTokens.CharacterPalette.innerWall).cgColor
             backSway.addSublayer(innerWall)
 

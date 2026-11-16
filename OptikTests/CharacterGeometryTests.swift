@@ -45,6 +45,32 @@ struct CharacterGeometryTests {
         #expect(cut.maxY > box.height * 0.85)
     }
 
+    @Test func innerWallFillsEveryNotchOfTheBreak() {
+        // Inside the egg, below the zigzag and above the rim's center line,
+        // nothing may show through: the inner wall has to cover it.
+        let outline = CharacterGeometry.shellOutline
+        let shell = CharacterGeometry.shellPath
+        let wall = CharacterGeometry.innerWallPath
+        var uncovered: [CGPoint] = []
+        for x in stride(from: 0.25, to: 120.0, by: 0.5) {
+            for y in stride(from: 118.25, to: 131.0, by: 0.5) {
+                let point = CGPoint(x: x, y: y)
+                if outline.contains(point), !shell.contains(point), !wall.contains(point) {
+                    uncovered.append(point)
+                }
+            }
+        }
+        #expect(uncovered.isEmpty, "uncovered: \(uncovered.prefix(5))")
+    }
+
+    @Test func innerWallStaysInsideTheEgg() {
+        let wall = CharacterGeometry.innerWallPath.boundingBox
+        #expect(wall.minX >= 0 && wall.maxX <= 120)
+        // At the rim's height the egg is narrower than 120, so the clip must bite.
+        #expect(!CharacterGeometry.innerWallPath.contains(CGPoint(x: 1, y: 131)))
+        #expect(CharacterGeometry.innerWallPath.contains(CGPoint(x: 60, y: 131)))
+    }
+
     @Test func shadeSitsOnTheLowerRight() {
         // Inset shadow offset (-10, -12): a crescent inside the right edge, nothing on the left.
         let shade = CharacterGeometry.shellShadePath

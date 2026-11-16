@@ -24,7 +24,13 @@ enum CharacterGeometry {
     static let swayFrame = CGRect(x: 0, y: 0, width: 180, height: 160)
 
     /// ic-duvar: the inside of the shell seen through the break. Parent: sway.
-    static let innerWallFrame = CGRect(x: 44, y: 126, width: 92, height: 22)
+    /// Same box and outline as the shell, clipped to `ellipse(60px 11px at 60px 131px)`,
+    /// so it fills every notch of the zigzag without showing past the egg's sides.
+    static let innerWallFrame = shellFrame
+
+    nonisolated(unsafe) static let innerWallPath: CGPath = shellOutline.intersection(
+        CGPath(ellipseIn: CGRect(x: 0, y: 120, width: 120, height: 22), transform: nil)
+    )
 
     /// bacak: legs pivot on their top center. Parent: body.
     static let legSize = CGSize(width: 30, height: 46)
