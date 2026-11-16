@@ -7,6 +7,11 @@ Bu lisans şu klasörlerdeki her şey için geçerlidir:
                     animasyon referansı, tasarım tokenları)
 - tasarim-kaynak/  (ekran tasarımlarının kaynak dosyaları)
 
+İstisna: assets/sesler/konusma/ (Optik'in sabit cümleleri) bu lisansa girmez.
+Bu dosyalar ElevenLabs (https://elevenlabs.io) ile üretilmiştir ve ElevenLabs
+kullanım koşullarına tabidir: yalnızca ticari olmayan kullanım, ElevenLabs atfıyla.
+Ayrıntı: assets/sesler/konusma/OKU.txt
+
 Bu dosyalar Creative Commons Attribution 4.0 International (CC BY 4.0)
 lisansıyla dağıtılır: https://creativecommons.org/licenses/by/4.0/
 

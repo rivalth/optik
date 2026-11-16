@@ -54,10 +54,12 @@ mikrofon (16 kHz mono)
 
 Dört protokol uygulaması, bu sırayla denenir:
 
-1. **Picovoice Porcupine.** Özel uyandırma kelimesi Picovoice Console'dan saniyeler içinde eğitilir, macOS arm64 desteklenir, Swift'ten kullanılır. Erişim anahtarı gerekir. **Doğrula:** Türkçe model var mı ve "Optik" kelimesi Türkçe ya da başka bir dil modeliyle güvenilir tetikleniyor mu. Lisans koşullarını kişisel kullanım için kontrol et.
-2. **Açık kaynak anahtar kelime tespiti** (örnek: sherpa-onnx keyword spotting ya da openWakeWord ile eğitilmiş özel model). Porcupine uymazsa.
+1. **Açık sözcük dağarcıklı anahtar kelime tespiti** (sherpa-onnx KWS Zipformer, Swift sarmalayıcısı `speech-swift`). Eğitim gerekmez: anahtar kelime metin olarak verilir. Türkçe model yok; "Optik" İngilizce "optic" ile neredeyse aynı okunduğu için İngilizce model "optic" anahtarıyla denenir. **Ölç:** boşta CPU (%2 bütçesi), 30 dakika ortam sesinde yanlış tetikleme, Türkçe söyleyişte yakalama oranı.
+2. **Kendi eğittiğimiz küçük model** (openWakeWord tarzı, binlerce sentezlenmiş "Optik" söyleyişiyle eğitilir, ONNX). 1. ölçümü geçemezse.
 3. **Sürekli küçük model yazıya çevirme + metinde "optik" arama.** Güvenilir ama boşta CPU bütçesini zorlar. Yalnızca geçici çözüm.
-4. **Klavye kısayolu.** Her zaman çalışır, diğerleri kapalıyken tek yol.
+4. **Klavye kısayolu (⌘ ⌘).** Her zaman çalışır, diğerleri kapalıyken tek yol.
+
+Picovoice Porcupine elendi: Türkçe modeli yok ve ücretsiz katmanı 30 Haziran 2026'da kapandı. Açık kaynak bir projede herkesten ücretli lisans istenemez.
 
 Yanlış tetiklemeyi azaltmak için: tetiklemeden sonra 1,5 sn içinde konuşma başlamazsa adacık sessizce kapanır ve "Efendim?" tekrar edilmez.
 
@@ -90,8 +92,13 @@ Claude API, Messages uç noktası, akışla.
 Optik'in tek, tutarlı, kendine ait bir sesi vardır. Ses kimliği tarifi `llm/ses-kimligi.md` içinde.
 
 - **Sabit cümleler** (`llm/sabit-cumleler.json`): "Efendim?", "Tamam, kaydettim." gibi sık kullanılanlar seçilen sesle bir kez üretilir, `assets/sesler/konusma/` altına konur ve gecikmesiz çalınır. 250 ms hedefini tutturan şey budur.
-- **Değişken yanıtlar:** akışla çalışan, düşük gecikmeli, Türkçe destekleyen bir konuşma sentezi servisi. İlk aday: ElevenLabs'in düşük gecikmeli modeli (Flash v2.5, yaklaşık 75 ms model gecikmesi, 32 dil, WebSocket ile akış). **Doğrula:** güncel model listesi (daha yeni modeller çıkmış), Türkçe kalitesi, tasarlanan sesin bu modelde kullanılabildiği.
-- **Yedek:** ağ yoksa `AVSpeechSynthesizer` Türkçe sesi. Karakter sesiyle aynı değildir, yalnızca yedektir.
+- **Değişken yanıtlar:** ElevenLabs, akışla. Kör dinleme testinde (9 aday: ElevenLabs hazır ve tasarlanmış sesler, Cartesia Sonic 3.5) seçilen ses **Jessica** (ElevenLabs hazır sesi, `cgSgspJ2msm6clMCkdW9`).
+  - Canlı yanıt `eleven_v4_turbo` ile, `language_code: tr`. Ölçülen ilk ses 260–530 ms (her istekte yeni TLS bağlantısıyla; açık bağlantı ve WebSocket ile daha düşük). Bütçe sıkışırsa `eleven_flash_v2_5` denenir.
+  - Sabit cümleler kalite modeli `eleven_v4` ile üretilir; gecikme orada önemsiz.
+  - Hazır sesler ücretsiz planda da API'den kullanılabilir. Kütüphane sesleri ve API'den ses tasarımı ücretli plan ister; arayüzde tasarlanan ya da klonlanan ses ise hesabın kendi sesidir, API'den kullanılır.
+  - Sağlayıcı `SpeechSynthesizer` protokolünün arkasında durur, sonradan değiştirilebilir. Cartesia yedek aday olarak kalır (Sonic 3.5, ölçülen ilk ses ~240 ms).
+- **Kişiye özel ses:** kullanıcı ayarlardan kendi ElevenLabs ses kimliğini (arayüzde tasarladığı ya da rızayla klonladığı ses) girebilir. O zaman sabit cümleler bu sesle kullanıcının Mac'inde yeniden üretilir, `~/Library/Application Support/Optik/konusma/` altına yazılır ve paketteki Jessica cümlelerinin yerine çalar. Bu dosyalar ve ses kimliği depoya girmez. "Varsayılana dön" Jessica'ya geri alır.
+- **Yedek:** ağ ya da ElevenLabs anahtarı yoksa sabit cümleler paketten çalmaya devam eder, değişken yanıtlar `AVSpeechSynthesizer` Türkçe sesiyle okunur. Karakter sesiyle aynı değildir, yalnızca yedektir.
 - Sentezlenen her cümle metnine göre diskte önbelleğe alınır, aynı cümle ikinci kez ücretsiz ve anında çalar.
 - Ses efektleri (`assets/sesler/*.wav`) konuşmadan ayrıdır ve her zaman yereldir.
 
@@ -145,9 +152,9 @@ Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_
 | :-- | :-- | :-- |
 | GRDB.swift | SQLite | Kullan |
 | WhisperKit | Cihazda yazıya çevirme | Kullan (paket adını doğrula) |
-| Porcupine | Uyandırma kelimesi | Türkçe desteğini doğruladıktan sonra |
+| sherpa-onnx KWS (`speech-swift` ile) | Uyandırma kelimesi | Denenecek (onaylandı); ölçümü geçerse kalır |
 | Anthropic API | LLM | Resmî Swift SDK yoksa `URLSession` ile doğrudan, SSE akışı |
-| Konuşma sentezi istemcisi | Optik'in sesi | `URLSessionWebSocketTask` ile doğrudan |
+| ElevenLabs istemcisi | Optik'in sesi | Paket yok, `URLSession` / `URLSessionWebSocketTask` ile doğrudan |
 | KeyboardShortcuts (sindresorhus, MIT) | Kullanıcının kaydettiği ek kısayol, açıkken `Esc` | Kullanılıyor, 3.1.0'a sabit |
 
 Bunların dışında bağımlılık eklemeden önce sor.
@@ -165,7 +172,8 @@ Bunların dışında bağımlılık eklemeden önce sor.
 - Claude akış: https://platform.claude.com/docs/en/build-with-claude/streaming
 - Claude istem önbelleği: https://platform.claude.com/docs/en/build-with-claude/prompt-caching
 - Claude Code proje talimat dosyaları: https://code.claude.com/docs/en/memory
-- Porcupine: https://github.com/Picovoice/porcupine ve https://picovoice.ai/docs/quick-start/porcupine-ios
+- sherpa-onnx anahtar kelime tespiti: https://k2-fsa.github.io/sherpa/onnx/kws ve Swift sarmalayıcısı https://github.com/soniqo/speech-swift
+- Picovoice ücretsiz katmanının kapanışı: https://community.home-assistant.io/t/fyi-picovoice-confirmed-free-tier-accesskeys-will-stop-working-after-june-30-2026/1012744
 - WhisperKit: https://github.com/argmaxinc/WhisperKit ve https://arxiv.org/html/2507.10860v1
 - Apple SpeechAnalyzer: https://developer.apple.com/documentation/speech/speechanalyzer
 - SpeechAnalyzer dil desteği özeti: https://blog.addpipe.com/apple-speechanalyzer-api/

@@ -25,7 +25,8 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 - Mikrofon izni, 16 kHz yakalama, VAD.
 - `Transcriber` (WhisperKit), kısmi metin adacıkta.
 - `LLMClient` (Claude, akış), araçsız kısa sohbet.
-- `SpeechSynthesizer`: sabit cümleler dosyadan, değişken yanıt akışla. Önbellek.
+- `SpeechSynthesizer` (ElevenLabs, Jessica): sabit cümleler dosyadan, değişken yanıt akışla. Önbellek.
+- Ayarlarda kişiye özel ElevenLabs sesi: ses kimliği gir, sabit cümleleri yerelde yeniden üret, varsayılana dön.
 - `WakeWordDetector`: önce doğrulama (bkz. mimari 3.1), sonra bağlama.
 - Gecikme ölçümü ve kaydı.
 
@@ -83,6 +84,9 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | Ruh halleri | Yedi ruh hali (uykulu dahil). |
 | 2026-11-16 | Çağırma kısayolu | Varsayılan ⌘ ⌘ (Girdi İzleme izniyle). Kullanıcı ayarlardan ek bir kısayol kaydedebilir (`KeyboardShortcuts` paketi). |
 | 2026-11-16 | "Efendim?" süresi | 250 ms bütçesi ilk ses için: `uyan` efekti. "Efendim?" efekt bittikten 60 ms sonra çalar, ikisi üst üste binmez. |
+| 2026-11-16 | Uyandırma kelimesi | Önce sherpa-onnx anahtar kelime tespiti ("optic" anahtarı, eğitimsiz) denenir. Ölçümü geçemezse kendi eğittiğimiz küçük model. Porcupine elendi (Türkçe yok, ücretsiz katman kapandı). |
+| 2026-11-16 | Optik'in sesi | Kör dinleme testinde ElevenLabs'in hazır sesi **Jessica** seçildi. Sabit cümleler Jessica ile üretilip pakete girer, canlı yanıtlar `eleven_v4_turbo` ile akışla gelir. Kullanıcı ayarlardan kendi ElevenLabs sesini girebilir; o zaman sabit cümleler onun Mac'inde yeniden üretilir. |
+| 2026-11-16 | Sabit cümlelerin lisansı | Jessica ile ElevenLabs ücretsiz planında üretildi, `assets/sesler/konusma/` altında. CC BY 4.0 dışında: yalnızca ticari olmayan kullanım, ElevenLabs atfıyla (`LICENSE-ASSETS`, `konusma/OKU.txt`). Optik ticari bir ürün olursa ücretli planla yeniden üretilir. |
 | 2026-11-16 | Kapalı adacık | 312 × 38 pt kalır (çentikten 6 pt aşağı taşar). Renk `#000000`; LCD ekranda kamera kutusundan biraz açık görünmesi ekranın arka ışığından. |
 
 ## Açık sorular
@@ -90,10 +94,9 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 Bunlara dayanan bir iş yapmadan önce kullanıcıya sor.
 
 1. **Telefon:** iPhone mu, Android mi, ikisi de mi? (iPhone ise SwiftUI ile kod paylaşılır, Android varsa Expo / React Native mantıklı.)
-2. **Optik'in sesi:** hangi konuşma sentezi servisi ve hangi ses? Kullanıcı birkaç aday ses dinleyip seçecek (`llm/ses-kimligi.md`).
-3. **Uyandırma kelimesi:** Porcupine Türkçe "Optik" kelimesini güvenilir tanıyor mu? Tanımıyorsa hangi yedek?
-4. **Takvim kaynağı:** Apple Takvim mi, Google Takvim mi? Tek yönlü okuma mı, iki yönlü mü?
-5. **Mevcut bütçe verisi:** kullanıcının başka bir bütçe uygulamasındaki harcamaları Optik'e bir kez mi aktarılacak (CSV), yoksa Optik oradan mı okuyacak?
-6. **Ödeme planı şablonları:** varsayılan %40 / %30 / %30 doğru mu, iş türüne göre değişiyor mu?
-7. **Para birimi:** yalnızca TL mi, döviz teklifleri var mı?
-8. **Brifing saatleri:** 08.30 ve 21.30 uygun mu?
+2. **Uyandırma kelimesi:** "optic" anahtarıyla anahtar kelime tespiti Türkçe söyleyişte yeterince güvenilir mi? Ölçümden sonra kesinleşir.
+3. **Takvim kaynağı:** Apple Takvim mi, Google Takvim mi? Tek yönlü okuma mı, iki yönlü mü?
+4. **Mevcut bütçe verisi:** kullanıcının başka bir bütçe uygulamasındaki harcamaları Optik'e bir kez mi aktarılacak (CSV), yoksa Optik oradan mı okuyacak?
+5. **Ödeme planı şablonları:** varsayılan %40 / %30 / %30 doğru mu, iş türüne göre değişiyor mu?
+6. **Para birimi:** yalnızca TL mi, döviz teklifleri var mı?
+7. **Brifing saatleri:** 08.30 ve 21.30 uygun mu?

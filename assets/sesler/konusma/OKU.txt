@@ -1,3 +1,14 @@
-Bu klasör şimdilik boş.
-Optik'in sesiyle üretilecek sabit cümleler buraya <id>.wav adıyla konur (44,1 kHz, mono).
-Liste: llm/sabit-cumleler.json. Ses tarifi: llm/ses-kimligi.md.
+Optik'in sabit cümleleri: llm/sabit-cumleler.json içindeki her cümle <id>.wav (44,1 kHz, 16 bit, mono).
+
+Ses: Jessica, ElevenLabs hazır sesi. Model eleven_v4. Üretildi: 2026-11-16, ElevenLabs ücretsiz planı.
+Atıf: Bu ses dosyaları ElevenLabs (https://elevenlabs.io) ile üretilmiştir.
+
+Lisans: Bu klasör assets/ altındaki CC BY 4.0 lisansının DIŞINDADIR. Dosyalar ElevenLabs
+kullanım koşullarına tabidir: ücretsiz planda üretildikleri için yalnızca ticari olmayan
+kullanım içindir ve ElevenLabs atfıyla dağıtılır.
+
+İşleme: MP3 (44,1 kHz, 128 kbps) çıktısı WAV'a çevrildi, baştaki sessizlik 10 ms'ye kırpıldı,
+sona 80 ms bırakıldı, konuşma kısmının RMS düzeyi -20 dBFS'e eşitlendi (tepe en fazla -3 dBFS).
+
+Kişiye özel ses seçen kullanıcının cümleleri buraya değil, kendi Mac'inde
+~/Library/Application Support/Optik/konusma/ altına yazılır.
