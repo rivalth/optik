@@ -78,13 +78,27 @@ Her ses turunda bu sürelerin ölçülüp `conversation_log.latency_ms_json` ala
 
 ## Komutlar
 
-Proje iskeleti kurulunca bu bölümü gerçek komutlarla güncelle. Beklenen:
-
 ```bash
-xcodebuild -scheme Optik -configuration Debug build
-xcodebuild -scheme Optik test
 swift test --package-path Packages/OptikCore
+xcodebuild -project Optik.xcodeproj -scheme Optik -destination 'platform=macOS,arch=arm64' build
+xcodebuild -project Optik.xcodeproj -scheme Optik -destination 'platform=macOS,arch=arm64' test
 ```
+
+CI (`.github/workflows/build.yml`) aynı üç adımı `macos-26` üzerinde çalıştırır.
+
+## Proje yapısı
+
+| Yol | Ne |
+| :-- | :-- |
+| `Optik.xcodeproj` | Elle yazılmış proje. Klasörler "senkron grup": `Optik/` ve `OptikTests/` altına eklenen dosya projeye kendiliğinden girer, `project.pbxproj` dosyasına dokunmak gerekmez. |
+| `Optik/` | Uygulama: `App/`, `Settings/`, `Theme/`, `Resources/` (varlık kataloğu, `Localizable.xcstrings`, yazı tipleri). |
+| `OptikTests/` | Uygulama testleri (Swift Testing). Uygulama içinde çalışır. |
+| `Packages/OptikCore/` | Platformdan bağımsız çekirdek. AppKit, UIKit, SwiftUI içe aktarılmaz. |
+| `Config/` | `Base.xcconfig` (ortak ayarlar), `Local.xcconfig.example` (kişiye özel ayar örneği), `Info.plist`, `Optik.entitlements`. |
+
+- Tasarım tokenları `OptikCore/DesignTokens.swift` içinde. `assets/tasarim-tokenlari.json` ile farklılaşırsa `DesignTokensTests` kırılır. JSON'u değiştirirsen Swift tarafını da güncelle.
+- Kişiye özel imza ayarları `Config/Local.xcconfig` dosyasında (depoya girmez). Yoksa uygulama "yalnızca bu Mac'te çalıştır" imzasıyla derlenir.
+- Kullanıcı metni ekleyince `Localizable.xcstrings` içinde göründüğünü kontrol et. Kaynak dil Türkçe.
 
 ## Bitti sayılması için
 

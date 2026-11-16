@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "tr",
+  "strings" : {
+    "Ayarlar…" : {
+
+    },
+    "Diğer ayarlar sonraki aşamalarda gelecek." : {
+
+    },
+    "Genel" : {
+
+    },
+    "Optik" : {
+      "shouldTranslate" : false
+    },
+    "Optik'ten çık" : {
+
+    },
+    "Sürüm" : {
+
+    }
+  },
+  "version" : "1.0"
+}

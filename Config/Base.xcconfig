@@ -1,0 +1,32 @@
+// Shared build settings for every target.
+//
+// Personal settings (Apple team, bundle id prefix) never go here.
+// Copy Local.xcconfig.example to Local.xcconfig (gitignored) and set them there.
+
+OPTIK_BUNDLE_ID_PREFIX = io.github.rivalth
+
+// Without a team the app is signed to run locally only.
+DEVELOPMENT_TEAM =
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = -
+
+SDKROOT = macosx
+MACOSX_DEPLOYMENT_TARGET = 14.0
+ARCHS = arm64
+
+SWIFT_VERSION = 6.0
+SWIFT_STRICT_CONCURRENCY = complete
+CLANG_ENABLE_MODULES = YES
+ENABLE_STRICT_OBJC_MSGSEND = YES
+GCC_NO_COMMON_BLOCKS = YES
+DEAD_CODE_STRIPPING = YES
+ENABLE_USER_SCRIPT_SANDBOXING = YES
+ENABLE_HARDENED_RUNTIME = YES
+
+LOCALIZATION_PREFERS_STRING_CATALOGS = YES
+ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES
+
+MARKETING_VERSION = 0.1.0
+CURRENT_PROJECT_VERSION = 1
+
+#include? "Local.xcconfig"
