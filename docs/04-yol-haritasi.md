@@ -22,13 +22,13 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 
 ## Aşama 2: Ses hattı
 
-- Mikrofon izni, 16 kHz yakalama, VAD.
-- `Transcriber` (WhisperKit), kısmi metin adacıkta.
-- `LLMClient` (Claude, akış), araçsız kısa sohbet.
-- `SpeechSynthesizer` (ElevenLabs, Jessica): sabit cümleler dosyadan, değişken yanıt akışla. Önbellek.
+- ✅ Mikrofon izni, 16 kHz yakalama, yankı giderme, VAD (arka plan sesini ayırır).
+- ✅ `Transcriber` (WhisperKit), kısmi metin adacıkta.
+- ✅ `LLMClient` (Claude, akış), araçsız kısa sohbet. Anahtar yokken duyduğunu tekrar eder.
+- ✅ `SpeechSynthesizer` (ElevenLabs, Jessica): sabit cümleler dosyadan, değişken yanıt akışla. Önbellek henüz yok.
 - Ayarlarda kişiye özel ElevenLabs sesi: ses kimliği gir, sabit cümleleri yerelde yeniden üret, varsayılana dön.
 - `WakeWordDetector`: önce doğrulama (bkz. mimari 3.1), sonra bağlama.
-- Gecikme ölçümü ve kaydı.
+- ✅ Gecikme ölçümü. Kayıt şimdilik sistem günlüğüne, aşama 3'te `conversation_log`'a.
 
 **Kabul:** "Optik" → ilk ses (`uyan` efekti) 250 ms altı, "Efendim?" hemen ardından. "Saat kaç?" gibi bir soruda konuşma sonu → ilk ses 1,5 sn altı (10 denemenin ortancası). Optik konuşurken söz kesilince susuyor. Ağ yokken anlaşılır biçimde bildiriyor. 30 dakikalık ortam sesinde en fazla 1 yanlış tetikleme.
 

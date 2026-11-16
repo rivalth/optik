@@ -65,9 +65,18 @@ Yanlış tetiklemeyi azaltmak için: tetiklemeden sonra 1,5 sn içinde konuşma 
 
 ### 3.2 Konuşmayı yazıya çevirme
 
-- **Birincil: WhisperKit** (Argmax, MIT). Whisper modellerini Core ML ile Apple Silicon'da çalıştırır, akışla yazıya çevirme ve konuşma algılama içerir, çok dilli. macOS 14+ ve Apple Silicon ister. **Doğrula:** paket artık `argmax-oss-swift` deposunda bir ürün olarak geçiyor olabilir, güncel paket adını ve sürümünü kontrol et. Türkçe için model boyutunu ölçerek seç (küçük modelle başla, doğruluk yetmezse büyüt).
+- **Birincil: WhisperKit** (Argmax, MIT). Whisper modellerini Core ML ile Apple Silicon'da çalıştırır, çok dilli. macOS 14+ ve Apple Silicon ister. Paket `argmax-oss-swift` deposundaki `WhisperKit` ürünü, 1.1.1'e sabit.
+- **Model:** kullanıcı Ayarlar → Ses'ten seçer, ilk seferde Hugging Face'ten indirilir (uygulama kabının `Application Support/Optik/Models` klasörüne). M2'de ölçülen:
+
+  | Model | Türkçe | Konuşma sonu → metin | Not |
+  | :-- | :-- | :-- | :-- |
+  | `openai_whisper-base` ("Hızlı") | Yetersiz | 110–390 ms | Yalnızca çok yavaş Mac'ler için |
+  | `openai_whisper-small` ("Dengeli", varsayılan) | İyi | 230–380 ms | Neural Engine'de. İlk derleme ~45 sn, sonra açılışta 1,6 sn'de yüklenir |
+  | `openai_whisper-large-v3-v20240930_turbo_632MB` ("En doğru") | Denenemedi | 20 sn ve üstü | Neural Engine derlemesi saatlerce sürüp takıldı, bu yüzden GPU'da çalışır; M2 GPU'da sesli tur için fazla yavaş |
 - **İkincil: Apple `SpeechAnalyzer` / `SpeechTranscriber`** (macOS 26+). Çalışma anında `SpeechTranscriber.supportedLocale(equivalentTo:)` ile `tr_TR` desteğini sor. İlk çıktığında desteklenen diller arasında Türkçe yoktu. Destek varsa ve ölçümde daha hızlıysa kullan.
-- Model uyandırma anında yüklenir, son kullanımdan 90 sn sonra bellekten atılır (boşta bellek bütçesi için). İlk tetiklemede gecikme olmasın diye model dosyası uygulama açılışında diskten ön ısıtılır.
+- Model açılışta, indirme bitince ve kullanıcı model değiştirince hemen yüklenir; Ayarlar o sırada "Hazırlanıyor…" gösterir. Derlenmiş model az yer tuttuğu için bellekte kalır (`small` yüklüyken uygulamanın bellek ayak izi 75 MB) ve yalnızca sistem belleği daralınca atılır. İlk denemede model 90 sn sonra atılıyordu; yeniden yükleme sesli turu bekletiyordu.
+- Yine de beklemek gerekirse (model henüz derleniyorsa) Optik 1,5 sn sonra "Bir saniye, hazırlanıyorum." der, susup beklemez.
+- Kullanıcı konuşurken 0,9 sn'de bir kısmi metin üretilip adacıkta gösterilir.
 - Özel isimler (müşteri, kişi, ders adları) LLM istemine "bilinen isimler" olarak verilir, yazım hatalarını LLM düzeltir.
 
 ### 3.3 LLM
@@ -85,7 +94,9 @@ Claude API, Messages uç noktası, akışla.
 - **Bağlam:** veritabanının tamamı gönderilmez. Bağlam kurucu her tur için küçük bir özet üretir: şimdiki tarih ve saat, bugünün ajandası, açık siparişlerin başlık ve müşteri listesi, bütçe kategorileri, son 5 konuşma turu. Gerisini LLM araçla ister.
 - **Sesli yanıt kuralı:** yanıt en fazla iki kısa cümle. Liste gerekiyorsa adacıkta gösterilir, sesle yalnızca özeti söylenir.
 - **Akış ve ses:** LLM çıktısı cümle sınırında bölünür, ilk cümle tamamlanır tamamlanmaz konuşma sentezine gönderilir.
-- **Hata:** ağ yoksa Optik "İnternet yok, bunu not aldım" der, cümleyi kuyruğa yazar, bağlantı gelince işler.
+- **Hata:** ağ yoksa Optik "İnternet yok, bunu not aldım" der, cümleyi kuyruğa yazar, bağlantı gelince işler. (Aşama 2'de yalnızca bildirir; kuyruk veritabanıyla birlikte aşama 3'te.)
+- **Anahtarsız deneme:** Claude anahtarı girilmemişse Optik duyduğunu tekrar eder ("Şunu duydum: …"). Mikrofon, yazıya çevirme, ses ve gecikme anahtar olmadan uçtan uca denenebilir.
+- İstek ham HTTP ile gider (`anthropic-version: 2026-10-21`). Sesli turda `thinking` kapalı ve `effort: low`; sistem istemi `cache_control` ile önbellekte, turun değişken bağlamı ayrı bir blokta.
 
 ### 3.4 Optik'in sesi
 
@@ -98,14 +109,24 @@ Optik'in tek, tutarlı, kendine ait bir sesi vardır. Ses kimliği tarifi `llm/s
   - Hazır sesler ücretsiz planda da API'den kullanılabilir. Kütüphane sesleri ve API'den ses tasarımı ücretli plan ister; arayüzde tasarlanan ya da klonlanan ses ise hesabın kendi sesidir, API'den kullanılır.
   - Sağlayıcı `SpeechSynthesizer` protokolünün arkasında durur, sonradan değiştirilebilir. Cartesia yedek aday olarak kalır (Sonic 3.5, ölçülen ilk ses ~240 ms).
 - **Kişiye özel ses:** kullanıcı ayarlardan kendi ElevenLabs ses kimliğini (arayüzde tasarladığı ya da rızayla klonladığı ses) girebilir. O zaman sabit cümleler bu sesle kullanıcının Mac'inde yeniden üretilir, `~/Library/Application Support/Optik/konusma/` altına yazılır ve paketteki Jessica cümlelerinin yerine çalar. Bu dosyalar ve ses kimliği depoya girmez. "Varsayılana dön" Jessica'ya geri alır.
-- **Yedek:** ağ ya da ElevenLabs anahtarı yoksa sabit cümleler paketten çalmaya devam eder, değişken yanıtlar `AVSpeechSynthesizer` Türkçe sesiyle okunur. Karakter sesiyle aynı değildir, yalnızca yedektir.
+- **Yedek:** ağ ya da ElevenLabs anahtarı yoksa sabit cümleler paketten çalmaya devam eder, değişken yanıtlar `AVSpeechSynthesizer` Türkçe sesiyle okunur. Kurulu en iyi Türkçe ses seçilir (varsa "Yelda (Gelişmiş)"); sıkıştırılmış ses çok kötü duyulur. Karakter sesiyle aynı değildir, yalnızca yedektir. Hata mesajları da Optik'in sesiyle okunur, yedek ses yalnızca ElevenLabs'e ulaşılamazsa devreye girer.
 - Sentezlenen her cümle metnine göre diskte önbelleğe alınır, aynı cümle ikinci kez ücretsiz ve anında çalar.
 - Ses efektleri (`assets/sesler/*.wav`) konuşmadan ayrıdır ve her zaman yereldir.
 
 ### 3.5 Kesme ve sıra
 
-- Optik konuşurken kullanıcı konuşmaya başlarsa (VAD) Optik susar ve dinler.
+- Optik konuşurken kullanıcı konuşmaya başlarsa (VAD) Optik susar ve dinler. Yanıtın ilk 0,6 sn'sinde kesilmez (yankı giderici o sırada oturuyor). Kesmek için kullanıcının 0,35 sn içinde en az 0,25 sn odanın belirgin üstünde konuşması gerekir; oda sesi ve kalan yankı kesmez. Yankı giderme kapalıysa kesme yoktur.
 - "Tamam", "sus", "boş ver" yerelde tanınır, LLM'e gitmeden işlenir.
+
+### 3.6 Mikrofon ve konuşma algılama
+
+- **Yakalama:** `AVAudioEngine`, sistemin ses işlemesi (voice processing) açık: yankı giderme sayesinde Optik kendi sesini duymaz. Ses işleme, çıkış tarafının mikrofonla aynı örnekleme hızında olmasını ister (dahili mikrofon 48 kHz, hoparlör 44,1 kHz olabilir; farklıysa -10875 hatası). Ana karıştırıcı çıkışa mikrofonun hızıyla bağlanır. Ses işleme yine de açılmazsa motor onsuz çalışır.
+- Ses işlemenin otomatik kazancı kapalı: cümle aralarında odayı konuşma düzeyine çıkarıyordu.
+- Yakalanan ses 16 kHz mono'ya çevrilir, 20 ms'lik çerçevelerle konuşma algılayıcıya (`EndpointDetector`, OptikCore) gider.
+- **Gürültü tabanı:** son 2 sn'nin en sessiz anı. Oda sesi artınca taban da yükselir; konuşmadaki kelime araları tabanı odaya yakın tutar.
+- **Arka plan:** başka bir cihazda oynayan video ya da odadaki sohbet de konuşmadır. Kullanıcı konuşmadan önceki ~4 sn'nin yüksek ucu (90. yüzdelik) arka plan sayılır. Konuşmanın başlaması için arka planın 6 dB üstüne çıkmak gerekir, arka plan düzeyine dönmek cümleyi bitirir. Mikrofona yakın olan kullanıcı genelde 15–40 dB öndedir.
+- Konuşma 0,12 sn eşiğin üstünde kalınca başlar. 0,7 sn tabana ya da arka plana yakın kalınca, ya da kendi en yüksek düzeyinin 20 dB altına inince biter. En fazla 30 sn sürer. Başlangıçtan önceki 0,3 sn de kayda eklenir, ilk hece kesilmez.
+- Mikrofon yalnızca Optik çağrıldığında açılır ve dönüş sonu sessizliğinden (8 sn) sonra kapanır. Açıkken adacıkta yeşil nokta görünür. Mikrofon açıkken `dinliyor` efekti çalınmaz.
 
 ## 4. Veri
 
@@ -136,7 +157,11 @@ Bütçeler `CLAUDE.md` içinde. Nasıl tutturulur:
 | Boşta bellek 150 MB | Yazıya çevirme modeli kullanılmadığında bellekten atılır. |
 | Kare hızı | Karakter katmanları `CAShapeLayer` / SwiftUI `Canvas`, dönüşüm animasyonları GPU'da. Her karede düzen hesabı yok. |
 
-Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_to_efendim`, `speech_end_to_transcript`, `transcript_to_first_token`, `first_token_to_first_audio`, `total`.
+Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_to_efendim`, `speech_end_to_transcript`, `transcript_to_first_token`, `first_token_to_first_audio`, `total`. Veritabanı gelene kadar (aşama 3) sistem günlüğüne `latency` kategorisiyle JSON olarak yazılır; sonra `conversation_log.latency_ms_json` alanına:
+
+```bash
+log show --last 10m --info --predicate 'subsystem == "io.github.rivalth.optik" AND category == "latency"'
+```
 
 ## 7. Güvenlik ve gizlilik
 
@@ -151,7 +176,7 @@ Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_
 | Paket | Ne için | Durum |
 | :-- | :-- | :-- |
 | GRDB.swift | SQLite | Kullan |
-| WhisperKit | Cihazda yazıya çevirme | Kullan (paket adını doğrula) |
+| WhisperKit (`argmax-oss-swift`, MIT) | Cihazda yazıya çevirme | Kullanılıyor, 1.1.1'e sabit |
 | sherpa-onnx KWS (`speech-swift` ile) | Uyandırma kelimesi | Denenecek (onaylandı); ölçümü geçerse kalır |
 | Anthropic API | LLM | Resmî Swift SDK yoksa `URLSession` ile doğrudan, SSE akışı |
 | ElevenLabs istemcisi | Optik'in sesi | Paket yok, `URLSession` / `URLSessionWebSocketTask` ile doğrudan |

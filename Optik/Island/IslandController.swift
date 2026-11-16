@@ -19,13 +19,17 @@ final class IslandModel {
     var hasNotch = true
     /// The island's current width; on very wide notches it can exceed the design size.
     var width: CGFloat = DesignTokens.Island.idle.width
+    /// The greeting Optik says, one of the "Efendim?" variants.
+    var greeting = String(localized: "Efendim?")
+    /// The microphone is on: the island shows a green dot (`CLAUDE.md`, privacy).
+    var isMicrophoneOn = false
     var onClick: () -> Void = {}
 
     var phase: IslandPhase { machine.phase }
 }
 
 /// Runs the notch island: the panel, the state machine and everything that reacts
-/// to it (sounds, "Efendim?", Esc, the 8 s silence timeout, screens, full screen).
+/// to it (sounds, "Efendim?", the voice conversation, Esc, screens, full screen).
 @MainActor
 final class IslandController {
     static let shared = IslandController()
@@ -36,7 +40,11 @@ final class IslandController {
     private var screen: IslandScreen?
     private let fullScreen = FullScreenMonitor()
     private let doubleCommand = DoubleCommandMonitor()
-    private let speaker = GreetingSpeaker()
+    let transcriber = WhisperTranscriber()
+    private lazy var conversation = VoiceConversation(
+        transcriber: transcriber, llm: ClaudeClient(), synthesizer: ElevenLabsSynthesizer()
+    )
+    private var trigger: TurnContext.Trigger = .shortcut
     private var escapeTask: Task<Void, Never>?
     private var phaseTimer: DispatchWorkItem?
     private var shrinkPanel: DispatchWorkItem?
@@ -49,7 +57,7 @@ final class IslandController {
     static let silenceTimeout: TimeInterval = 8
     /// How long an announcement stays when nobody reacts.
     static let announcementDuration: TimeInterval = 6
-    /// A reply's time on screen, until replies are spoken by Optik's own voice.
+    /// A reply's time on screen when no conversation drives it (debug demo).
     static let replyDuration: TimeInterval = 5.7
     /// `docs/03-karakter.md` 7: speech starts 60 ms after the sound effect ends.
     static let speechGap: TimeInterval = 0.06
@@ -71,15 +79,22 @@ final class IslandController {
         screensChanged()
         fullScreen.start()
 
-        speaker.onStart = { [weak self] in self?.logLatency("Efendim audible") }
-        speaker.onFinish = { [weak self] in self?.send(.greeted) }
-        speaker.prewarm()
+        conversation.onTranscript = { [weak self] text in self?.send(.transcript(text)) }
+        conversation.onReply = { [weak self] text in self?.send(.reply(text)) }
+        conversation.onListenAgain = { [weak self] in self?.send(.listen) }
+        conversation.onFinish = { [weak self] in self?.send(.dismiss) }
+        conversation.onMicrophoneChange = { [weak self] on in self?.model.isMicrophoneOn = on }
 
         doubleCommand.onDoubleTap = { [weak self] timestamp in self?.summon(at: timestamp) }
         updateDoubleCommand()
         KeyboardShortcuts.onKeyDown(for: .summonOptik) { [weak self] in
             self?.summon(at: clock_gettime_nsec_np(CLOCK_UPTIME_RAW))
         }
+
+        // Warm the speech model from disk once, so the first summon does not pay
+        // Core ML's specialization; it leaves memory again after 90 s.
+        let transcriber = self.transcriber
+        Task.detached(priority: .utility) { try? await transcriber.prepareSelectedModel() }
     }
 
     /// Starts or stops the ⌘ ⌘ watcher to match the setting and the permission.
@@ -96,8 +111,11 @@ final class IslandController {
     // MARK: Input
 
     /// `timestamp`: when the key event happened, ns since boot (`CLOCK_UPTIME_RAW`).
-    func summon(at timestamp: UInt64 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW)) {
+    func summon(at timestamp: UInt64 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW),
+                trigger: TurnContext.Trigger = .shortcut) {
         summonedAt = timestamp
+        self.trigger = trigger
+        lastLatencies = [:]
         send(.summon)
         logLatency("island opening")
     }
@@ -109,7 +127,7 @@ final class IslandController {
     func announce(_ announcement: Announcement) { send(.announce(announcement)) }
 
     private func clicked() {
-        if model.phase.isOpen { dismiss() } else { summon() }
+        if model.phase.isOpen { dismiss() } else { summon(trigger: .click) }
     }
 
     // MARK: State
@@ -129,33 +147,53 @@ final class IslandController {
         phaseTimer?.cancel()
         switch phase {
         case .idle:
-            speaker.stop()
+            conversation.end()
             setEscapeEnabled(false)
         case .wake:
             setEscapeEnabled(true)
-            speaker.stop()
+            conversation.end()
+            conversation.begin(trigger: trigger, summonedAt: summonedAt ?? clock_gettime_nsec_np(CLOCK_UPTIME_RAW))
             let effect = SoundEffect.uyan
             Task {
                 await SoundEffectPlayer.shared.play(effect)
                 self.logLatency("first sound")
             }
             // "Efendim?" right after the wake sound, never on top of it.
+            let phrase = FixedPhrases.variant("efendim")
+            model.greeting = phrase?.metin ?? String(localized: "Efendim?")
             let delay = effect.duration + Self.speechGap
-            schedule(after: delay) { [weak self] in
-                self?.speaker.speak(String(localized: "Efendim?"))
-            }
+            schedule(after: delay) { [weak self] in self?.greet(phrase) }
         case .listening:
-            Task { await SoundEffectPlayer.shared.play(.dinliyor) }
-            // Nothing transcribes yet (stage 2), so the silence timeout always ends it.
-            schedule(after: Self.silenceTimeout) { [weak self] in self?.send(.dismiss) }
+            if conversation.isActive {
+                // The conversation listens and closes the island after 8 s of silence.
+                conversation.greeted()
+            } else {
+                schedule(after: Self.silenceTimeout) { [weak self] in self?.send(.dismiss) }
+            }
         case .replying:
-            Task { await SoundEffectPlayer.shared.play(.mutlu) }
-            schedule(after: Self.replyDuration) { [weak self] in self?.send(.replyFinished) }
+            // A spoken reply ends when the conversation says so; the demo reply on a timer.
+            if !conversation.isActive {
+                Task { await SoundEffectPlayer.shared.play(.mutlu) }
+                schedule(after: Self.replyDuration) { [weak self] in self?.send(.replyFinished) }
+            }
         case .announcing:
             setEscapeEnabled(true)
             Task { await SoundEffectPlayer.shared.play(.uyari) }
             schedule(after: Self.announcementDuration) { [weak self] in self?.send(.announcementFinished) }
         }
+    }
+
+    private func greet(_ phrase: FixedPhrases.Phrase?) {
+        conversation.playGreeting(
+            phrase,
+            onStart: { [weak self] in
+                guard let self else { return }
+                self.logLatency("Efendim audible")
+                self.conversation.recordIslandLatency(wakeToIsland: self.lastLatencies["island opening"],
+                                                      wakeToEfendim: self.lastLatencies["Efendim audible"])
+            },
+            done: { [weak self] in self?.send(.greeted) }
+        )
     }
 
     private func schedule(after seconds: TimeInterval, _ action: @escaping @MainActor () -> Void) {

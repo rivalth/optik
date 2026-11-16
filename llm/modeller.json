@@ -1,0 +1,5 @@
+{
+ "_aciklama": "Optik'in kullandığı Claude modelleri. Kod bu dosyayı okur, model adı koda gömülmez (docs/02-mimari.md 3.3).",
+ "sesli_tur": "claude-haiku-5-5",
+ "uzun_is": "claude-sonnet-5-5"
+}

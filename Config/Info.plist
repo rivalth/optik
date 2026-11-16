@@ -4,5 +4,7 @@
 <dict>
 	<key>ATSApplicationFontsPath</key>
 	<string>.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Optik seni dinlemek için mikrofonu yalnızca sen çağırdığında açar. Ses kaydı cihazından çıkmaz.</string>
 </dict>
 </plist>

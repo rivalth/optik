@@ -28,6 +28,7 @@ struct IslandView: View {
             coop
             optik
             content
+            microphoneDot
         }
         .frame(width: model.width, height: phase.size.height, alignment: .topLeading)
         .clipShape(shape)
@@ -60,6 +61,19 @@ struct IslandView: View {
             .accessibilityHidden(true)
     }
 
+    /// Green while the microphone is on (`CLAUDE.md`, privacy).
+    @ViewBuilder
+    private var microphoneDot: some View {
+        if model.isMicrophoneOn && phase.isOpen {
+            Circle()
+                .fill(Color(DesignTokens.Palette.mint))
+                .frame(width: 7, height: 7)
+                .offset(x: model.width - 24, y: 16)
+                .transition(.opacity)
+                .accessibilityLabel(Text("Mikrofon açık"))
+        }
+    }
+
     // MARK: Text
 
     @ViewBuilder
@@ -69,21 +83,32 @@ struct IslandView: View {
             case .idle:
                 EmptyView()
             case .wake:
-                Text("Efendim?")
+                Text(verbatim: model.greeting)
                     .font(OptikFont.heading(size: 40))
                     .padding(.top, 16)
                     .transition(rise)
             case .listening:
-                HStack(spacing: 10) {
-                    ListeningWave(reduceMotion: reduceMotion)
-                    Text("Dinliyorum")
-                        .font(OptikFont.body(size: 13, weight: .semibold))
-                        .foregroundStyle(Color(DesignTokens.Palette.textMuted))
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 10) {
+                        ListeningWave(reduceMotion: reduceMotion)
+                        Text("Dinliyorum")
+                            .font(OptikFont.body(size: 13, weight: .semibold))
+                            .foregroundStyle(Color(DesignTokens.Palette.textMuted))
+                    }
+                    if let transcript = model.machine.transcript, !transcript.isEmpty {
+                        // What the user is saying, live (`docs/01-urun.md` 1.1).
+                        Text(verbatim: transcript)
+                            .font(OptikFont.body(size: 15))
+                            .lineLimit(2)
+                            .truncationMode(.head)
+                            .transition(.opacity)
+                    }
                 }
                 .padding(.top, 10)
+                .animation(.easeOut(duration: 0.15), value: model.machine.transcript)
                 .transition(rise)
             case .replying:
-                message(model.machine.replyText ?? "")
+                reply(model.machine.replyText ?? "")
             case .announcing:
                 message(model.machine.currentAnnouncement?.text ?? "")
             }
@@ -91,6 +116,15 @@ struct IslandView: View {
         .foregroundStyle(Color(DesignTokens.Palette.text))
         .frame(width: max(0, model.width - 196 - 26), alignment: .leading)
         .offset(x: 196, y: 46)
+    }
+
+    /// A streamed reply grows in place instead of rising again with every word.
+    private func reply(_ text: String) -> some View {
+        Text(verbatim: text)
+            .font(OptikFont.body(size: 16))
+            .lineSpacing(16 * 0.45 - 4)
+            .fixedSize(horizontal: false, vertical: true)
+            .transition(rise)
     }
 
     private func message(_ text: String) -> some View {

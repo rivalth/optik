@@ -13,8 +13,12 @@ struct SettingsView: View {
                 .tabItem {
                     Label("Çağırma", systemImage: "keyboard")
                 }
+            VoiceSettingsView()
+                .tabItem {
+                    Label("Ses", systemImage: "waveform")
+                }
         }
-        .frame(width: 440)
+        .frame(width: 480)
     }
 }
 
