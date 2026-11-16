@@ -6,7 +6,7 @@ Karakteri altı kırık bir yumurta: kırıktan civciv ayakları çıkıyor, kab
 
 ![Optik'in ruh halleri](assets/karakter/optik-ruh-halleri.png)
 
-> **Durum:** tasarım ve tarif aşamasında. Kod henüz yok. Sıradaki iş `docs/04-yol-haritasi.md` içindeki Aşama 0.
+> **Durum:** Aşama 0 (iskelet ve karakter) sürüyor. Yol haritası `docs/04-yol-haritasi.md` içinde.
 
 ## Kimin için
 
@@ -14,6 +14,27 @@ Optik tek kişilik bir asistandır ve yalnızca kendi Mac'inde çalışır. Haz�
 
 - macOS 14 ve üstü, Apple Silicon
 - Çentikli MacBook (çentiksiz ekranda yüzen bir hap olarak görünür)
+
+## Derleme
+
+Gerekenler: Xcode 26 ya da üstü.
+
+```bash
+git clone https://github.com/rivalth/optik.git
+cd optik
+open Optik.xcodeproj
+```
+
+Xcode'da `Optik` şemasını seçip çalıştır. Uygulama menü çubuğunda açılır, Dock'ta görünmez.
+
+Kendi Apple geliştirici hesabınla imzalamak istersen `Config/Local.xcconfig.example` dosyasını `Config/Local.xcconfig` adıyla kopyala ve ekip kimliğini yaz. Bu dosya depoya girmez. Yapmazsan uygulama yalnızca kendi Mac'inde çalışacak şekilde imzalanır.
+
+Komut satırından test:
+
+```bash
+swift test --package-path Packages/OptikCore
+xcodebuild -project Optik.xcodeproj -scheme Optik -destination 'platform=macOS,arch=arm64' test
+```
 
 ## Gereken hesaplar ve anahtarlar
 
@@ -55,3 +76,4 @@ Ayrıntılar `CLAUDE.md` içindeki "Depo ve git kuralları" bölümünde.
 
 - Kod ve belgeler: [MIT](LICENSE).
 - Görseller, karakter, ses efektleri ve ekran tasarımları (`assets/`, `tasarim-kaynak/`): [CC BY 4.0](LICENSE-ASSETS). Kullanırken Optik'e atıf ver.
+- Yazı tipleri (`Optik/Resources/Fonts/`): Space Grotesk ve Inter, [SIL Open Font License 1.1](Optik/Resources/Fonts/). Lisans metinleri dosyaların yanında.
