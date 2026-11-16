@@ -1,6 +1,6 @@
 # Optik
 
-Optik, tek bir kullanıcı için kişisel "ikinci beyin" asistanıdır. Açık kaynaktır: herkes depoyu klonlayıp kendi Mac'inde kendi asistanını kurabilir. MacBook çentiğinde bir kümeste yaşar. "Optik" diye seslenildiğinde kümesten çıkar, "Efendim?" der, Türkçe konuşmayı dinler, bir LLM ile anlar, işi yapar ve kendi sesiyle yanıt verir. Buluşmaları, kişileri, dersleri, takvimi, projeleri, harcamaları, bütçeyi, ilişkiyi ve müşteri siparişlerini tutar. Rapor, öneri ve hatırlatıcılarla kendisi haber verir.
+Optik, tek bir kullanıcı için kişisel "ikinci beyin" asistanıdır. Açık kaynaktır: herkes depoyu klonlayıp kendi Mac'inde kendi asistanını kurabilir. MacBook çentiğinde bir kümeste yaşar. "Optik" diye seslenildiğinde kümesten çıkar, "Efendim?" der, Türkçe konuşmayı dinler, bir LLM ile anlar, işi yapar ve kendi sesiyle yanıt verir. Buluşmaları, kişileri, dersleri, takvimi, projeleri, harcamaları, bütçeyi, ilişkiyi ve müşteri siparişlerini tutar. E-postaları okur, onay aldıktan sonra e-posta ve iMessage ile mesaj ve dosya gönderir, WhatsApp mesajını hazırlar. Rapor, öneri ve hatırlatıcılarla kendisi haber verir.
 
 Karakter: altı kırık bir yumurta, kırıktan civciv ayakları çıkıyor, kabuktaki çatlaktan gözleri ve gagası görünüyor.
 
