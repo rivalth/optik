@@ -42,7 +42,7 @@ xcodebuild -project Optik.xcodeproj -scheme Optik -destination 'platform=macOS,a
 
 - Claude API anahtarı.
 - Bir konuşma sentezi servisi hesabı (Optik'in sesi için).
-- Uyandırma kelimesi için Picovoice erişim anahtarı (Porcupine kullanılacaksa).
+- Uyandırma kelimesi cihaz üzerinde, hesap ya da anahtar istemeyen açık kaynak bir modelle çalışır.
 
 Anahtarlar depoya girmez. Uygulama bunları ilk açılışta sorar ve Keychain'e yazar.
 

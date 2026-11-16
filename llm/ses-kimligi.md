@@ -13,14 +13,14 @@ Bu pakette Optik'in konuşma sesi yok. Ses bir konuşma sentezi servisinde tasar
 
 ## Seçim yöntemi
 
-1. Seçilen serviste "ses tasarımı" ile üç aday üret. Tarif olarak yukarıdaki maddeleri kullan.
+1. Adaylar ElevenLabs ve Cartesia'dan gelir. Her serviste "ses tasarımı" (ya da hazır ses kütüphanesi) ile en fazla üç aday seç ya da üret. Tarif olarak yukarıdaki maddeleri kullan.
 2. Her adaya şu beş cümleyi okut:
    - "Efendim?"
    - "Tamam, kaydettim."
    - "Yarın saat üçte Yeliz'le buluşman var, on dakika önce hatırlatayım mı?"
    - "Kuzey Mobilya için on sekiz bin lira aldım. Kalan on sekiz bin."
    - "Elektrik faturası için yarın son gün."
-3. Kullanıcı dinleyip birini seçer. Seçilen sesin kimliği ayarlarda saklanır.
+3. Kullanıcı adayları servis adı gizli olarak (kör) dinler ve birini seçer. Seçilen servis ve ses kimliği ayarlarda saklanır.
 4. `llm/sabit-cumleler.json` içindeki cümleler bu sesle üretilir, `assets/sesler/konusma/<id>.wav` olarak kaydedilir (44,1 kHz, mono). Yüksek kaliteli model kullan, gecikme burada önemli değil.
 5. Canlı yanıtlar aynı sesle, düşük gecikmeli modelle akışla üretilir.
 

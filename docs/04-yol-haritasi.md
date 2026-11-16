@@ -83,6 +83,8 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | Ruh halleri | Yedi ruh hali (uykulu dahil). |
 | 2026-11-16 | Çağırma kısayolu | Varsayılan ⌘ ⌘ (Girdi İzleme izniyle). Kullanıcı ayarlardan ek bir kısayol kaydedebilir (`KeyboardShortcuts` paketi). |
 | 2026-11-16 | "Efendim?" süresi | 250 ms bütçesi ilk ses için: `uyan` efekti. "Efendim?" efekt bittikten 60 ms sonra çalar, ikisi üst üste binmez. |
+| 2026-11-16 | Uyandırma kelimesi | Önce sherpa-onnx anahtar kelime tespiti ("optic" anahtarı, eğitimsiz) denenir. Ölçümü geçemezse kendi eğittiğimiz küçük model. Porcupine elendi (Türkçe yok, ücretsiz katman kapandı). |
+| 2026-11-16 | Optik'in sesi | ElevenLabs ve Cartesia kör dinleme testine girer. Kullanıcı beş sınama cümlesini dinleyip sesi seçer. |
 | 2026-11-16 | Kapalı adacık | 312 × 38 pt kalır (çentikten 6 pt aşağı taşar). Renk `#000000`; LCD ekranda kamera kutusundan biraz açık görünmesi ekranın arka ışığından. |
 
 ## Açık sorular
@@ -90,8 +92,8 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 Bunlara dayanan bir iş yapmadan önce kullanıcıya sor.
 
 1. **Telefon:** iPhone mu, Android mi, ikisi de mi? (iPhone ise SwiftUI ile kod paylaşılır, Android varsa Expo / React Native mantıklı.)
-2. **Optik'in sesi:** hangi konuşma sentezi servisi ve hangi ses? Kullanıcı birkaç aday ses dinleyip seçecek (`llm/ses-kimligi.md`).
-3. **Uyandırma kelimesi:** Porcupine Türkçe "Optik" kelimesini güvenilir tanıyor mu? Tanımıyorsa hangi yedek?
+2. **Optik'in sesi:** ElevenLabs mı Cartesia mı, hangi ses? Kör dinleme testinden sonra kesinleşir (`llm/ses-kimligi.md`).
+3. **Uyandırma kelimesi:** "optic" anahtarıyla anahtar kelime tespiti Türkçe söyleyişte yeterince güvenilir mi? Ölçümden sonra kesinleşir.
 4. **Takvim kaynağı:** Apple Takvim mi, Google Takvim mi? Tek yönlü okuma mı, iki yönlü mü?
 5. **Mevcut bütçe verisi:** kullanıcının başka bir bütçe uygulamasındaki harcamaları Optik'e bir kez mi aktarılacak (CSV), yoksa Optik oradan mı okuyacak?
 6. **Ödeme planı şablonları:** varsayılan %40 / %30 / %30 doğru mu, iş türüne göre değişiyor mu?
