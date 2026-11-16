@@ -4,6 +4,17 @@ import SwiftUI
 /// The notch island (stage 1) and the second-brain window (stage 3) come later.
 @main
 struct OptikApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
+    init() {
+        // Decode sound effects off the main thread so the first one plays instantly.
+        Task.detached(priority: .utility) {
+            await SoundEffectPlayer.shared.preload()
+            let enabled = UserDefaults.standard.object(forKey: SettingsKey.soundEffectsEnabled) as? Bool ?? true
+            await SoundEffectPlayer.shared.setEnabled(enabled)
+        }
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuBarMenu()
@@ -11,6 +22,7 @@ struct OptikApp: App {
             Image(.menuBarIcon)
                 .accessibilityLabel(Text("Optik"))
         }
+
 
         Settings {
             SettingsView()

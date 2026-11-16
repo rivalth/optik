@@ -91,7 +91,7 @@ CI (`.github/workflows/build.yml`) aynı üç adımı `macos-26` üzerinde çal�
 | Yol | Ne |
 | :-- | :-- |
 | `Optik.xcodeproj` | Elle yazılmış proje. Klasörler "senkron grup": `Optik/` ve `OptikTests/` altına eklenen dosya projeye kendiliğinden girer, `project.pbxproj` dosyasına dokunmak gerekmez. |
-| `Optik/` | Uygulama: `App/`, `Settings/`, `Theme/`, `Resources/` (varlık kataloğu, `Localizable.xcstrings`, yazı tipleri). |
+| `Optik/` | Uygulama: `App/`, `Character/` (karakter çizimi ve animasyonları), `Sound/` (ses efektleri), `Preview/` (karakter önizlemesi), `Settings/`, `Theme/`, `Resources/` (varlık kataloğu, `Localizable.xcstrings`, yazı tipleri). Ses efektleri kopyalanmaz, `assets/sesler` doğrudan hedefe bağlıdır. |
 | `OptikTests/` | Uygulama testleri (Swift Testing). Uygulama içinde çalışır. |
 | `Packages/OptikCore/` | Platformdan bağımsız çekirdek. AppKit, UIKit, SwiftUI içe aktarılmaz. |
 | `Config/` | `Base.xcconfig` (ortak ayarlar), `Local.xcconfig.example` (kişiye özel ayar örneği), `Info.plist`, `Optik.entitlements`. |
@@ -99,6 +99,9 @@ CI (`.github/workflows/build.yml`) aynı üç adımı `macos-26` üzerinde çal�
 - Tasarım tokenları `OptikCore/DesignTokens.swift` içinde. `assets/tasarim-tokenlari.json` ile farklılaşırsa `DesignTokensTests` kırılır. JSON'u değiştirirsen Swift tarafını da güncelle.
 - Kişiye özel imza ayarları `Config/Local.xcconfig` dosyasında (depoya girmez). Yoksa uygulama "yalnızca bu Mac'te çalıştır" imzasıyla derlenir.
 - Kullanıcı metni ekleyince `Localizable.xcstrings` içinde göründüğünü kontrol et. Kaynak dil Türkçe.
+- Karakter `optik.css` ile birebir: geometri `CharacterGeometry`, anahtar kareler `CharacterAnimations` içinde, CSS'teki adlarıyla. CSS değişirse ikisini birlikte güncelle.
+- Karakteri referansla karşılaştırmak için: `TEST_RUNNER_OPTIK_WRITE_SNAPSHOTS=1 xcodebuild ... test -only-testing:OptikTests/CharacterSnapshotTests`. PNG'ler `~/Library/Containers/<paket kimliği>/Data/tmp/` altına düşer.
+- Önizleme penceresini açık başlatmak için uygulamayı `--show-character-preview` argümanıyla çalıştır.
 
 ## Bitti sayılması için
 
