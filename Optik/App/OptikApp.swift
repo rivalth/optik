@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Optik runs as a menu bar agent (`LSUIElement`): no Dock icon, no main window.
-/// The notch island (stage 1) and the second-brain window (stage 3) come later.
+/// It lives in the notch island (`IslandController`); the second-brain window comes in stage 3.
 @main
 struct OptikApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
@@ -22,7 +22,6 @@ struct OptikApp: App {
             Image(.menuBarIcon)
                 .accessibilityLabel(Text("Optik"))
         }
-
 
         Settings {
             SettingsView()

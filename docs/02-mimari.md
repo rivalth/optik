@@ -28,6 +28,15 @@ Packages/OptikCore   platformdan bağımsız: modeller, kurallar, para ve tarih 
 - İçerik SwiftUI. Boyut geçişleri yaylı animasyon (yaklaşık 0,45 sn, hafif taşma).
 - Hazır kütüphane seçeneği: `DynamicNotchKit` (MIT, SwiftUI içeriğini çentikten gösterir). Kümes ve karakter özel çizim istediği için öneri: kendi `NSPanel` alt sınıfını yaz, `DynamicNotchKit` ve benzeri açık kaynak çentik uygulamalarını yalnızca referans olarak oku.
 - Çok ekran: adacık yerleşik ekranda durur. Kapak kapalıyken dış ekranın üst ortasında yüzen hap olarak çizilir.
+- Kapalıyken panel adacığın tam boyundadır. Açılırken önce panel büyür (yay taşması için kenarlarda 32 pt pay), adacık içinde yaylanır; kapanınca yay bitince panel geri küçülür.
+- Tam ekran: başka bir uygulamanın penceresi ekranın tamamını (menü çubuğu dahil) kaplıyorsa kapalı adacık gizlenir, haberler bekler. Kontrol yalnızca masaüstü ve uygulama değişiminde yapılır, zamanlayıcı yok. Pencere sınırlarını okumak izin istemez.
+
+### 2.1 Çağırma kısayolu
+
+- Varsayılan: ⌘ ⌘ (Command tuşuna art arda iki kez basmak). Yalnızca dinleyen bir olay musluğu (`CGEventTap`, `listenOnly`) ile yakalanır, bunun için **Girdi İzleme** izni gerekir. Musluk yalnızca Command tuşunun kodunu ve değiştirici bayraklarını okur; başka bir tuşa basıldığında yalnızca "başka bir tuş" olduğunu not eder, hangi tuş olduğunu okumaz. Algılama ikinci basışta tetikler, bekleme yok.
+- Ek kısayol: kullanıcı ayarlardan istediği tuş birleşimini kaydedebilir (`KeyboardShortcuts`). Varsayılanı boş.
+- `Esc` yalnızca adacık açıkken yakalanır, kapalıyken başka uygulamalardan çalınmaz.
+- İzin uygulamanın imzasına bağlıdır. Yalnızca bu Mac'e özel imzayla (`-`) her derlemede kimlik değişir ve izin düşer; kalıcı olması için `Config/Local.xcconfig` ile kendi geliştirici sertifikanla imzala.
 
 ## 3. Ses hattı
 
@@ -114,7 +123,7 @@ Bütçeler `CLAUDE.md` içinde. Nasıl tutturulur:
 | Bütçe | Yöntem |
 | :-- | :-- |
 | Uyandırma → adacık 100 ms | Panel hep hazır ve gizli, yalnızca animasyon başlar. |
-| Uyandırma → "Efendim?" 250 ms | Sabit ses dosyası önceden çözülmüş `AVAudioPlayerNode` tamponunda. |
+| Uyandırma → ilk ses 250 ms | `uyan` efekti önceden çözülmüş `AVAudioPlayerNode` tamponunda, birkaç ms içinde başlar. "Efendim?" efekt bittikten 60 ms sonra gelir (ses ve efekt üst üste binmez). |
 | Konuşma sonu → ilk ses 1,5 sn | Akışla yazıya çevirme (son kısım yaklaşık 300 ms) + Haiku ilk cümle + akışla sentez. Bağlantılar (LLM ve sentez) uyandırma anında açılır. |
 | Boşta CPU %2 | Yalnızca uyandırma kelimesi motoru çalışır. Animasyonlar adacık kapalıyken durur (yeşil nokta hariç, o da Core Animation'da). |
 | Boşta bellek 150 MB | Yazıya çevirme modeli kullanılmadığında bellekten atılır. |
@@ -127,7 +136,7 @@ Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_
 - Anahtarlar (Claude, konuşma sentezi, uyandırma kelimesi) Keychain'de. İlk açılışta ayarlar ekranından girilir.
 - Ses verisi diske yazılmaz, ağa çıkmaz. Hata ayıklama kaydı varsayılan kapalı ve ayrı bir ayarın arkasında.
 - Günlüklerde kişi adı, tutar, not metni yok. Yalnızca tür ve süre.
-- Mikrofon izni, erişilebilirlik izni gerekmiyor. Yalnızca mikrofon istenir.
+- Erişilebilirlik izni gerekmiyor. İstenen izinler: mikrofon (aşama 2) ve ⌘ ⌘ kısayolu için Girdi İzleme. Girdi İzleme verilmezse ek kısayol ve menüden çağırma yine çalışır.
 - LLM'e giden her istekte hangi verinin gittiği `conversation_log` içinde görülebilir.
 
 ## 8. Bağımlılıklar
@@ -139,6 +148,7 @@ Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_
 | Porcupine | Uyandırma kelimesi | Türkçe desteğini doğruladıktan sonra |
 | Anthropic API | LLM | Resmî Swift SDK yoksa `URLSession` ile doğrudan, SSE akışı |
 | Konuşma sentezi istemcisi | Optik'in sesi | `URLSessionWebSocketTask` ile doğrudan |
+| KeyboardShortcuts (sindresorhus, MIT) | Kullanıcının kaydettiği ek kısayol, açıkken `Esc` | Kullanılıyor, 3.1.0'a sabit |
 
 Bunların dışında bağımlılık eklemeden önce sor.
 

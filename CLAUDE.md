@@ -60,7 +60,7 @@ Depo herkese açık. Buraya giren her şey herkese yayınlanır.
 | Ölçüm | Hedef |
 | :-- | :-- |
 | Uyandırma kelimesi → adacığın açılmaya başlaması | 100 ms altı |
-| Uyandırma kelimesi → "Efendim?" sesi | 250 ms altı |
+| Uyandırma kelimesi → ilk ses (`uyan` efekti) | 250 ms altı. "Efendim?" efekt bittikten 60 ms sonra gelir |
 | Konuşma bitti → Optik'in ilk sesi | 1,5 sn altı (hedef 1 sn) |
 | Boşta CPU (yalnızca uyandırma kelimesi dinlerken) | %2 altı |
 | Boşta bellek | 150 MB altı |

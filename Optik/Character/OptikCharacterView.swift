@@ -22,8 +22,20 @@ final class OptikCharacterView: NSView {
         didSet { guard reduceMotion != oldValue else { return }; apply(mood: mood, animated: false) }
     }
 
+    /// The island draws Optik without its ground shadow (`docs/03-karakter.md` 4).
+    var showsGroundShadow = true {
+        didSet { withoutActions { groundShadow.isHidden = !showsGroundShadow } }
+    }
+
+    /// When false, clicks go through Optik to whatever is behind it.
+    var isInteractive = true
+
+    /// False while Optik hides in the coop: shrunk behind the door and invisible.
+    private(set) var isOutOfCoop = true
+
     // MARK: Layers
 
+    private let coop = CALayer()       // opt: the hop out of the coop, in view points
     private let stage = CALayer()      // design box, scaled
     private let groundShadow = CAShapeLayer() // golge
     private let tapLayer = CALayer()    // dokun
@@ -57,6 +69,7 @@ final class OptikCharacterView: NSView {
     private static let loopKey = "optik.loop"
     private static let transitionKey = "optik.transition"
     private static let bounceKey = "optik.bounce"
+    private static let coopKey = "optik.coop"
 
     private var isPaused = false
 
@@ -86,6 +99,10 @@ final class OptikCharacterView: NSView {
         layoutCharacter()
     }
 
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        isInteractive ? super.hitTest(point) : nil
+    }
+
     override func mouseDown(with event: NSEvent) {
         bounce()
         onTap?()
@@ -110,8 +127,13 @@ final class OptikCharacterView: NSView {
 
     /// Hidden or fully covered: freeze every animation so the render server does no work.
     @objc private func windowVisibilityChanged() {
+        updatePaused()
+    }
+
+    /// Nothing to animate while the window is covered or Optik sits in the coop.
+    private func updatePaused() {
         let visible = window?.occlusionState.contains(.visible) ?? false
-        setPaused(!visible)
+        setPaused(!visible || !isOutOfCoop)
     }
 
     @objc private func backingChanged() {
@@ -140,9 +162,11 @@ final class OptikCharacterView: NSView {
         guard let root = layer else { return }
         withoutActions {
             root.masksToBounds = false
+            coop.anchorPoint = CGPoint(x: 0, y: 1)
+            root.addSublayer(coop)
             stage.anchorPoint = .zero
             stage.bounds = CGRect(origin: .zero, size: CharacterGeometry.designSize)
-            root.addSublayer(stage)
+            coop.addSublayer(stage)
 
             // golge
             groundShadow.frame = CharacterGeometry.shadowFrame
@@ -285,6 +309,8 @@ final class OptikCharacterView: NSView {
 
     private func layoutCharacter() {
         withoutActions {
+            coop.bounds = CGRect(origin: .zero, size: intrinsicContentSize)
+            coop.position = CGPoint(x: 0, y: intrinsicContentSize.height)
             stage.position = .zero
             stage.setAffineTransform(CGAffineTransform(scaleX: scale, y: scale))
         }
@@ -296,6 +322,60 @@ final class OptikCharacterView: NSView {
         withoutActions {
             for text in sleepLetters + [alertMark] { text.contentsScale = contentsScale }
         }
+    }
+
+    // MARK: Coop
+
+    /// `.opt-in`: shifted (-50, 30) toward the door and shrunk to 0.15, around the bottom left.
+    private static var inCoopTransform: CATransform3D { CSSTransform.make(.translate(-50, 30), .scale(0.15, 0.15)) }
+
+    /// Hop out of the coop or back in (`docs/03-karakter.md` 4). Out: 0.5 s with the
+    /// overshooting curve after a 0.25 s delay, while the door opens. In: the same path back.
+    func setOutOfCoop(_ out: Bool, animated: Bool) {
+        guard out != isOutOfCoop else { return }
+        isOutOfCoop = out
+        let transform = out ? CATransform3DIdentity : Self.inCoopTransform
+        let opacity: Float = out ? 1 : 0
+        coop.removeAnimation(forKey: Self.coopKey)
+        if out { updatePaused() }
+
+        guard animated, !reduceMotion else {
+            withoutActions {
+                coop.transform = transform
+                coop.opacity = opacity
+            }
+            if !out { updatePaused() }
+            return
+        }
+
+        let delay = out ? 0.25 : 0
+        let move = CABasicAnimation(keyPath: "transform")
+        move.fromValue = coop.presentation()?.transform ?? coop.transform
+        move.toValue = transform
+        move.duration = 0.5
+        move.timingFunction = CSSTiming.cubicBezier(0.3, 1.5, 0.5, 1)
+        let fade = CABasicAnimation(keyPath: "opacity")
+        fade.fromValue = coop.presentation()?.opacity ?? coop.opacity
+        fade.toValue = opacity
+        fade.duration = 0.25
+        fade.timingFunction = CSSTiming.ease
+        let group = CAAnimationGroup()
+        group.animations = [move, fade]
+        group.duration = move.duration
+        group.beginTime = CACurrentMediaTime() + delay
+        group.fillMode = .backwards
+
+        CATransaction.begin()
+        CATransaction.setCompletionBlock { [weak self] in
+            guard let self, !self.isOutOfCoop else { return }
+            self.updatePaused()
+        }
+        withoutActions {
+            coop.transform = transform
+            coop.opacity = opacity
+        }
+        coop.add(group, forKey: Self.coopKey)
+        CATransaction.commit()
     }
 
     // MARK: Moods

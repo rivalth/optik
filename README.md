@@ -6,7 +6,7 @@ Karakteri altı kırık bir yumurta: kırıktan civciv ayakları çıkıyor, kab
 
 ![Optik'in ruh halleri](assets/karakter/optik-ruh-halleri.png)
 
-> **Durum:** Aşama 0 (iskelet ve karakter) sürüyor. Yol haritası `docs/04-yol-haritasi.md` içinde.
+> **Durum:** Aşama 1 (çentik adacığı ve kümes) sürüyor. Yol haritası `docs/04-yol-haritasi.md` içinde.
 
 ## Kimin için
 
@@ -25,9 +25,11 @@ cd optik
 open Optik.xcodeproj
 ```
 
-Xcode'da `Optik` şemasını seçip çalıştır. Uygulama menü çubuğunda açılır, Dock'ta görünmez.
+Xcode'da `Optik` şemasını seçip çalıştır. Uygulama menü çubuğunda ve çentikte açılır, Dock'ta görünmez. Optik'i çağırmak için ⌘ tuşuna art arda iki kez bas.
 
-Kendi Apple geliştirici hesabınla imzalamak istersen `Config/Local.xcconfig.example` dosyasını `Config/Local.xcconfig` adıyla kopyala ve ekip kimliğini yaz. Bu dosya depoya girmez. Yapmazsan uygulama yalnızca kendi Mac'inde çalışacak şekilde imzalanır.
+⌘ ⌘ kısayolu **Girdi İzleme** izni ister (Sistem Ayarları > Gizlilik ve Güvenlik > Girdi İzleme). Optik yalnızca ⌘ tuşunu izler, başka tuşları okumaz. İzin vermek istemezsen ayarlardan kendi kısayolunu kaydedebilirsin.
+
+Kendi Apple geliştirici hesabınla imzala: Xcode > Settings > Accounts'ta Apple kimliğinle oturum aç (ücretsiz hesap yeter), sonra `Config/Local.xcconfig.example` dosyasını `Config/Local.xcconfig` adıyla kopyala ve ekip kimliğini yaz. Bu dosya depoya girmez. Yapmazsan uygulama yalnızca bu Mac'te çalışacak şekilde imzalanır, ama o zaman macOS her derlemeden sonra Girdi İzleme iznini yeniden ister.
 
 Komut satırından test:
 

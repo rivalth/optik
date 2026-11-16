@@ -1,22 +1,118 @@
 {
   "sourceLanguage" : "tr",
   "strings" : {
+    "13.00’te Yeliz ile kahve, Moda’da. 16.30’da da proje grubu toplantın var." : {
+
+    },
+    "20.00’de alt ağ planı ödevinin teslimi var." : {
+
+    },
+    "Adacık akışını oynat" : {
+
+    },
     "Ayarlar…" : {
 
     },
-    "Diğer ayarlar sonraki aşamalarda gelecek." : {
+    "Bekliyor" : {
+
+    },
+    "Bir ruh haline bas: hareketi oynar, sesi çalar. Optik'in üstüne basınca zıplar." : {
+
+    },
+    "Bütün ruh halleri" : {
+
+    },
+    "Command tuşuna art arda iki kez bas." : {
+
+    },
+    "Dinliyor" : {
+
+    },
+    "Dinliyorum" : {
+
+    },
+    "Düşünceli" : {
+
+    },
+    "Efendim?" : {
+
+    },
+    "Ek kısayol" : {
+
+    },
+    "Geliştirici" : {
 
     },
     "Genel" : {
 
     },
+    "Girdi İzleme izni gerekli" : {
+
+    },
+    "Hatırlatma" : {
+
+    },
+    "Karakter önizlemesi" : {
+
+    },
+    "Kutlama" : {
+
+    },
+    "Mavi" : {
+
+    },
+    "Mutlu" : {
+
+    },
     "Optik" : {
       "shouldTranslate" : false
+    },
+    "Optik yalnızca ⌘ tuşunu izler, başka hiçbir tuşu okumaz." : {
+
+    },
+    "Optik'i çağır" : {
+
     },
     "Optik'ten çık" : {
 
     },
+    "Optik, %@" : {
+
+    },
+    "Pembe" : {
+
+    },
+    "Sarı" : {
+
+    },
+    "Ses efektleri" : {
+
+    },
     "Sürüm" : {
+
+    },
+    "Turuncu" : {
+
+    },
+    "Uykulu" : {
+
+    },
+    "Vurgu rengi" : {
+
+    },
+    "Zıplatmak için bas" : {
+
+    },
+    "Çağırma" : {
+
+    },
+    "Örnek haber (5 sn sonra)" : {
+
+    },
+    "İzin ver…" : {
+
+    },
+    "⌘ ⌘ ile çağır" : {
 
     }
   },
