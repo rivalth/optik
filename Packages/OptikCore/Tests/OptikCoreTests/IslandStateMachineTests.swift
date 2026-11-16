@@ -178,3 +178,37 @@ struct DoubleTapDetectorTests {
         #expect(!r15)
     }
 }
+
+@Suite struct IslandTranscriptTests {
+    @Test func transcriptShowsWhileListening() {
+        var machine = IslandStateMachine()
+        machine.handle(.summon)
+        machine.handle(.transcript("Saat"))
+        #expect(machine.phase == .listening)
+        #expect(machine.transcript == "Saat")
+        machine.handle(.transcript("Saat kaç?"))
+        #expect(machine.transcript == "Saat kaç?")
+        machine.handle(.reply("On üç."))
+        #expect(machine.phase == .replying)
+        #expect(machine.transcript == nil)
+    }
+
+    @Test func transcriptIsIgnoredWhenClosed() {
+        var machine = IslandStateMachine()
+        let changed = machine.handle(.transcript("x"))
+        #expect(!changed)
+        #expect(machine.phase == .idle)
+    }
+
+    @Test func interruptingAReplyListensAgain() {
+        var machine = IslandStateMachine()
+        machine.handle(.summon)
+        machine.handle(.reply("Uzun bir yanıt."))
+        machine.handle(.listen)
+        #expect(machine.phase == .listening)
+        #expect(machine.replyText == nil)
+        machine.handle(.dismiss)
+        #expect(machine.phase == .idle)
+        #expect(machine.transcript == nil)
+    }
+}

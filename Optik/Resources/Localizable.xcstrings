@@ -10,6 +10,15 @@
     "Adacık akışını oynat" : {
 
     },
+    "Adın" : {
+
+    },
+    "Anahtarlar" : {
+
+    },
+    "Anahtarlar yalnızca bu Mac'in Anahtar Zinciri'nde durur. ElevenLabs anahtarı yoksa Optik sistemin Türkçe sesiyle konuşur." : {
+
+    },
     "Ayarlar…" : {
 
     },
@@ -19,16 +28,46 @@
     "Bir ruh haline bas: hareketi oynar, sesi çalar. Optik'in üstüne basınca zıplar." : {
 
     },
+    "Bir saniye, hazırlanıyorum." : {
+
+    },
+    "Bir şeyler ters gitti, bir daha dener misin?" : {
+
+    },
+    "Bunda yardımcı olamam." : {
+
+    },
     "Bütün ruh halleri" : {
 
     },
+    "Claude API anahtarı" : {
+
+    },
+    "Claude API anahtarı geçersiz görünüyor. Ayarlar'dan kontrol eder misin?" : {
+
+    },
+    "Claude API anahtarı yok. Ayarlar'daki Ses bölümünden ekler misin?" : {
+
+    },
+    "Claude şu an çok yoğun. Biraz sonra tekrar dener misin?" : {
+
+    },
+    "Claude'dan yanıt alamadım. Bir daha dener misin?" : {
+
+    },
     "Command tuşuna art arda iki kez bas." : {
+
+    },
+    "Dengeli (yaklaşık 500 MB)" : {
 
     },
     "Dinliyor" : {
 
     },
     "Dinliyorum" : {
+
+    },
+    "Durum" : {
 
     },
     "Düşünceli" : {
@@ -38,6 +77,12 @@
 
     },
     "Ek kısayol" : {
+
+    },
+    "ElevenLabs API anahtarı" : {
+
+    },
+    "En doğru (yaklaşık 650 MB)" : {
 
     },
     "Geliştirici" : {
@@ -52,7 +97,31 @@
     "Hatırlatma" : {
 
     },
+    "Hazır" : {
+
+    },
+    "Hazırlanıyor…" : {
+
+    },
+    "Hızlı (yaklaşık 150 MB)" : {
+
+    },
     "Karakter önizlemesi" : {
+
+    },
+    "Kaydet" : {
+
+    },
+    "Kayıtlı" : {
+
+    },
+    "Konuşman bu Mac'te yazıya çevrilir, ses dışarı çıkmaz. Model bir kez indirilir." : {
+
+    },
+    "Konuşmayı tanıma" : {
+
+    },
+    "Konuşmayı tanıma modelini indiriyorum. Bitince seni duyabileceğim, ilerlemeyi Ayarlar'da görebilirsin." : {
 
     },
     "Kutlama" : {
@@ -61,11 +130,29 @@
     "Mavi" : {
 
     },
+    "Mikrofon" : {
+
+    },
+    "Mikrofon açık" : {
+
+    },
+    "Mikrofon izni yok. Sistem Ayarları'nda Optik'e mikrofon izni verir misin?" : {
+
+    },
+    "Mikrofonu açamadım." : {
+
+    },
+    "Model" : {
+
+    },
     "Mutlu" : {
 
     },
     "Optik" : {
       "shouldTranslate" : false
+    },
+    "Optik sana nasıl seslensin?" : {
+
     },
     "Optik yalnızca ⌘ tuşunu izler, başka hiçbir tuşu okumaz." : {
 
@@ -85,7 +172,19 @@
     "Sarı" : {
 
     },
+    "Seni duyamadım, bir daha söyler misin?" : {
+
+    },
+    "Ses" : {
+
+    },
     "Ses efektleri" : {
+
+    },
+    "Sil" : {
+
+    },
+    "Sistem Ayarları'nı aç…" : {
 
     },
     "Sürüm" : {
@@ -109,7 +208,28 @@
     "Örnek haber (5 sn sonra)" : {
 
     },
+    "İlk seferde model bu Mac için derlenir, bir dakika kadar sürebilir." : {
+
+    },
+    "İndir" : {
+
+    },
+    "İndirilemedi" : {
+
+    },
+    "İnternete bağlanamadım. Biraz sonra tekrar dener misin?" : {
+
+    },
+    "İstem dosyası eksik, Optik kurulumunu kontrol et." : {
+
+    },
+    "İzin verildi" : {
+
+    },
     "İzin ver…" : {
+
+    },
+    "Şunu duydum: %@" : {
 
     },
     "⌘ ⌘ ile çağır" : {

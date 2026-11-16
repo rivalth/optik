@@ -13,6 +13,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard !Self.isRunningTests else { return }
         IslandController.shared.start()
+        #if DEBUG
+        // Lets a developer summon Optik from the shell to test the voice loop.
+        DistributedNotificationCenter.default().addObserver(
+            forName: Notification.Name("io.github.rivalth.optik.debug.summon"), object: nil, queue: .main
+        ) { _ in
+            MainActor.assumeIsolated { IslandController.shared.summon() }
+        }
+        #endif
         if ProcessInfo.processInfo.arguments.contains(Self.showPreviewArgument) {
             CharacterPreviewWindowController.shared.show()
         }

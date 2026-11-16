@@ -7,6 +7,10 @@ enum SettingsKey {
     static let soundEffectsEnabled = "soundEffectsEnabled"
     /// ⌘ ⌘ summons Optik. On by default; needs Input Monitoring.
     static let summonWithDoubleCommand = "summonWithDoubleCommand"
+    /// The user's name, for the model's turn context.
+    static let userName = "userName"
+    /// `SpeechModel` raw value.
+    static let speechModel = "speechModel"
 }
 
 /// The accent colors the user can pick (`vurguSecenekleri`).

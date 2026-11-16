@@ -8,6 +8,10 @@ public struct IslandStateMachine: Equatable, Sendable {
         case greeted
         /// No speech for 8 s, or the user pressed Esc.
         case dismiss
+        /// What the user said so far, shown live while listening.
+        case transcript(String)
+        /// Back to listening from a reply: the user interrupted or keeps talking.
+        case listen
         case reply(String)
         /// The reply was spoken and its time on screen ran out.
         case replyFinished
@@ -20,6 +24,7 @@ public struct IslandStateMachine: Equatable, Sendable {
 
     public private(set) var phase: IslandPhase = .idle
     public private(set) var replyText: String?
+    public private(set) var transcript: String?
     public private(set) var currentAnnouncement: Announcement?
     /// Announcements waiting for a moment when Optik may come out on its own.
     public private(set) var pending: [Announcement] = []
@@ -42,15 +47,29 @@ public struct IslandStateMachine: Equatable, Sendable {
             if phase != .wake {
                 currentAnnouncement = nil
                 replyText = nil
+                transcript = nil
                 phase = .wake
             }
         case .greeted:
             if phase == .wake { phase = .listening }
         case .dismiss:
             close()
+        case .transcript(let text):
+            // Speaking over "Efendim?" counts as listening already.
+            if phase == .wake || phase == .listening {
+                transcript = text
+                phase = .listening
+            }
+        case .listen:
+            if phase == .replying || phase == .wake {
+                replyText = nil
+                transcript = nil
+                phase = .listening
+            }
         case .reply(let text):
             if phase == .wake || phase == .listening || phase == .replying {
                 replyText = text
+                transcript = nil
                 phase = .replying
             }
         case .replyFinished:
@@ -70,6 +89,7 @@ public struct IslandStateMachine: Equatable, Sendable {
     private mutating func close() {
         phase = .idle
         replyText = nil
+        transcript = nil
         currentAnnouncement = nil
         deliverIfPossible()
     }
