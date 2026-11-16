@@ -48,6 +48,24 @@ struct SoundEffectTests {
             .sorted()
         #expect(wavs == SoundEffect.allCases.map(\.fileName).sorted())
     }
+
+    /// Reads the `data` chunk of each 44.1 kHz, 16 bit, mono WAV.
+    @Test(arguments: SoundEffect.allCases)
+    func durationMatchesFile(effect: SoundEffect) throws {
+        let url = MoodTests.repoRoot.appending(path: "assets/sesler/\(effect.fileName)")
+        let bytes = [UInt8](try Data(contentsOf: url))
+        func uint32(_ at: Int) -> Int { Int(bytes[at]) | Int(bytes[at + 1]) << 8 | Int(bytes[at + 2]) << 16 | Int(bytes[at + 3]) << 24 }
+        var offset = 12
+        var dataSize: Int?
+        while offset + 8 <= bytes.count {
+            let id = String(decoding: bytes[offset..<offset + 4], as: UTF8.self)
+            let size = uint32(offset + 4)
+            if id == "data" { dataSize = size; break }
+            offset += 8 + size + (size & 1)
+        }
+        let seconds = Double(try #require(dataSize)) / (44_100 * 2)
+        #expect(abs(seconds - effect.duration) < 0.006, "\(effect): \(seconds) s")
+    }
 }
 
 struct RGBAHexStringTests {

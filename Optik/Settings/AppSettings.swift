@@ -5,6 +5,8 @@ import SwiftUI
 enum SettingsKey {
     static let accentColor = "accentColor"
     static let soundEffectsEnabled = "soundEffectsEnabled"
+    /// ⌘ ⌘ summons Optik. On by default; needs Input Monitoring.
+    static let summonWithDoubleCommand = "summonWithDoubleCommand"
 }
 
 /// The accent colors the user can pick (`vurguSecenekleri`).

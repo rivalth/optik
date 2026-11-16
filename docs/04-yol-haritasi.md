@@ -29,7 +29,7 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 - `WakeWordDetector`: önce doğrulama (bkz. mimari 3.1), sonra bağlama.
 - Gecikme ölçümü ve kaydı.
 
-**Kabul:** "Optik" → "Efendim?" 250 ms altı. "Saat kaç?" gibi bir soruda konuşma sonu → ilk ses 1,5 sn altı (10 denemenin ortancası). Optik konuşurken söz kesilince susuyor. Ağ yokken anlaşılır biçimde bildiriyor. 30 dakikalık ortam sesinde en fazla 1 yanlış tetikleme.
+**Kabul:** "Optik" → ilk ses (`uyan` efekti) 250 ms altı, "Efendim?" hemen ardından. "Saat kaç?" gibi bir soruda konuşma sonu → ilk ses 1,5 sn altı (10 denemenin ortancası). Optik konuşurken söz kesilince susuyor. Ağ yokken anlaşılır biçimde bildiriyor. 30 dakikalık ortam sesinde en fazla 1 yanlış tetikleme.
 
 ## Aşama 3: Veri ve günlük hayat
 
@@ -81,6 +81,9 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | Kişisel veri | Depoda gerçek kullanıcıya ait bilgi yok. Belgeler ve örnek veri uydurma örnek kullanıcı "Ada" üzerinden anlatılır. |
 | 2026-11-16 | Dil | Belgeler, arayüz ve README Türkçe. Kod, tanımlayıcılar ve commit mesajları İngilizce. |
 | 2026-11-16 | Ruh halleri | Yedi ruh hali (uykulu dahil). |
+| 2026-11-16 | Çağırma kısayolu | Varsayılan ⌘ ⌘ (Girdi İzleme izniyle). Kullanıcı ayarlardan ek bir kısayol kaydedebilir (`KeyboardShortcuts` paketi). |
+| 2026-11-16 | "Efendim?" süresi | 250 ms bütçesi ilk ses için: `uyan` efekti. "Efendim?" efekt bittikten 60 ms sonra çalar, ikisi üst üste binmez. |
+| 2026-11-16 | Kapalı adacık | 312 × 38 pt kalır (çentikten 6 pt aşağı taşar). Renk `#000000`; LCD ekranda kamera kutusundan biraz açık görünmesi ekranın arka ışığından. |
 
 ## Açık sorular
 

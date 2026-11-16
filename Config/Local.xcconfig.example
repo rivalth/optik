@@ -1,6 +1,9 @@
 // Copy this file to Config/Local.xcconfig (gitignored) and fill in your values.
 // Find your team id in Xcode > Settings > Accounts, or at developer.apple.com.
+// Signing with your own certificate keeps macOS permissions (Input Monitoring)
+// across rebuilds; the default ad-hoc signature loses them on every build.
 
 // OPTIK_BUNDLE_ID_PREFIX = com.example
 // DEVELOPMENT_TEAM = ABCDE12345
 // CODE_SIGN_IDENTITY = Apple Development
+// CODE_SIGN_STYLE = Automatic

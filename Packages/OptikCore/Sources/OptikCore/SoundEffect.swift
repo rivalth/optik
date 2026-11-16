@@ -21,4 +21,20 @@ public enum SoundEffect: String, CaseIterable, Sendable, Hashable {
     case uykulu
 
     public var fileName: String { "\(rawValue).wav" }
+
+    /// Length in seconds, from the table. Speech waits for the effect to end, so the
+    /// app needs this without opening the file. `MoodTests` checks it against the WAVs.
+    public var duration: Double {
+        switch self {
+        case .tik: 0.07
+        case .uyan: 0.38
+        case .dinliyor: 0.18
+        case .mutlu: 0.23
+        case .dusunceli: 0.38
+        case .uyari: 0.44
+        case .tamam: 0.2
+        case .kutlama: 0.47
+        case .uykulu: 0.64
+        }
+    }
 }
