@@ -17,7 +17,7 @@ Kutu 180 × 200 birim. Koordinatlar sol üstten. Çizim sırası alttan üste:
 | # | Katman | Geometri | Renk |
 | :-- | :-- | :-- | :-- |
 | 1 | Gölge | elips, merkez (90, 190), 90 × 12 | siyah, %40 |
-| 2 | İç duvar | elips, merkez (90, 137), 92 × 22 | `#A3957F` |
+| 2 | İç duvar | elips, merkez (90, 137), 120 × 22, yumurta dış çizgisiyle kırpılır (kırık dişlerinin arasında boşluk kalmasın diye) | `#A3957F` |
 | 3 | Sol bacak | çizgi (73,146)→(73,178), parmaklar (62,187) (73,188) (84,187), kalınlık 5, yuvarlak uç | vurgu |
 | 4 | Sağ bacak | aynısı, x = 107 | vurgu |
 | 5 | Kabuk | 120 × 156, sol üst (30, 6). Üst yarı elips yarıçapı 60 × 96,72, alt yarı 60 × 59,28. Alt kenar zikzak kesik | `#F4EDE0` |

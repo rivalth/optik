@@ -10,7 +10,7 @@
 .optik .golge{position:absolute;left:45px;top:184px;width:90px;height:12px;border-radius:50%;background:#000;opacity:.4;animation:optik-golge 2.8s ease-in-out infinite}
 .optik .dokun,.optik .hareket{position:absolute;left:0;top:0;width:180px;height:192px;transform-origin:50% 100%}
 .optik .salin{position:absolute;left:0;top:0;width:180px;height:160px;transform-origin:50% 100%;animation:optik-salin 2.8s ease-in-out infinite}
-.optik .ic-duvar{position:absolute;left:44px;top:126px;width:92px;height:22px;border-radius:50%;background:#A3957F}
+.optik .ic-duvar{position:absolute;left:30px;top:6px;width:120px;height:156px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:#A3957F;clip-path:ellipse(60px 11px at 60px 131px)}
 .optik .bacak{position:absolute;top:144px;width:30px;height:46px;overflow:visible;transform-origin:50% 0;fill:none;stroke:var(--optik-vurgu);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
 .optik .bacak.sol{left:58px}
 .optik .bacak.sag{left:92px}

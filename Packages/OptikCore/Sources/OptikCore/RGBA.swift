@@ -25,6 +25,16 @@ public struct RGBA: Hashable, Sendable, CustomStringConvertible {
         )
     }
 
+    /// Parses `#RRGGBB` (the `#` is optional). Returns `nil` for anything else.
+    public init?(hexString: String) {
+        var digits = Substring(hexString)
+        if digits.hasPrefix("#") { digits = digits.dropFirst() }
+        guard digits.count == 6, digits.allSatisfy(\.isHexDigit), let hex = UInt32(digits, radix: 16) else {
+            return nil
+        }
+        self.init(hex: hex)
+    }
+
     /// Returns the same color with a different opacity.
     public func withAlpha(_ alpha: Double) -> RGBA {
         RGBA(red: red, green: green, blue: blue, alpha: alpha)
