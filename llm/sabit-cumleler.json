@@ -1,0 +1,95 @@
+{
+ "_aciklama": "Optik’in sesiyle bir kez üretilip assets/sesler/konusma/ altına <id>.wav olarak konacak sabit cümleler. Bunlar gecikmesiz çalar. Aynı anlam için birden fazla çeşit varsa rastgele seçilir.",
+ "cumleler": [
+  {
+   "id": "efendim-1",
+   "metin": "Efendim?",
+   "ne_zaman": "uyandırma kelimesi"
+  },
+  {
+   "id": "efendim-2",
+   "metin": "Buyur?",
+   "ne_zaman": "uyandırma kelimesi"
+  },
+  {
+   "id": "efendim-3",
+   "metin": "Buradayım.",
+   "ne_zaman": "uyandırma kelimesi"
+  },
+  {
+   "id": "tamam-1",
+   "metin": "Tamam, kaydettim.",
+   "ne_zaman": "kayıt sonrası kısa onay"
+  },
+  {
+   "id": "tamam-2",
+   "metin": "Oldu.",
+   "ne_zaman": "kayıt sonrası kısa onay"
+  },
+  {
+   "id": "bakiyorum-1",
+   "metin": "Bir saniye, bakıyorum.",
+   "ne_zaman": "yanıt 1,2 saniyeyi geçecekse"
+  },
+  {
+   "id": "bakiyorum-2",
+   "metin": "Hemen bakıyorum.",
+   "ne_zaman": "yanıt 1,2 saniyeyi geçecekse"
+  },
+  {
+   "id": "anlamadim-1",
+   "metin": "Anlamadım, bir daha söyler misin?",
+   "ne_zaman": "yazıya çevirme boş ya da güvensiz"
+  },
+  {
+   "id": "anlamadim-2",
+   "metin": "Kaçırdım, tekrar eder misin?",
+   "ne_zaman": "yazıya çevirme boş ya da güvensiz"
+  },
+  {
+   "id": "geri-aldim",
+   "metin": "Geri aldım.",
+   "ne_zaman": "geri al"
+  },
+  {
+   "id": "internet-yok",
+   "metin": "İnternet yok. Not aldım, bağlanınca hallederim.",
+   "ne_zaman": "ağ hatası"
+  },
+  {
+   "id": "kilitli",
+   "metin": "O bölüm kilitli. Önce kilidi açar mısın?",
+   "ne_zaman": "kilitli bölüme istek"
+  },
+  {
+   "id": "gunaydin",
+   "metin": "Günaydın. Bugüne bakalım mı?",
+   "ne_zaman": "sabah brifingi açılışı"
+  },
+  {
+   "id": "iyi-geceler",
+   "metin": "Bugünlük bu kadar. İyi geceler.",
+   "ne_zaman": "akşam kapanışı"
+  },
+  {
+   "id": "hatirlatma",
+   "metin": "Bir hatırlatmam var.",
+   "ne_zaman": "kendiliğinden haber verirken açılış"
+  },
+  {
+   "id": "bitti",
+   "metin": "Bitti! Bir tane daha eksildi.",
+   "ne_zaman": "görev tamamlandı"
+  },
+  {
+   "id": "tamamdir",
+   "metin": "Tamamdır.",
+   "ne_zaman": "kullanıcı \"tamam\", \"sağ ol\" dediğinde kapanış"
+  },
+  {
+   "id": "hangisi",
+   "metin": "Hangisi?",
+   "ne_zaman": "birden fazla eşleşme, seçenekler adacıkta gösterilirken"
+  }
+ ]
+}

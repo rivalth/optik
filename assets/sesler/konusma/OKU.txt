@@ -1,0 +1,3 @@
+Bu klasör şimdilik boş.
+Optik'in sesiyle üretilecek sabit cümleler buraya <id>.wav adıyla konur (44,1 kHz, mono).
+Liste: llm/sabit-cumleler.json. Ses tarifi: llm/ses-kimligi.md.

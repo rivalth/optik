@@ -1,0 +1,56 @@
+{
+  "renk": {
+    "zemin": "#12131C",
+    "yuzey": "#1C1E2B",
+    "yuzey2": "#262939",
+    "metin": "#F2F0E9",
+    "metinSoluk": "#A3A6B8",
+    "cizgi": "#5B5F78",
+    "cizgiGuclu": "#7A7F9C",
+    "vurgu": "#FF8A3D",
+    "vurguSecenekleri": ["#FF8A3D", "#7C9BFF", "#F25F8B", "#E9C46A"],
+    "vurguUstuMetin": "#12131C",
+    "nane": "#5EE0C8",
+    "uyari": "#FF8A3D",
+    "adacik": "#000000",
+    "naneIz": "rgba(94,224,200,0.18)",
+    "uyariIz": "rgba(255,138,61,0.22)"
+  },
+  "karakter": {
+    "kabuk": "#F4EDE0",
+    "kabukGolge": "rgba(0,0,0,0.07)",
+    "benek": "#DDD0BA",
+    "catlak": "#CFC2AC",
+    "icDuvar": "#A3957F",
+    "delik": "#2A2521",
+    "goz": "#FFF4D6",
+    "bacakVeGaga": "vurgu"
+  },
+  "kumes": {
+    "cerceve": "#5A3A1E",
+    "ic": "#1E140B",
+    "kanat": "#B07A42",
+    "saman": "#E9C46A"
+  },
+  "yazi": {
+    "baslik": { "aile": "Space Grotesk", "agirlik": 700 },
+    "metin": { "aile": "Inter", "agirliklar": [400, 500, 600] },
+    "boyut": { "ekranBasligi": 26, "bolumBasligi": 18, "kartBasligi": 16, "govde": 15, "ikincil": 13, "etiket": 11 }
+  },
+  "kose": { "kart": 18, "dugme": 22, "konusmaBalonu": 20, "altCubuk": 24, "ilerlemeCubugu": 4 },
+  "bosluk": { "ekranKenari": 20, "kartIci": 16, "kartlarArasi": 10, "bolumlerArasi": 20 },
+  "dokunmaHedefi": 44,
+  "adacik": {
+    "bekliyor": { "genislik": 312, "yukseklik": 38, "altKose": 18 },
+    "acik": { "genislik": 460, "yukseklik": 150, "altKose": 40 },
+    "yanit": { "genislik": 480, "yukseklik": 214, "altKose": 40 },
+    "gecisSuresiMs": 450,
+    "gecisEgrisi": "cubic-bezier(.3,1.25,.5,1)"
+  },
+  "hareket": {
+    "bicimGecisiMs": 280,
+    "tasanEgri": "cubic-bezier(.3,1.5,.5,1)",
+    "dokunmaZiplamasiMs": 550,
+    "geciciRuhHaliMs": [2000, 2800]
+  }
+}

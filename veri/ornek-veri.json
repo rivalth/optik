@@ -1,0 +1,1003 @@
+{
+ "_aciklama": "Geliştirme için örnek veri. Tutarlar kuruş, saatler UTC. Kişiler, müşteriler ve tutarlar uydurmadır. Bugün: 2026-11-16 Pazartesi (Europe/Istanbul).",
+ "people": [
+  {
+   "id": "p-yeliz",
+   "name": "Yeliz",
+   "relation": "arkadas",
+   "is_partner": 0,
+   "notes": null,
+   "last_contact_at": "2026-11-09T15:00:00Z",
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "p-merve",
+   "name": "Merve",
+   "relation": "arkadas",
+   "is_partner": 0,
+   "notes": null,
+   "last_contact_at": "2026-10-26T16:00:00Z",
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "p-emir",
+   "name": "Emir",
+   "relation": "proje ortagi",
+   "is_partner": 0,
+   "notes": null,
+   "last_contact_at": "2026-11-14T10:00:00Z",
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "p-leyla",
+   "name": "Leyla Hoca",
+   "relation": "danisman",
+   "is_partner": 0,
+   "notes": null,
+   "last_contact_at": "2026-11-05T12:00:00Z",
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "clients": [
+  {
+   "id": "c-kuzey",
+   "name": "Kuzey Mobilya",
+   "contact_name": "[İLETİŞİM KİŞİSİ]",
+   "contact_phone": null,
+   "contact_email": null,
+   "notes": null,
+   "last_contact_at": "2026-11-12T09:00:00Z",
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "c-mira",
+   "name": "Mira Kozmetik",
+   "contact_name": "[İLETİŞİM KİŞİSİ]",
+   "contact_phone": null,
+   "contact_email": null,
+   "notes": null,
+   "last_contact_at": "2026-11-10T11:00:00Z",
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "quotes": [
+  {
+   "id": "q-kuzey",
+   "client_id": "c-kuzey",
+   "title": "Katalog sitesi",
+   "amount": 6000000,
+   "currency": "TRY",
+   "status": "accepted",
+   "sent_at": "2026-10-28T09:00:00Z",
+   "follow_up_on": null,
+   "decided_at": "2026-11-02T13:00:00Z",
+   "reject_reason": null,
+   "file_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "q-mira",
+   "client_id": "c-mira",
+   "title": "Bayi toplantısı",
+   "amount": 15000000,
+   "currency": "TRY",
+   "status": "accepted",
+   "sent_at": "2026-11-01T09:00:00Z",
+   "follow_up_on": null,
+   "decided_at": "2026-11-06T10:00:00Z",
+   "reject_reason": null,
+   "file_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "q-mira2",
+   "client_id": "c-mira",
+   "title": "Ürün fotoğrafı çekimi",
+   "amount": 4200000,
+   "currency": "TRY",
+   "status": "sent",
+   "sent_at": "2026-11-12T09:00:00Z",
+   "follow_up_on": "2026-11-17",
+   "decided_at": null,
+   "reject_reason": null,
+   "file_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "orders": [
+  {
+   "id": "o-web",
+   "client_id": "c-kuzey",
+   "quote_id": "q-kuzey",
+   "title": "Katalog sitesi",
+   "description": "Ürün kataloğu ve teklif formu olan 12 sayfalık katalog sitesi. Türkçe ve İngilizce.",
+   "total_amount": 6000000,
+   "currency": "TRY",
+   "upfront_amount": 2400000,
+   "due_on": "2026-12-15",
+   "closed_at": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "o-bayi",
+   "client_id": "c-mira",
+   "quote_id": "q-mira",
+   "title": "Bayi toplantısı",
+   "description": "120 kişilik bayi toplantısı: mekân, sahne, teknik ekip ve karşılama.",
+   "total_amount": 15000000,
+   "currency": "TRY",
+   "upfront_amount": 7500000,
+   "due_on": "2026-12-12",
+   "closed_at": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "order_milestones": [
+  {
+   "id": "m-web-1",
+   "order_id": "o-web",
+   "position": 1,
+   "title": "Brif",
+   "due_on": "2026-11-03",
+   "done_at": "2026-11-03T12:00:00Z",
+   "payment_amount": 0
+  },
+  {
+   "id": "m-web-2",
+   "order_id": "o-web",
+   "position": 2,
+   "title": "Tasarım onayı",
+   "due_on": "2026-11-20",
+   "done_at": null,
+   "payment_amount": 1800000
+  },
+  {
+   "id": "m-web-3",
+   "order_id": "o-web",
+   "position": 3,
+   "title": "Geliştirme",
+   "due_on": "2026-12-04",
+   "done_at": null,
+   "payment_amount": 0
+  },
+  {
+   "id": "m-web-4",
+   "order_id": "o-web",
+   "position": 4,
+   "title": "Teslim",
+   "due_on": "2026-12-15",
+   "done_at": null,
+   "payment_amount": 1800000
+  },
+  {
+   "id": "m-bayi-1",
+   "order_id": "o-bayi",
+   "position": 1,
+   "title": "Mekân onayı",
+   "due_on": "2026-11-10",
+   "done_at": "2026-11-10T14:00:00Z",
+   "payment_amount": 0
+  },
+  {
+   "id": "m-bayi-2",
+   "order_id": "o-bayi",
+   "position": 2,
+   "title": "Teknik keşif",
+   "due_on": "2026-11-18",
+   "done_at": null,
+   "payment_amount": 0
+  },
+  {
+   "id": "m-bayi-3",
+   "order_id": "o-bayi",
+   "position": 3,
+   "title": "Etkinlik günü",
+   "due_on": "2026-12-05",
+   "done_at": null,
+   "payment_amount": 4500000
+  },
+  {
+   "id": "m-bayi-4",
+   "order_id": "o-bayi",
+   "position": 4,
+   "title": "Kapanış raporu",
+   "due_on": "2026-12-12",
+   "done_at": null,
+   "payment_amount": 3000000
+  }
+ ],
+ "order_payments": [],
+ "order_costs": [
+  {
+   "id": "oc-1",
+   "order_id": "o-bayi",
+   "title": "Mekân kaporası",
+   "amount": 1875000,
+   "spent_on": "2026-11-10"
+  }
+ ],
+ "order_files": [],
+ "projects": [
+  {
+   "id": "pr-site",
+   "title": "Blog sitesi",
+   "notes": null,
+   "closed_at": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-donem",
+   "title": "Dönem projesi",
+   "notes": null,
+   "closed_at": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-app",
+   "title": "Tarif uygulaması",
+   "notes": null,
+   "closed_at": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "project_steps": [
+  {
+   "id": "pr-site-s1",
+   "project_id": "pr-site",
+   "position": 1,
+   "title": "Taslak",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-site-s2",
+   "project_id": "pr-site",
+   "position": 2,
+   "title": "Tasarım",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-site-s3",
+   "project_id": "pr-site",
+   "position": 3,
+   "title": "İçerik",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-site-s4",
+   "project_id": "pr-site",
+   "position": 4,
+   "title": "Test",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-site-s5",
+   "project_id": "pr-site",
+   "position": 5,
+   "title": "Yayına alma",
+   "done_at": null
+  },
+  {
+   "id": "pr-donem-s1",
+   "project_id": "pr-donem",
+   "position": 1,
+   "title": "Konu seçimi",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-donem-s2",
+   "project_id": "pr-donem",
+   "position": 2,
+   "title": "Kaynak taraması",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-donem-s3",
+   "project_id": "pr-donem",
+   "position": 3,
+   "title": "Veri modeli",
+   "done_at": null
+  },
+  {
+   "id": "pr-donem-s4",
+   "project_id": "pr-donem",
+   "position": 4,
+   "title": "Arayüz",
+   "done_at": null
+  },
+  {
+   "id": "pr-donem-s5",
+   "project_id": "pr-donem",
+   "position": 5,
+   "title": "Test",
+   "done_at": null
+  },
+  {
+   "id": "pr-donem-s6",
+   "project_id": "pr-donem",
+   "position": 6,
+   "title": "Rapor",
+   "done_at": null
+  },
+  {
+   "id": "pr-app-s1",
+   "project_id": "pr-app",
+   "position": 1,
+   "title": "Fikir",
+   "done_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "pr-app-s2",
+   "project_id": "pr-app",
+   "position": 2,
+   "title": "Giriş ekranı",
+   "done_at": null
+  },
+  {
+   "id": "pr-app-s3",
+   "project_id": "pr-app",
+   "position": 3,
+   "title": "Ana akış",
+   "done_at": null
+  },
+  {
+   "id": "pr-app-s4",
+   "project_id": "pr-app",
+   "position": 4,
+   "title": "Yayın",
+   "done_at": null
+  }
+ ],
+ "courses": [
+  {
+   "id": "co-ag",
+   "name": "Bilgisayar Ağları",
+   "term": "2026 Güz"
+  },
+  {
+   "id": "co-ol",
+   "name": "Olasılık",
+   "term": "2026 Güz"
+  },
+  {
+   "id": "co-alg",
+   "name": "Algoritmalar",
+   "term": "2026 Güz"
+  }
+ ],
+ "course_slots": [
+  {
+   "id": "cs-1",
+   "course_id": "co-ag",
+   "weekday": 1,
+   "starts": "11:00",
+   "ends": "12:30",
+   "location": "Çevrim içi"
+  },
+  {
+   "id": "cs-2",
+   "course_id": "co-ag",
+   "weekday": 4,
+   "starts": "11:00",
+   "ends": "12:30",
+   "location": "Çevrim içi"
+  },
+  {
+   "id": "cs-3",
+   "course_id": "co-ol",
+   "weekday": 2,
+   "starts": "10:30",
+   "ends": "12:00",
+   "location": null
+  },
+  {
+   "id": "cs-4",
+   "course_id": "co-alg",
+   "weekday": 3,
+   "starts": "12:00",
+   "ends": "13:30",
+   "location": null
+  }
+ ],
+ "events": [
+  {
+   "id": "e-1",
+   "title": "Bilgisayar Ağları",
+   "kind": "class",
+   "starts_at": "2026-11-16T08:00:00Z",
+   "ends_at": "2026-11-16T09:30:00Z",
+   "location": "Çevrim içi",
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ag",
+   "notes": null,
+   "source": "rule",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-2",
+   "title": "Yeliz ile kahve",
+   "kind": "meeting",
+   "starts_at": "2026-11-16T10:00:00Z",
+   "ends_at": "2026-11-16T11:00:00Z",
+   "location": "Moda",
+   "person_id": "p-yeliz",
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-3",
+   "title": "Proje grubu toplantısı",
+   "kind": "work",
+   "starts_at": "2026-11-16T13:30:00Z",
+   "ends_at": "2026-11-16T14:30:00Z",
+   "location": "Görüntülü",
+   "person_id": "p-emir",
+   "client_id": null,
+   "project_id": "pr-donem",
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-4",
+   "title": "Olasılık",
+   "kind": "class",
+   "starts_at": "2026-11-17T07:30:00Z",
+   "ends_at": "2026-11-17T09:00:00Z",
+   "location": null,
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ol",
+   "notes": "Kısa sınav var",
+   "source": "rule",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-5",
+   "title": "Spor",
+   "kind": "personal",
+   "starts_at": "2026-11-17T16:00:00Z",
+   "ends_at": "2026-11-17T17:00:00Z",
+   "location": null,
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-6",
+   "title": "Algoritmalar",
+   "kind": "class",
+   "starts_at": "2026-11-18T09:00:00Z",
+   "ends_at": "2026-11-18T10:30:00Z",
+   "location": null,
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-alg",
+   "notes": null,
+   "source": "rule",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-7",
+   "title": "Bilgisayar Ağları",
+   "kind": "class",
+   "starts_at": "2026-11-19T08:00:00Z",
+   "ends_at": "2026-11-19T09:30:00Z",
+   "location": "Çevrim içi",
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ag",
+   "notes": null,
+   "source": "rule",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-8",
+   "title": "Merve ile öğle yemeği",
+   "kind": "meeting",
+   "starts_at": "2026-11-19T09:30:00Z",
+   "ends_at": "2026-11-19T10:30:00Z",
+   "location": null,
+   "person_id": "p-merve",
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-9",
+   "title": "Danışman görüşmesi",
+   "kind": "meeting",
+   "starts_at": "2026-11-19T12:00:00Z",
+   "ends_at": "2026-11-19T12:45:00Z",
+   "location": null,
+   "person_id": "p-leyla",
+   "client_id": null,
+   "project_id": "pr-donem",
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-10",
+   "title": "Blog sitesi testi",
+   "kind": "work",
+   "starts_at": "2026-11-19T15:00:00Z",
+   "ends_at": "2026-11-19T16:00:00Z",
+   "location": null,
+   "person_id": null,
+   "client_id": null,
+   "project_id": "pr-site",
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-11",
+   "title": "Aile kahvaltısı",
+   "kind": "personal",
+   "starts_at": "2026-11-21T08:00:00Z",
+   "ends_at": "2026-11-21T10:00:00Z",
+   "location": null,
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "e-12",
+   "title": "Sınav çalışması",
+   "kind": "personal",
+   "starts_at": "2026-11-22T11:00:00Z",
+   "ends_at": "2026-11-22T14:00:00Z",
+   "location": null,
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ag",
+   "notes": null,
+   "source": "manual",
+   "external_id": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "t-odev",
+   "title": "Alt ağ planı ödevi",
+   "kind": "assignment",
+   "due_at": "2026-11-16T17:00:00Z",
+   "done_at": null,
+   "person_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ag",
+   "notes": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "t-quiz",
+   "title": "Olasılık kısa sınavı",
+   "kind": "exam",
+   "due_at": "2026-11-17T07:30:00Z",
+   "done_at": null,
+   "person_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ol",
+   "notes": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "t-sinav",
+   "title": "Ağlar ara sınavı",
+   "kind": "exam",
+   "due_at": "2026-11-23T08:00:00Z",
+   "done_at": null,
+   "person_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": "co-ag",
+   "notes": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "t-fatura",
+   "title": "Elektrik faturasını öde",
+   "kind": "bill",
+   "due_at": "2026-11-17T15:00:00Z",
+   "done_at": null,
+   "person_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "t-rezervasyon",
+   "title": "Yıl dönümü rezervasyonu",
+   "kind": "plan",
+   "due_at": "2026-11-22T15:00:00Z",
+   "done_at": null,
+   "person_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "t-muayene",
+   "title": "Araç muayenesi randevusu al",
+   "kind": "todo",
+   "due_at": "2026-11-30T15:00:00Z",
+   "done_at": null,
+   "person_id": null,
+   "project_id": null,
+   "order_id": null,
+   "course_id": null,
+   "notes": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "budget_categories": [
+  {
+   "id": "b-market",
+   "name": "Market",
+   "monthly_limit": 750000,
+   "position": 1
+  },
+  {
+   "id": "b-yemek",
+   "name": "Dışarıda yemek",
+   "monthly_limit": 500000,
+   "position": 2
+  },
+  {
+   "id": "b-ulasim",
+   "name": "Ulaşım",
+   "monthly_limit": 375000,
+   "position": 3
+  },
+  {
+   "id": "b-abone",
+   "name": "Abonelikler",
+   "monthly_limit": 150000,
+   "position": 4
+  },
+  {
+   "id": "b-diger",
+   "name": "Diğer",
+   "monthly_limit": 1350000,
+   "position": 5
+  }
+ ],
+ "expenses": [
+  {
+   "id": "x-01",
+   "title": "Market",
+   "amount": 185000,
+   "category_id": "b-market",
+   "spent_at": "2026-11-02T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-02",
+   "title": "Market",
+   "amount": 165000,
+   "category_id": "b-market",
+   "spent_at": "2026-11-06T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-03",
+   "title": "Pazar",
+   "amount": 107500,
+   "category_id": "b-market",
+   "spent_at": "2026-11-08T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-04",
+   "title": "Market",
+   "amount": 112500,
+   "category_id": "b-market",
+   "spent_at": "2026-11-12T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-05",
+   "title": "Market",
+   "amount": 80000,
+   "category_id": "b-market",
+   "spent_at": "2026-11-15T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-06",
+   "title": "Öğle yemeği",
+   "amount": 52500,
+   "category_id": "b-yemek",
+   "spent_at": "2026-11-03T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-07",
+   "title": "Kahve",
+   "amount": 30000,
+   "category_id": "b-yemek",
+   "spent_at": "2026-11-05T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-08",
+   "title": "Akşam yemeği",
+   "amount": 120000,
+   "category_id": "b-yemek",
+   "spent_at": "2026-11-07T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-09",
+   "title": "Öğle yemeği",
+   "amount": 47500,
+   "category_id": "b-yemek",
+   "spent_at": "2026-11-10T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-10",
+   "title": "Kahve",
+   "amount": 52500,
+   "category_id": "b-yemek",
+   "spent_at": "2026-11-12T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-11",
+   "title": "Akşam yemeği",
+   "amount": 97500,
+   "category_id": "b-yemek",
+   "spent_at": "2026-11-14T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-12",
+   "title": "Yakıt",
+   "amount": 150000,
+   "category_id": "b-ulasim",
+   "spent_at": "2026-11-04T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-13",
+   "title": "Taksi",
+   "amount": 50000,
+   "category_id": "b-ulasim",
+   "spent_at": "2026-11-09T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-14",
+   "title": "Otobüs kartı",
+   "amount": 37500,
+   "category_id": "b-ulasim",
+   "spent_at": "2026-11-13T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-15",
+   "title": "İnternet",
+   "amount": 65000,
+   "category_id": "b-abone",
+   "spent_at": "2026-11-05T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-16",
+   "title": "Müzik ve dizi",
+   "amount": 47500,
+   "category_id": "b-abone",
+   "spent_at": "2026-11-10T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-17",
+   "title": "Kırtasiye",
+   "amount": 87500,
+   "category_id": "b-diger",
+   "spent_at": "2026-11-03T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-18",
+   "title": "Hediye",
+   "amount": 237500,
+   "category_id": "b-diger",
+   "spent_at": "2026-11-07T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-19",
+   "title": "Ev eşyası",
+   "amount": 325000,
+   "category_id": "b-diger",
+   "spent_at": "2026-11-09T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "x-20",
+   "title": "Giyim",
+   "amount": 250000,
+   "category_id": "b-diger",
+   "spent_at": "2026-11-11T09:00:00Z",
+   "source": "manual",
+   "receipt_path": null,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "planned_cash": [],
+ "important_dates": [
+  {
+   "id": "d-yildonumu",
+   "title": "Yıl dönümü",
+   "month": 11,
+   "day": 26,
+   "year": null,
+   "person_id": null
+  },
+  {
+   "id": "d-dogum",
+   "title": "Doğum günü",
+   "month": 3,
+   "day": 23,
+   "year": null,
+   "person_id": null
+  }
+ ],
+ "together_log": [
+  {
+   "id": "tl-1",
+   "day": "2026-11-11",
+   "note": null
+  }
+ ],
+ "notes": [
+  {
+   "id": "n-1",
+   "body": "Lale sever.",
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "locked": 1,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "n-2",
+   "body": "Çayı açık, iki şekerli.",
+   "person_id": null,
+   "client_id": null,
+   "project_id": null,
+   "order_id": null,
+   "locked": 1,
+   "created_at": "2026-11-16T08:00:00Z"
+  },
+  {
+   "id": "n-3",
+   "body": "Kuzey Mobilya katalogda ürün fiyatı göstermek istemiyor, teklif formu yeterli.",
+   "person_id": null,
+   "client_id": "c-kuzey",
+   "project_id": null,
+   "order_id": "o-web",
+   "locked": 0,
+   "created_at": "2026-11-16T08:00:00Z"
+  }
+ ],
+ "reminders": [],
+ "suggestions": [],
+ "settings": [
+  {
+   "key": "monthly_budget",
+   "value": "3125000"
+  },
+  {
+   "key": "briefing_morning",
+   "value": "08:30"
+  },
+  {
+   "key": "briefing_evening",
+   "value": "21:30"
+  },
+  {
+   "key": "accent_color",
+   "value": "#FF8A3D"
+  },
+  {
+   "key": "user_name",
+   "value": "Ada"
+  }
+ ]
+}

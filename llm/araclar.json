@@ -1,0 +1,741 @@
+[
+ {
+  "name": "get_agenda",
+  "description": "Bir tarih aralığındaki etkinlikleri ve teslim tarihi o aralığa düşen görevleri döndürür. Kullanıcı gününü, haftasını ya da belirli bir günü sorduğunda kullan.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "from": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD."
+    },
+    "to": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD."
+    }
+   },
+   "required": [
+    "from",
+    "to"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "find_entities",
+  "description": "İsimle kişi, müşteri, sipariş, teklif, proje ya da ders arar. Kullanıcı bir isim söylediğinde ve hangi kayıt olduğundan emin olmadığında, yazmadan önce bunu çağır. En iyi eşleşmeleri kimlikleriyle döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "description": "Aranan ad ya da adın bir parçası."
+    },
+    "types": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "enum": [
+       "person",
+       "client",
+       "order",
+       "quote",
+       "project",
+       "course"
+      ]
+     },
+     "description": "Aranacak kayıt türleri. Boşsa hepsi."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "get_order",
+  "description": "Bir siparişin açıklamasını, kilometre taşlarını, ödemelerini, masraflarını ve kalan tutarını döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "order_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "order_id"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "get_receivables",
+  "description": "Müşterilerden alınacak tutarları döndürür: sipariş başına kalan, vadesi gelmiş olanlar ve sıradaki tahsilatlar.",
+  "input_schema": {
+   "type": "object",
+   "properties": {},
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "get_budget_status",
+  "description": "Bir ayın bütçe durumunu döndürür: toplam, kategori başına harcanan ve sınır, kalan gün ve günlük kalan tutar. Para ile ilgili her soruda önce bunu çağır. Para bölümü kilitliyse hata döner.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "month": {
+     "type": "string",
+     "description": "YYYY-MM. Boşsa içinde bulunulan ay."
+    }
+   },
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "search_memory",
+  "description": "Notlarda, kişi ve müşteri notlarında, sipariş açıklamalarında serbest metin araması yapar. \"Ne konuşmuştuk\", \"ne demiştim\" türü sorularda kullan.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "description": "Aranacak kelimeler."
+    },
+    "limit": {
+     "type": "integer",
+     "description": "En fazla sonuç, varsayılan 8."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "get_person",
+  "description": "Bir kişinin kartını döndürür: ilişki türü, son görüşme, notlar, yaklaşan ortak etkinlikler.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "person_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "person_id"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_event",
+  "description": "Takvime etkinlik ekler. Aynı saatte başka etkinlik varsa sonuçta çakışma bilgisi döner, kullanıcıya söyle.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "kind": {
+     "type": "string",
+     "enum": [
+      "meeting",
+      "class",
+      "personal",
+      "work"
+     ],
+     "description": "Etkinlik türü."
+    },
+    "starts_at": {
+     "type": "string",
+     "description": "Yerel tarih ve saat, ISO 8601, örnek 2026-11-17T15:00 (Europe/Istanbul)."
+    },
+    "ends_at": {
+     "type": "string",
+     "description": "Yerel tarih ve saat, ISO 8601, örnek 2026-11-17T15:00 (Europe/Istanbul). Boşsa 1 saat varsayılır."
+    },
+    "location": {
+     "type": "string"
+    },
+    "person_id": {
+     "type": "string"
+    },
+    "client_id": {
+     "type": "string"
+    },
+    "project_id": {
+     "type": "string"
+    },
+    "order_id": {
+     "type": "string"
+    },
+    "notes": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "title",
+    "kind",
+    "starts_at"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_task",
+  "description": "Görev, ödev, sınav, fatura ya da plan ekler.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "kind": {
+     "type": "string",
+     "enum": [
+      "todo",
+      "assignment",
+      "exam",
+      "bill",
+      "plan"
+     ],
+     "description": "Görev türü."
+    },
+    "due_at": {
+     "type": "string",
+     "description": "Yerel tarih ve saat, ISO 8601, örnek 2026-11-17T15:00 (Europe/Istanbul)."
+    },
+    "course_id": {
+     "type": "string"
+    },
+    "project_id": {
+     "type": "string"
+    },
+    "order_id": {
+     "type": "string"
+    },
+    "person_id": {
+     "type": "string"
+    },
+    "notes": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "title",
+    "kind"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "complete_task",
+  "description": "Bir görevi tamamlandı olarak işaretler.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "task_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "task_id"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_reminder",
+  "description": "Belirli bir zamana hatırlatıcı kurar.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "fire_at": {
+     "type": "string",
+     "description": "Yerel tarih ve saat, ISO 8601, örnek 2026-11-17T15:00 (Europe/Istanbul)."
+    },
+    "repeat_rule": {
+     "type": "string",
+     "enum": [
+      "daily",
+      "weekly",
+      "monthly",
+      "yearly"
+     ],
+     "description": "Tekrar. Tek seferlikse verme."
+    },
+    "source_type": {
+     "type": "string"
+    },
+    "source_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "title",
+    "fire_at"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "complete_project_step",
+  "description": "Bir projenin sıradaki adımını tamamlar.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "project_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "project_id"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "log_contact",
+  "description": "Bir kişiyle ya da müşteriyle bugün (ya da verilen tarihte) görüşüldüğünü kaydeder.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "person_id": {
+     "type": "string"
+    },
+    "client_id": {
+     "type": "string"
+    },
+    "on": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD. Boşsa bugün."
+    },
+    "note": {
+     "type": "string"
+    }
+   },
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_note",
+  "description": "Not ekler. Bir kişiye, müşteriye, projeye ya da siparişe bağlanabilir. Kullanıcı \"unutma\", \"not al\", \"aklında olsun\" dediğinde kullan.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "body": {
+     "type": "string"
+    },
+    "person_id": {
+     "type": "string"
+    },
+    "client_id": {
+     "type": "string"
+    },
+    "project_id": {
+     "type": "string"
+    },
+    "order_id": {
+     "type": "string"
+    },
+    "about_partner": {
+     "type": "boolean",
+     "description": "İlişki bölümüne ait bir not ise true."
+    }
+   },
+   "required": [
+    "body"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "log_together_time",
+  "description": "Partnerle birlikte vakit geçirildiğini kaydeder.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "on": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD. Boşsa bugün."
+    },
+    "note": {
+     "type": "string"
+    }
+   },
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "set_important_date",
+  "description": "Yıl dönümü, doğum günü gibi önemli bir günü kaydeder.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "month": {
+     "type": "integer",
+     "description": "1–12"
+    },
+    "day": {
+     "type": "integer",
+     "description": "1–31"
+    },
+    "year": {
+     "type": "integer",
+     "description": "Yıllık tekrar ediyorsa verme."
+    },
+    "person_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "title",
+    "month",
+    "day"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_expense",
+  "description": "Kişisel harcama kaydeder. Kategori söylenmediyse başlıktan tahmin et (kahve, restoran: Dışarıda yemek; taksi, yakıt: Ulaşım). Emin değilsen Diğer.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "amount": {
+     "type": "integer",
+     "description": "Tutar, kuruş cinsinden tamsayı (120 TL = 12000)."
+    },
+    "category": {
+     "type": "string",
+     "description": "Kategori adı, bütçedeki kategorilerden biri."
+    },
+    "spent_at": {
+     "type": "string",
+     "description": "Yerel tarih ve saat, ISO 8601, örnek 2026-11-17T15:00 (Europe/Istanbul). Boşsa şimdi."
+    }
+   },
+   "required": [
+    "title",
+    "amount",
+    "category"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_client",
+  "description": "Yeni müşteri ekler.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "contact_name": {
+     "type": "string"
+    },
+    "contact_phone": {
+     "type": "string"
+    },
+    "contact_email": {
+     "type": "string"
+    },
+    "notes": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "name"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "create_quote",
+  "description": "Bir müşteri için teklif kaydı oluşturur.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "client_id": {
+     "type": "string"
+    },
+    "title": {
+     "type": "string"
+    },
+    "amount": {
+     "type": "integer",
+     "description": "Tutar, kuruş cinsinden tamsayı (120 TL = 12000)."
+    },
+    "status": {
+     "type": "string",
+     "enum": [
+      "draft",
+      "sent"
+     ],
+     "description": "Taslak mı, gönderildi mi."
+    },
+    "follow_up_on": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD. Gönderildiyse takip tarihi, boşsa 3 iş günü sonrası."
+    }
+   },
+   "required": [
+    "client_id",
+    "title",
+    "amount",
+    "status"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "set_quote_status",
+  "description": "Teklifin durumunu değiştirir. Reddedildiyse nedeni sor ve yaz.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "quote_id": {
+     "type": "string"
+    },
+    "status": {
+     "type": "string",
+     "enum": [
+      "sent",
+      "accepted",
+      "rejected"
+     ],
+     "description": "Yeni durum."
+    },
+    "reject_reason": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "quote_id",
+    "status"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "convert_quote_to_order",
+  "description": "Kabul edilmiş teklifi siparişe çevirir. Kilometre taşları ve ödeme planı verilmezse varsayılan şablon kullanılır. Kullanıcıya planı söyle ve onay al.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "quote_id": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    },
+    "due_on": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD."
+    },
+    "upfront_amount": {
+     "type": "integer",
+     "description": "Tutar, kuruş cinsinden tamsayı (120 TL = 12000). Alınan kapora."
+    },
+    "milestones": {
+     "type": "array",
+     "description": "Sıralı kilometre taşları.",
+     "items": {
+      "type": "object",
+      "properties": {
+       "title": {
+        "type": "string"
+       },
+       "due_on": {
+        "type": "string",
+        "description": "Yerel tarih, YYYY-MM-DD."
+       },
+       "payment_amount": {
+        "type": "integer",
+        "description": "Tutar, kuruş cinsinden tamsayı (120 TL = 12000). Bu adım bitince doğacak tahsilat, yoksa 0."
+       }
+      },
+      "required": [
+       "title"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   "required": [
+    "quote_id"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "complete_milestone",
+  "description": "Bir siparişte kilometre taşını tamamlar. Bağlı ödeme varsa vadesi gelmiş olur, kullanıcıya tutarı söyle.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "order_id": {
+     "type": "string"
+    },
+    "milestone_id": {
+     "type": "string",
+     "description": "Boşsa sıradaki kilometre taşı."
+    }
+   },
+   "required": [
+    "order_id"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "record_payment",
+  "description": "Bir sipariş için müşteriden alınan ödemeyi kaydeder. Tutar vadesi gelen bir kilometre taşı ödemesiyle eşleşiyorsa ona bağlanır. Müşteri ya da sipariş eşleşmesinden emin değilsen önce find_entities çağır.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "order_id": {
+     "type": "string"
+    },
+    "amount": {
+     "type": "integer",
+     "description": "Tutar, kuruş cinsinden tamsayı (120 TL = 12000)."
+    },
+    "received_at": {
+     "type": "string",
+     "description": "Yerel tarih ve saat, ISO 8601, örnek 2026-11-17T15:00 (Europe/Istanbul). Boşsa şimdi."
+    },
+    "note": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "order_id",
+    "amount"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "add_order_cost",
+  "description": "Bir siparişe yapılan masrafı kaydeder (kâr hesabı için). Kişisel bütçeye yazılmaz.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "order_id": {
+     "type": "string"
+    },
+    "title": {
+     "type": "string"
+    },
+    "amount": {
+     "type": "integer",
+     "description": "Tutar, kuruş cinsinden tamsayı (120 TL = 12000)."
+    },
+    "spent_on": {
+     "type": "string",
+     "description": "Yerel tarih, YYYY-MM-DD. Boşsa bugün."
+    }
+   },
+   "required": [
+    "order_id",
+    "title",
+    "amount"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "undo_last",
+  "description": "Bu konuşmada yapılan son değişikliği geri alır. Kullanıcı \"geri al\", \"yanlış oldu\", \"iptal\" dediğinde kullan.",
+  "input_schema": {
+   "type": "object",
+   "properties": {},
+   "required": [],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "show_in_island",
+  "description": "Sesle okunmayacak kadar uzun bir listeyi ya da kartı adacıkta gösterir. Sesli yanıtta yalnızca özetini söyle.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "kind": {
+     "type": "string",
+     "enum": [
+      "agenda",
+      "order",
+      "receivables",
+      "budget",
+      "list"
+     ],
+     "description": "Gösterilecek kart türü."
+    },
+    "ref_id": {
+     "type": "string",
+     "description": "İlgili kaydın kimliği, varsa."
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "kind = list ise satırlar."
+    }
+   },
+   "required": [
+    "kind"
+   ],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "open_section",
+  "description": "İkinci beyin penceresini belirli bir bölümde açar.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "section": {
+     "type": "string",
+     "enum": [
+      "bugun",
+      "ozet",
+      "takvim",
+      "kisiler",
+      "iliski",
+      "dersler",
+      "projeler",
+      "para",
+      "musteriler",
+      "teklifler",
+      "siparisler",
+      "rapor",
+      "hafiza"
+     ],
+     "description": "Açılacak bölüm."
+    }
+   },
+   "required": [
+    "section"
+   ],
+   "additionalProperties": false
+  }
+ }
+]

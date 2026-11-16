@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optik: animasyon ve ses referansı</title>
+<link rel="stylesheet" href="optik.css">
+<style>
+  body{margin:0;min-height:100vh;background:#12131C;color:#F2F0E9;font-family:Inter,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:28px;padding:40px 20px;box-sizing:border-box}
+  h1{margin:0;font-size:28px}
+  p{margin:0;color:#A3A6B8;font-size:15px;text-align:center;max-width:46ch;line-height:1.5}
+  .sahne{width:360px;height:400px;position:relative}
+  .sahne .buyut{position:absolute;left:0;top:0;transform:scale(2);transform-origin:0 0}
+  .sahne button{all:unset;cursor:pointer;display:block}
+  .sahne button:focus-visible{outline:2px solid #5EE0C8;outline-offset:6px;border-radius:12px}
+  .dugmeler{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:560px}
+  .dugmeler button{min-height:44px;padding:0 18px;border-radius:22px;border:2px solid transparent;background:#1C1E2B;color:#F2F0E9;font:600 14px Inter,system-ui,sans-serif;cursor:pointer}
+  .dugmeler button[aria-pressed="true"]{border-color:#FF8A3D}
+  .dugmeler button:focus-visible{outline:2px solid #5EE0C8;outline-offset:2px}
+</style>
+</head>
+<body>
+<h1>Optik</h1>
+<p>Bir ruh haline bas: hareketi oynar, sesi çalar. Optik’in üstüne basınca zıplar. Sesler <code>../sesler</code> klasöründeki WAV dosyalarıdır.</p>
+
+<div class="sahne">
+  <div class="buyut">
+    <button type="button" id="dokun" aria-label="Optik’e dokun">
+      <div class="optik" id="optik">
+        <div class="golge"></div>
+        <div class="dokun" id="dokunKatman">
+          <div class="hareket">
+            <div class="pul a"></div><div class="pul b"></div><div class="pul c"></div><div class="pul d"></div>
+            <div class="zz a">z</div><div class="zz b">z</div><div class="zz c">z</div>
+            <div class="unlem">!</div>
+            <div class="salin"><div class="ic-duvar"></div></div>
+            <svg class="bacak sol" viewBox="0 0 30 46" aria-hidden="true"><path d="M15 2V34M15 34L4 43M15 34V44M15 34L26 43"/></svg>
+            <svg class="bacak sag" viewBox="0 0 30 46" aria-hidden="true"><path d="M15 2V34M15 34L4 43M15 34V44M15 34L26 43"/></svg>
+            <div class="salin">
+              <div class="kabuk">
+                <div class="benek a"></div><div class="benek b"></div><div class="benek c"></div>
+                <svg class="catlak" viewBox="0 0 120 156" aria-hidden="true"><path d="M89 60L98 54L101 45M32 80L24 86L22 95"/></svg>
+                <div class="delik">
+                  <div class="gozler">
+                    <div class="goz-sar"><div class="goz"></div></div>
+                    <div class="goz-sar"><div class="goz sag"></div></div>
+                  </div>
+                  <div class="gaga"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<div class="dugmeler" id="dugmeler"></div>
+
+<script>
+  var MOODS = [
+    { id: 'bekliyor', ad: 'Bekliyor', ses: 'tik' },
+    { id: 'mutlu', ad: 'Mutlu', ses: 'mutlu' },
+    { id: 'dinliyor', ad: 'Dinliyor', ses: 'dinliyor' },
+    { id: 'dusunceli', ad: 'Düşünceli', ses: 'dusunceli' },
+    { id: 'uyari', ad: 'Hatırlatma', ses: 'uyari' },
+    { id: 'kutlama', ad: 'Kutlama', ses: 'kutlama' },
+    { id: 'uykulu', ad: 'Uykulu', ses: 'uykulu' }
+  ];
+  var optik = document.getElementById('optik');
+  var katman = document.getElementById('dokunKatman');
+  var kutu = document.getElementById('dugmeler');
+  var n = 0;
+  var secili = 'bekliyor';
+
+  function cal(ad) {
+    try { new Audio('../sesler/' + ad + '.wav').play().catch(function () {}); } catch (e) {}
+  }
+  function zipla() {
+    n += 1;
+    katman.classList.remove('zipla-a', 'zipla-b');
+    katman.classList.add(n % 2 ? 'zipla-a' : 'zipla-b');
+  }
+  function sec(id, sessiz) {
+    secili = id;
+    optik.className = 'optik' + (id === 'bekliyor' ? '' : ' ' + id);
+    Array.prototype.forEach.call(kutu.children, function (b) { b.setAttribute('aria-pressed', b.dataset.id === id ? 'true' : 'false'); });
+    if (!sessiz) {
+      zipla();
+      cal(MOODS.filter(function (m) { return m.id === id; })[0].ses);
+    }
+  }
+  MOODS.forEach(function (m) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = m.ad;
+    b.dataset.id = m.id;
+    b.addEventListener('click', function () { sec(m.id); });
+    kutu.appendChild(b);
+  });
+  document.getElementById('dokun').addEventListener('click', function () { zipla(); cal('dinliyor'); });
+  function hashtenSec() {
+    var ilk = (location.hash || '').replace('#', '');
+    sec(MOODS.some(function (m) { return m.id === ilk; }) ? ilk : 'bekliyor', true);
+  }
+  window.addEventListener('hashchange', hashtenSec);
+  hashtenSec();
+</script>
+</body>
+</html>

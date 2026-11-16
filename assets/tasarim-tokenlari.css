@@ -1,0 +1,16 @@
+:root{
+  --optik-zemin: #12131C;
+  --optik-yuzey: #1C1E2B;
+  --optik-yuzey2: #262939;
+  --optik-metin: #F2F0E9;
+  --optik-metin-soluk: #A3A6B8;
+  --optik-cizgi: #5B5F78;
+  --optik-cizgi-guclu: #7A7F9C;
+  --optik-vurgu: #FF8A3D;
+  --optik-vurgu-ustu-metin: #12131C;
+  --optik-nane: #5EE0C8;
+  --optik-uyari: #FF8A3D;
+  --optik-adacik: #000000;
+  --optik-nane-iz: rgba(94,224,200,0.18);
+  --optik-uyari-iz: rgba(255,138,61,0.22);
+}

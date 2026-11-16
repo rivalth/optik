@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Optik ikinci beyin: para, ilişki, işler, rapor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5EE0C8}a:hover{color:#8FEBD9}
+button:focus-visible{outline:2px solid #5EE0C8;outline-offset:2px}
+.tik .eye{width:10px;height:13px;border-radius:5px;background:#FFF4D6;transition:all .28s cubic-bezier(.3,1.5,.5,1)}
+.tik .eye-w{animation:tik-blink 4.2s infinite}
+.tik .beak{width:10px;height:7px;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:50% 0;transition:transform .28s cubic-bezier(.3,1.5,.5,1)}
+.tik .zz,.tik .sp,.tik .al{opacity:0}
+.tik-bob{animation:tik-bob 2.8s ease-in-out infinite}
+.tik-shadow{animation:tik-shadow 2.8s ease-in-out infinite}
+.tik-leg{transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.tik-tap-a{animation:tik-tap-a .55s cubic-bezier(.3,.7,.4,1)}
+.tik-tap-b{animation:tik-tap-b .55s cubic-bezier(.3,.7,.4,1)}
+.m-mutlu .eye{height:7px;border-radius:7px 7px 2px 2px}
+.m-mutlu .tik-bob{animation:tik-sway 1s ease-in-out infinite}
+.m-mutlu .tik-leg-l{animation:tik-step 1s ease-in-out infinite}
+.m-mutlu .tik-leg-r{animation:tik-step 1s ease-in-out .5s infinite}
+.m-dusunceli .eye{transform:translate(3px,-3px)}
+.m-dusunceli .eye.r{height:9px}
+.m-dusunceli .tik-bob{animation:tik-tilt 2.6s ease-in-out infinite}
+.m-dusunceli .tik-leg-r{animation:tik-toe .6s ease-in-out infinite}
+.m-kutlama .eye{width:11px;height:11px;border-radius:3px;transform:rotate(45deg)}
+.m-kutlama .eye-w{animation:tik-twinkle .5s ease-in-out infinite alternate}
+.m-kutlama .beak{transform:scaleY(1.5)}
+.m-kutlama .tik-act{animation:tik-jump .72s cubic-bezier(.3,.7,.4,1) infinite}
+.m-kutlama .tik-shadow{animation:tik-shadow-j .72s cubic-bezier(.3,.7,.4,1) infinite}
+.m-kutlama .tik-leg-l{animation:tik-kick-l .72s ease-in-out infinite}
+.m-kutlama .tik-leg-r{animation:tik-kick-r .72s ease-in-out infinite}
+.m-kutlama .sp{animation:tik-pop .9s ease-out infinite}
+.m-kutlama .sp.b{animation-delay:.2s}
+.m-kutlama .sp.c{animation-delay:.4s}
+.m-kutlama .sp.d{animation-delay:.6s}
+.m-uyari .eye{width:12px;height:12px;border-radius:50%}
+.m-uyari .beak{transform:scaleY(1.6)}
+.m-uyari .tik-act{animation:tik-shake 1.4s ease-in-out infinite}
+.m-uyari .tik-leg-l{animation:tik-step .36s ease-in-out infinite}
+.m-uyari .tik-leg-r{animation:tik-step .36s ease-in-out .18s infinite}
+.m-uyari .al{opacity:1;animation:tik-flash .5s steps(2) infinite}
+.m-dinliyor .eye{width:11px;height:14px}
+.m-dinliyor .tik-bob{animation:tik-lean 1.8s ease-in-out infinite}
+.m-dinliyor .beak{animation:tik-talk .3s ease-in-out infinite alternate}
+@keyframes tik-bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-3px) rotate(1.5deg)}}
+@keyframes tik-shadow{0%,100%{transform:scale(1)}50%{transform:scale(.94)}}
+@keyframes tik-shadow-j{0%,100%{transform:scale(1);opacity:.4}35%{transform:scale(.66);opacity:.22}60%{transform:scale(.7);opacity:.24}}
+@keyframes tik-blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes tik-sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes tik-step{0%,50%,100%{transform:translateY(0)}25%{transform:translateY(-7px)}}
+@keyframes tik-tilt{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(4deg)}}
+@keyframes tik-toe{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-14deg)}}
+@keyframes tik-lean{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(-5deg) translateY(-2px)}}
+@keyframes tik-twinkle{from{transform:scale(.8)}to{transform:scale(1.15)}}
+@keyframes tik-jump{0%,100%{transform:translateY(0) scale(1.06,.92)}35%{transform:translateY(-26px) scale(.95,1.07)}60%{transform:translateY(-22px) scale(1,1)}}
+@keyframes tik-kick-l{0%,100%{transform:rotate(0deg)}40%{transform:rotate(30deg)}}
+@keyframes tik-kick-r{0%,100%{transform:rotate(0deg)}40%{transform:rotate(-30deg)}}
+@keyframes tik-pop{0%{opacity:0;transform:scale(.2) rotate(45deg)}30%{opacity:1}100%{opacity:0;transform:scale(1.3) rotate(45deg)}}
+@keyframes tik-shake{0%,60%,100%{transform:translateX(0) rotate(0deg)}66%{transform:translateX(-5px) rotate(-3deg)}72%{transform:translateX(5px) rotate(3deg)}78%{transform:translateX(-4px) rotate(-2deg)}84%{transform:translateX(4px) rotate(2deg)}90%{transform:translateX(-2px)}}
+@keyframes tik-flash{50%{opacity:.25}}
+@keyframes tik-talk{from{transform:scaleY(.6)}to{transform:scaleY(1.8)}}
+@keyframes tik-tap-a{0%{transform:scale(1)}25%{transform:scale(1.1,.86)}55%{transform:scale(.94,1.08) translateY(-18px)}80%{transform:scale(1.03,.97)}100%{transform:scale(1)}}
+@keyframes tik-tap-b{0%{transform:scale(1)}25%{transform:scale(1.1,.86)}55%{transform:scale(.94,1.08) translateY(-18px)}80%{transform:scale(1.03,.97)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.tik *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; display: flex; flex-direction: column; background: #12131C; color: #F2F0E9; font-family: Inter, system-ui, sans-serif">
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 24px 20px 4px">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="font-size: 13px; color: #A3A6B8">Pazartesi, 16 Kasım</span>
+<span style="font-size: 11px; font-weight: 600; color: #A3A6B8; border: 1px solid #5B5F78; border-radius: 10px; padding: 2px 8px">Örnek veri</span>
+</div>
+<h1 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 26px; line-height: 1.15">İkinci beynin</h1>
+</div>
+<button type="button" aria-label="{{soundLabel}}" aria-pressed="{{soundPressed}}" onClick="{{ toggleSound }}" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; border: none; background: #1C1E2B; color: #F2F0E9; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round">
+<path d="M4 10v4h3l5 4V6L7 10z"></path>
+<path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" style="opacity: {{waveOp}}"></path>
+<path d="M16 9.5l5 5M21 9.5l-5 5" style="opacity: {{muteOp}}"></path>
+</svg>
+</button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 14px; height: 168px; flex-shrink: 0; padding: 0 20px 8px; box-sizing: border-box">
+<button type="button" aria-label="Optik'e dokun" onClick="{{ tapTik }}" style="width: 144px; height: 160px; flex-shrink: 0; border: none; background: transparent; padding: 0; cursor: pointer; position: relative">
+<div style="position: absolute; left: 0; top: 0; width: 180px; height: 200px; transform: scale(0.8); transform-origin: 0 0">
+<div class="tik {{moodClass}}" role="img" aria-label="{{tikAlt}}" style="position: relative; width: 180px; height: 200px">
+<div class="tik-shadow" style="position: absolute; left: 45px; top: 184px; width: 90px; height: 12px; border-radius: 50%; background: #000000; opacity: 0.4"></div>
+<div class="{{tapClass}}" style="position: absolute; left: 0; top: 0; width: 180px; height: 192px; transform-origin: 50% 100%">
+<div class="tik-act" style="position: absolute; left: 0; top: 0; width: 180px; height: 192px; transform-origin: 50% 100%">
+<div class="sp" style="position: absolute; left: 18px; top: 10px; width: 10px; height: 10px; background: #5EE0C8"></div>
+<div class="sp b" style="position: absolute; left: 150px; top: 6px; width: 8px; height: 8px; background: {{accent}}"></div>
+<div class="sp c" style="position: absolute; left: 4px; top: 96px; width: 8px; height: 8px; background: {{accent}}"></div>
+<div class="sp d" style="position: absolute; left: 166px; top: 100px; width: 10px; height: 10px; background: #5EE0C8"></div>
+<div class="al" style="position: absolute; left: 150px; top: 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 30px; line-height: 1; color: {{accent}}">!</div>
+<div class="tik-bob" style="position: absolute; left: 0; top: 0; width: 180px; height: 160px; transform-origin: 50% 100%">
+<div style="position: absolute; left: 44px; top: 126px; width: 92px; height: 22px; border-radius: 50%; background: #A3957F"></div>
+</div>
+<svg class="tik-leg tik-leg-l" viewBox="0 0 30 46" aria-hidden="true" style="position: absolute; left: 58px; top: 144px; width: 30px; height: 46px; overflow: visible; transform-origin: 50% 0; fill: none; stroke: {{accent}}; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round"><path d="M15 2V34M15 34L4 43M15 34V44M15 34L26 43"></path></svg>
+<svg class="tik-leg tik-leg-r" viewBox="0 0 30 46" aria-hidden="true" style="position: absolute; left: 92px; top: 144px; width: 30px; height: 46px; overflow: visible; transform-origin: 50% 0; fill: none; stroke: {{accent}}; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round"><path d="M15 2V34M15 34L4 43M15 34V44M15 34L26 43"></path></svg>
+<div class="tik-bob" style="position: absolute; left: 0; top: 0; width: 180px; height: 160px; transform-origin: 50% 100%">
+<div style="position: absolute; left: 30px; top: 6px; width: 120px; height: 156px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; background: #F4EDE0; box-shadow: inset -10px -12px 0 rgba(0,0,0,0.07); clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 87%, 80% 79%, 69% 88%, 58% 80%, 47% 89%, 36% 80%, 25% 88%, 15% 79%, 6% 86%, 0 80%)">
+<div style="position: absolute; left: 22px; top: 34px; width: 7px; height: 7px; border-radius: 50%; background: #DDD0BA"></div>
+<div style="position: absolute; left: 90px; top: 28px; width: 5px; height: 5px; border-radius: 50%; background: #DDD0BA"></div>
+<div style="position: absolute; left: 94px; top: 100px; width: 6px; height: 6px; border-radius: 50%; background: #DDD0BA"></div>
+<div style="position: absolute; left: 26px; top: 50px; width: 68px; height: 40px; background: #2A2521; clip-path: polygon(100% 50%, 87.5% 66.7%, 81.2% 87.2%, 58.3% 89.1%, 38.5% 96.1%, 22.4% 81.7%, 3.6% 68.7%, 7.1% 47.7%, 6.3% 27.8%, 25.4% 18.5%, 41.1% 4.4%, 60% 9.7%, 81.2% 11.5%, 88.5% 32%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">
+<div style="display: flex; align-items: center; justify-content: center; gap: 13px; height: 14px">
+<div class="eye-w"><div class="eye"></div></div>
+<div class="eye-w"><div class="eye r"></div></div>
+</div>
+<div class="beak" style="background: {{accent}}"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</button>
+<div style="position: relative; flex-grow: 1; min-width: 0; min-height: 88px; box-sizing: border-box; background: #1C1E2B; border-radius: 20px; padding: 14px 16px; display: flex; align-items: center">
+<div aria-hidden="true" style="position: absolute; left: -6px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: #1C1E2B; transform: rotate(45deg); border-radius: 3px"></div>
+<div aria-live="polite" style="position: relative; font-size: 15px; line-height: 1.4; text-wrap: pretty">{{line}}</div>
+</div>
+</div>
+
+<div style="flex: 1 1 0; min-height: 0; overflow-y: auto; padding: 8px 20px 20px">
+
+<sc-if value="{{ isOzet }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 2px 2px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Hatırlatıcılar</h2>
+<span style="font-size: 13px; color: #A3A6B8">{{remCount}}</span>
+</div>
+<sc-for list="{{ reminders }}" as="it" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 15px; font-weight: 600; color: {{it.tc}}; text-decoration: {{it.deco}}">{{it.title}}</div>
+<div style="font-size: 13px; color: #A3A6B8">{{it.sub}}</div>
+</div>
+<button type="button" aria-label="{{it.label}}" aria-pressed="{{it.pressed}}" onClick="{{ it.toggle }}" style="width: 44px; height: 44px; flex-shrink: 0; border: none; background: transparent; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center">
+<span style="width: 28px; height: 28px; box-sizing: border-box; border-radius: 50%; border: 2px solid {{it.cbBorder}}; background: {{it.cbBg}}; display: flex; align-items: center; justify-content: center">
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #12131C; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; opacity: {{it.checkOp}}"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</span>
+</button>
+</div>
+</sc-for>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Optik’in önerileri</h2>
+<sc-for list="{{ suggestions }}" as="sg" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; background: #1C1E2B; border-radius: 18px">
+<div style="font-size: 15px; line-height: 1.45; text-wrap: pretty">{{sg.text}}</div>
+<div style="display: flex; gap: 8px">
+<button type="button" onClick="{{ sg.accept }}" style="min-height: 44px; border: none; border-radius: 22px; background: {{sg.accent}}; color: #12131C; padding: 0 16px; cursor: pointer; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600">{{sg.act}}</button>
+<button type="button" onClick="{{ sg.skip }}" style="min-height: 44px; border: none; border-radius: 22px; background: #262939; color: #F2F0E9; padding: 0 16px; cursor: pointer; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600">Geç</button>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ noSuggestions }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 22px 16px; border: 1px dashed #5B5F78; border-radius: 18px; font-size: 14px; color: #A3A6B8; text-align: center">Şimdilik yeni öneri yok.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPara }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 18px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 13px; font-weight: 600; color: #A3A6B8">Kasım bütçesi</span>
+<span style="font-size: 13px; color: #A3A6B8">{{budgetSub}}</span>
+</div>
+<div style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 30px; line-height: 1.1">{{budgetLeft}}</div>
+<div aria-hidden="true" style="height: 8px; border-radius: 4px; background: {{budgetTrack}}; overflow: hidden">
+<div style="width: {{budgetPct}}; height: 8px; border-radius: 4px; background: {{budgetFill}}; transition: width 0.4s ease"></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 16px; background: #1C1E2B; border-radius: 18px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 7px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 14px; font-weight: 600">{{c.name}}</span>
+<span style="font-size: 13px; color: #A3A6B8">{{c.amount}}</span>
+</div>
+<div aria-hidden="true" style="height: 6px; border-radius: 3px; background: {{c.track}}; overflow: hidden">
+<div style="width: {{c.pct}}; height: 6px; border-radius: 3px; background: {{c.fill}}; transition: width 0.4s ease"></div>
+</div>
+<sc-if value="{{ c.warn }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #F2F0E9">
+<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="flex-shrink: 0; fill: none; stroke: #FF8A3D; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M12 4l9 16H3zM12 10v4M12 17v.5"></path></svg>
+<span>{{c.warnText}}</span>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Hızlı ekle</h2>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<sc-for list="{{ quick }}" as="q" hint-placeholder-count="3">
+<button type="button" onClick="{{ q.add }}" style="min-height: 44px; border: 1px solid #5B5F78; border-radius: 22px; background: transparent; color: #F2F0E9; padding: 0 14px; cursor: pointer; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600">{{q.text}}</button>
+</sc-for>
+</div>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Son harcamalar</h2>
+<div style="display: flex; flex-direction: column; padding: 4px 16px; background: #1C1E2B; border-radius: 18px">
+<sc-for list="{{ log }}" as="l" hint-placeholder-count="3">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 0">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-size: 14px; font-weight: 600">{{l.t}}</span>
+<span style="font-size: 12px; color: #A3A6B8">{{l.when}}</span>
+</div>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 15px">{{l.amount}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isIliski }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 12px 14px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<span style="font-size: 13px; color: #A3A6B8">Son birlikte vakit</span>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 20px">{{togetherText}}</span>
+</div>
+<button type="button" aria-pressed="{{togetherPressed}}" onClick="{{ markTogether }}" style="min-height: 44px; flex-shrink: 0; border: none; border-radius: 22px; background: {{togetherBg}}; color: {{togetherColor}}; padding: 0 14px; cursor: pointer; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600">{{togetherBtn}}</button>
+</div>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Önemli günler</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 15px; font-weight: 600">Yıl dönümü</span>
+<span style="font-size: 13px; color: #A3A6B8">26 Kasım Perşembe</span>
+</div>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 15px">10 gün</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 15px; font-weight: 600">Doğum günü</span>
+<span style="font-size: 13px; color: #A3A6B8">23 Mart Salı</span>
+</div>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 15px">127 gün</span>
+</div>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Planlar</h2>
+<sc-for list="{{ plans }}" as="it" hint-placeholder-count="2">
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 15px; font-weight: 600; color: {{it.tc}}; text-decoration: {{it.deco}}">{{it.title}}</div>
+<div style="font-size: 13px; color: #A3A6B8">{{it.sub}}</div>
+</div>
+<button type="button" aria-label="{{it.label}}" aria-pressed="{{it.pressed}}" onClick="{{ it.toggle }}" style="width: 44px; height: 44px; flex-shrink: 0; border: none; background: transparent; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center">
+<span style="width: 28px; height: 28px; box-sizing: border-box; border-radius: 50%; border: 2px solid {{it.cbBorder}}; background: {{it.cbBg}}; display: flex; align-items: center; justify-content: center">
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #12131C; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; opacity: {{it.checkOp}}"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</span>
+</button>
+</div>
+</sc-for>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Aklında olsun</h2>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; background: #1C1E2B; border-radius: 18px; font-size: 14px; line-height: 1.4">
+<div>Lale sever.</div>
+<div>Çayı açık, iki şekerli.</div>
+<div>Cumartesi sabahları yüzmeye gider.</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isIsler }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 2px 2px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Müşteri siparişleri</h2>
+<span style="font-size: 13px; color: #A3A6B8">{{ordersDue}}</span>
+</div>
+<sc-for list="{{ orders }}" as="o" hint-placeholder-count="2">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{ o.pick }}" style="box-sizing: border-box; width: 100%; border: 2px solid {{o.border}}; border-radius: 18px; background: #1C1E2B; color: #F2F0E9; padding: 14px; cursor: pointer; display: flex; flex-direction: column; gap: 6px; text-align: left; font-family: Inter, system-ui, sans-serif">
+<span style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 16px">{{o.title}}</span>
+<span style="flex-shrink: 0; font-size: 13px; font-weight: 600">{{o.left}}</span>
+</span>
+<span style="font-size: 13px; line-height: 1.35; color: #A3A6B8">{{o.meta}}</span>
+</button>
+</sc-for>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 16px; background: #1C1E2B; border-radius: 18px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; font-weight: 600; color: #A3A6B8">Açıklama</span>
+<div style="font-size: 14px; line-height: 1.45; text-wrap: pretty">{{sel.desc}}</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #A3A6B8">Kilometre taşları</span>
+<sc-for list="{{ selSteps }}" as="st" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 20px; height: 20px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 2px solid {{st.ring}}; background: {{st.bg}}; display: flex; align-items: center; justify-content: center">
+<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" style="fill: none; stroke: #12131C; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; opacity: {{st.checkOp}}"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</span>
+<span style="flex-grow: 1; min-width: 0; font-size: 14px; font-weight: {{st.weight}}; color: {{st.color}}">{{st.name}}</span>
+<span style="flex-shrink: 0; font-size: 13px; color: #A3A6B8">{{st.note}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 13px; font-weight: 600; color: #A3A6B8">Ödeme</span>
+<span style="font-size: 13px; color: #A3A6B8">{{sel.paySub}}</span>
+</div>
+<div style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.15">{{sel.payLeft}}</div>
+<div aria-hidden="true" style="height: 8px; border-radius: 4px; background: rgba(94,224,200,0.18); overflow: hidden">
+<div style="width: {{sel.payPct}}; height: 8px; border-radius: 4px; background: #5EE0C8; transition: width 0.4s ease"></div>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 13px; line-height: 1.35">
+<sc-if value="{{ sel.due }}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="flex-shrink: 0; fill: none; stroke: #FF8A3D; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M12 4l9 16H3zM12 10v4M12 17v.5"></path></svg>
+</sc-if>
+<span>{{sel.payNext}}</span>
+</div>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<sc-if value="{{ sel.hasNext }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ sel.advance }}" style="min-height: 44px; border: none; border-radius: 22px; background: {{sel.accent}}; color: #12131C; padding: 0 16px; cursor: pointer; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600">{{sel.advanceText}}</button>
+</sc-if>
+<sc-if value="{{ sel.due }}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{ sel.collect }}" style="min-height: 44px; border: none; border-radius: 22px; background: #262939; color: #F2F0E9; padding: 0 16px; cursor: pointer; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600">Ödeme alındı</button>
+</sc-if>
+</div>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 10px; padding: 0 2px 2px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Yapılacaklar</h2>
+<span style="font-size: 13px; color: #A3A6B8">{{todoCount}}</span>
+</div>
+<sc-for list="{{ todos }}" as="it" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 16px; background: #1C1E2B; border-radius: 18px">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 15px; font-weight: 600; color: {{it.tc}}; text-decoration: {{it.deco}}">{{it.title}}</div>
+<div style="font-size: 13px; color: #A3A6B8">{{it.sub}}</div>
+</div>
+<button type="button" aria-label="{{it.label}}" aria-pressed="{{it.pressed}}" onClick="{{ it.toggle }}" style="width: 44px; height: 44px; flex-shrink: 0; border: none; background: transparent; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center">
+<span style="width: 28px; height: 28px; box-sizing: border-box; border-radius: 50%; border: 2px solid {{it.cbBorder}}; background: {{it.cbBg}}; display: flex; align-items: center; justify-content: center">
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #12131C; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; opacity: {{it.checkOp}}"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</span>
+</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRapor }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 2px 2px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Haftalık rapor</h2>
+<span style="font-size: 13px; color: #A3A6B8">9–15 Kasım</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 12px; background: #1C1E2B; border-radius: 16px">
+<span style="font-size: 12px; color: #A3A6B8">Harcama</span>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 20px">₺5.435</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 12px; background: #1C1E2B; border-radius: 16px">
+<span style="font-size: 12px; color: #A3A6B8">Biten iş</span>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 20px">14/18</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 12px; background: #1C1E2B; border-radius: 16px">
+<span style="font-size: 12px; color: #A3A6B8">Buluşma</span>
+<span style="font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 20px">3</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; background: #1C1E2B; border-radius: 18px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 14px; font-weight: 600">Günlük harcama</span>
+<span aria-live="polite" style="font-size: 13px; color: #A3A6B8">{{barInfo}}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; border-bottom: 1px solid #3A3D52">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+<button type="button" aria-label="{{b.label}}" aria-pressed="{{b.pressed}}" onClick="{{ b.pick }}" style="height: 112px; border: none; background: transparent; padding: 0; cursor: pointer; display: flex; align-items: flex-end; justify-content: center">
+<span style="display: block; width: 20px; height: {{b.h}}; border-radius: 4px 4px 0 0; background: #5EE0C8; opacity: {{b.op}}"></span>
+</button>
+</sc-for>
+</div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; font-size: 11px; font-weight: 600; color: #A3A6B8; text-align: center">
+<span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span>
+</div>
+</div>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Öne çıkanlar</h2>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; background: #1C1E2B; border-radius: 18px; font-size: 14px; line-height: 1.45">
+<div>En çok harcama cumartesi günü yapıldı: ₺1.560.</div>
+<div>Açık kalan 4 işin 2’si ödeme ve randevu.</div>
+<div>Hafta içi 5 dersin 5’ine de girdin.</div>
+</div>
+<h2 style="margin: 10px 0 0; padding: 0 2px 2px; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 18px">Gelecek hafta için</h2>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; background: #1C1E2B; border-radius: 18px; font-size: 14px; line-height: 1.45">
+<div>Cumartesi için ₺1.000 harcama sınırı koyalım.</div>
+<div>Faturayı salı sabahına hatırlatayım.</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+
+<nav aria-label="Bölümler" style="display: flex; flex-shrink: 0; padding: 6px 8px 14px; background: #1C1E2B; border-radius: 24px 24px 0 0">
+<button type="button" aria-pressed="{{pOzet}}" onClick="{{ goOzet }}" style="flex: 1 1 0; min-width: 0; height: 56px; border: none; background: transparent; color: {{cOzet}}; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 600">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"></path></svg>
+<span>Özet</span>
+</button>
+<button type="button" aria-pressed="{{pPara}}" onClick="{{ goPara }}" style="flex: 1 1 0; min-width: 0; height: 56px; border: none; background: transparent; color: {{cPara}}; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 600">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18M15.5 14.5h2"></path></svg>
+<span>Para</span>
+</button>
+<button type="button" aria-pressed="{{pIliski}}" onClick="{{ goIliski }}" style="flex: 1 1 0; min-width: 0; height: 56px; border: none; background: transparent; color: {{cIliski}}; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 600">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"></path></svg>
+<span>İlişki</span>
+</button>
+<button type="button" aria-pressed="{{pIsler}}" onClick="{{ goIsler }}" style="flex: 1 1 0; min-width: 0; height: 56px; border: none; background: transparent; color: {{cIsler}}; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 600">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><rect x="4" y="4" width="16" height="16" rx="4"></rect><path d="M8.5 12.5l2.5 2.5 4.5-5"></path></svg>
+<span>İşler</span>
+</button>
+<button type="button" aria-pressed="{{pRapor}}" onClick="{{ goRapor }}" style="flex: 1 1 0; min-width: 0; height: 56px; border: none; background: transparent; color: {{cRapor}}; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 600">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M5 20v-9M10 20V5M15 20v-7M20 20V8"></path></svg>
+<span>Rapor</span>
+</button>
+</nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#FF8A3D","options":["#FF8A3D","#7C9BFF","#F25F8B","#E9C46A"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  state = {
+    tab: 'ozet', flash: null, tapN: 0, tapI: 0, sound: true,
+    done: {}, gone: {}, together: false, bar: 5,
+    order: 'web', ostep: {}, opaid: {},
+    spent: { market: 6500, yemek: 4000, ulasim: 2375, abone: 1125, diger: 9000 },
+    added: []
+  };
+
+  BUDGET = 31250;
+  DAYS_LEFT = 15;
+
+  CATS = [
+    { id: 'market', name: 'Market', cap: 7500 },
+    { id: 'yemek', name: 'Dışarıda yemek', cap: 5000 },
+    { id: 'ulasim', name: 'Ulaşım', cap: 3750 },
+    { id: 'abone', name: 'Abonelikler', cap: 1500 },
+    { id: 'diger', name: 'Diğer', cap: 13500 }
+  ];
+
+  QUICK = [
+    { label: 'Kahve', amt: 150, cat: 'yemek' },
+    { label: 'Market', amt: 560, cat: 'market' },
+    { label: 'Taksi', amt: 250, cat: 'ulasim' }
+  ];
+
+  LOG = [
+    { t: 'Market', a: 800, when: 'Dün' },
+    { t: 'Akşam yemeği', a: 975, when: 'Cumartesi' },
+    { t: 'Otobüs kartı', a: 375, when: 'Cuma' }
+  ];
+
+  REMINDERS = [
+    { id: 'kargo', title: 'Kulaklık kargosu bugün geliyor', sub: '14.00–18.00 arası teslim' },
+    { id: 'fatura', title: 'Elektrik faturasını öde', sub: 'Son ödeme yarın' },
+    { id: 'rezervasyon', title: 'Yıl dönümü rezervasyonu', sub: 'Yıl dönümüne 10 gün kaldı' }
+  ];
+
+  TODOS = [
+    { id: 'fatura', title: 'Elektrik faturasını öde', sub: 'Son ödeme yarın' },
+    { id: 'rezervasyon', title: 'Yıl dönümü rezervasyonu', sub: 'Bu hafta' },
+    { id: 'muayene', title: 'Araç muayenesi randevusu al', sub: '30 Kasım’a kadar' }
+  ];
+
+  PLANS = [
+    { id: 'sinema', title: 'Sinema', sub: 'Cumartesi akşamı' },
+    { id: 'rezervasyon', title: 'Yıl dönümü yemeği', sub: '26 Kasım · Rezervasyon bekliyor' }
+  ];
+
+  ORDERS = [
+    {
+      id: 'web', title: 'Katalog sitesi', client: 'Kuzey Mobilya', total: 60000, upfront: 24000, start: 1,
+      desc: 'Ürün kataloğu ve teklif formu olan 12 sayfalık katalog sitesi. Türkçe ve İngilizce.',
+      steps: [
+        { name: 'Brif', date: '3 Kas', pay: 0 },
+        { name: 'Tasarım onayı', date: '20 Kas', pay: 18000 },
+        { name: 'Geliştirme', date: '4 Ara', pay: 0 },
+        { name: 'Teslim', date: '15 Ara', pay: 18000 }
+      ]
+    },
+    {
+      id: 'bayi', title: 'Bayi toplantısı', client: 'Mira Kozmetik', total: 150000, upfront: 75000, start: 1,
+      desc: '120 kişilik bayi toplantısı: mekân, sahne, teknik ekip ve karşılama.',
+      steps: [
+        { name: 'Mekân onayı', date: '10 Kas', pay: 0 },
+        { name: 'Teknik keşif', date: '18 Kas', pay: 0 },
+        { name: 'Etkinlik günü', date: '5 Ara', pay: 45000 },
+        { name: 'Kapanış raporu', date: '12 Ara', pay: 30000 }
+      ]
+    }
+  ];
+
+  WEEK = [
+    { k: 'Pazartesi', v: 525 }, { k: 'Salı', v: 475 }, { k: 'Çarşamba', v: 760 }, { k: 'Perşembe', v: 365 },
+    { k: 'Cuma', v: 1100 }, { k: 'Cumartesi', v: 1560 }, { k: 'Pazar', v: 650 }
+  ];
+
+  MOOD_NAMES = { mutlu: 'mutlu', dinliyor: 'dinliyor', dusunceli: 'düşünceli', uyari: 'hatırlatıyor', kutlama: 'kutluyor' };
+
+  TAP_LINES = ['Buradayım, dinliyorum.', 'Bir harcama mı ekleyelim?', 'Söyle, not alayım.'];
+
+  componentWillUnmount() {
+    clearTimeout(this._t);
+  }
+
+  money(n) {
+    const neg = n < 0;
+    const s = String(Math.abs(Math.round(n))).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return (neg ? '-₺' : '₺') + s;
+  }
+
+  sfx(name, force) {
+    if (!force && !this.state.sound) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!this._ac) this._ac = new AC();
+      const ac = this._ac;
+      if (ac.state === 'suspended') ac.resume();
+      const n = (type, f0, f1, at, dur, vol) => {
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        const t = ac.currentTime + at;
+        o.type = type;
+        o.frequency.setValueAtTime(f0, t);
+        if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g);
+        g.connect(ac.destination);
+        o.start(t);
+        o.stop(t + dur + 0.03);
+      };
+      const tik = (at) => n('triangle', 1500, 700, at, 0.03, 0.2);
+      const civ = (f0, f1, at, dur) => n('sine', f0, f1, at, dur, 0.13);
+      if (name === 'nav') { tik(0); }
+      else if (name === 'mutlu') { civ(2200, 3200, 0, 0.07); civ(2600, 3600, 0.11, 0.08); }
+      else if (name === 'dinliyor') { civ(1800, 3000, 0, 0.14); }
+      else if (name === 'uyari') { tik(0); tik(0.09); tik(0.18); civ(2400, 2000, 0.3, 0.1); }
+      else if (name === 'kutlama') { [2000, 2400, 2800, 3400].forEach((f, i) => civ(f, f * 1.25, i * 0.09, i === 3 ? 0.16 : 0.07)); }
+      else if (name === 'done') { tik(0); civ(2400, 3400, 0.06, 0.1); }
+    } catch (e) {}
+  }
+
+  flash(mood, line, sound, ms) {
+    clearTimeout(this._t);
+    this.setState({ flash: { mood: mood, line: line }, tapN: this.state.tapN + 1 });
+    this.sfx(sound);
+    this._t = setTimeout(() => this.setState({ flash: null }), ms || 2200);
+  }
+
+  go(tab) {
+    clearTimeout(this._t);
+    this.setState({ tab: tab, flash: null });
+    this.sfx('nav');
+  }
+
+  toggle(id, title) {
+    const was = !!this.state.done[id];
+    const done = Object.assign({}, this.state.done);
+    done[id] = !was;
+    this.setState({ done: done });
+    if (!was) this.flash('kutlama', '“' + title + '” tamam. Bir tane daha eksildi.', 'kutlama');
+    else this.sfx('nav');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const accent = this.props.accent ?? '#FF8A3D';
+    const MINT = '#5EE0C8';
+    const MUTED = '#A3A6B8';
+    const TEXT = '#F2F0E9';
+    const WARN = '#FF8A3D';
+
+    const check = (it) => {
+      const d = !!s.done[it.id];
+      return Object.assign({}, it, {
+        tc: d ? MUTED : TEXT,
+        deco: d ? 'line-through' : 'none',
+        cbBg: d ? MINT : 'transparent',
+        cbBorder: d ? MINT : '#7A7F9C',
+        checkOp: d ? 1 : 0,
+        pressed: d ? 'true' : 'false',
+        label: (d ? 'Geri al: ' : 'Tamamla: ') + it.title,
+        toggle: () => this.toggle(it.id, it.title)
+      });
+    };
+
+    const reminders = this.REMINDERS.map(check);
+    const todos = this.TODOS.map(check);
+    const plans = this.PLANS.map(check);
+    const remRest = this.REMINDERS.filter((it) => !s.done[it.id]);
+    const todoRest = this.TODOS.filter((it) => !s.done[it.id]);
+
+    const total = this.CATS.reduce((sum, c) => sum + s.spent[c.id], 0);
+    const left = this.BUDGET - total;
+    const daily = Math.floor(Math.max(left, 0) / this.DAYS_LEFT);
+    const budgetRatio = total / this.BUDGET;
+    let tight = null;
+    const cats = this.CATS.map((c) => {
+      const v = s.spent[c.id];
+      const r = v / c.cap;
+      const warn = r >= 0.8;
+      if (r >= 0.9 && (!tight || r > tight.r)) tight = { name: c.name, r: r };
+      return {
+        name: c.name,
+        amount: this.money(v) + ' / ' + this.money(c.cap),
+        pct: Math.min(100, Math.round(r * 100)) + '%',
+        fill: warn ? WARN : MINT,
+        track: warn ? 'rgba(255,138,61,0.22)' : 'rgba(94,224,200,0.18)',
+        warn: warn,
+        warnText: r >= 1 ? 'Sınır aşıldı' : 'Sınıra yakın: %' + Math.round(r * 100)
+      };
+    });
+
+    const yemekPct = Math.round((s.spent.yemek / 5000) * 100);
+    const SUGS = [
+      { id: 'evde', text: 'Dışarıda yemek bütçenin %' + yemekPct + '’i gitti. Cumartesi evde yemek yapalım mı?', act: 'Plana ekle', ok: 'Cumartesi akşamına “evde yemek” ekledim.' },
+      { id: 'onay', text: 'Kuzey Mobilya tasarım onayı 20 Kasım’da. Onay gelince ₺18.000 tahsilat doğuyor. O sabah hatırlatayım mı?', act: 'Hatırlat', ok: '20 Kasım sabahına hatırlatıcı kurdum.' }
+    ];
+    const suggestions = SUGS.filter((g) => !s.gone[g.id]).map((g) => ({
+      text: g.text,
+      act: g.act,
+      accent: accent,
+      accept: () => {
+        const gone = Object.assign({}, s.gone);
+        gone[g.id] = true;
+        this.setState({ gone: gone });
+        this.flash('kutlama', g.ok, 'done');
+      },
+      skip: () => {
+        const gone = Object.assign({}, s.gone);
+        gone[g.id] = true;
+        this.setState({ gone: gone });
+        this.sfx('nav');
+      }
+    }));
+
+    const quick = this.QUICK.map((q) => ({
+      text: q.label + ' ' + this.money(q.amt),
+      add: () => {
+        const spent = Object.assign({}, s.spent);
+        spent[q.cat] = spent[q.cat] + q.amt;
+        const added = [{ t: q.label, a: q.amt, when: 'Şimdi' }].concat(s.added);
+        this.setState({ spent: spent, added: added });
+        const cat = this.CATS.find((c) => c.id === q.cat);
+        const r = spent[q.cat] / cat.cap;
+        const newLeft = left - q.amt;
+        if (r >= 0.9) this.flash('uyari', cat.name + ' bütçesinin %' + Math.round(r * 100) + '’ine geldin.', 'uyari', 2600);
+        else this.flash('mutlu', q.label + ' kaydedildi. Bu ay ' + this.money(newLeft) + ' kaldı.', 'done');
+      }
+    }));
+    const log = s.added.concat(this.LOG).slice(0, 3).map((l) => ({ t: l.t, when: l.when, amount: this.money(l.a) }));
+
+    const calc = (o) => {
+      const n = s.ostep[o.id] ?? o.start;
+      const payable = o.steps.filter((st) => st.pay > 0);
+      const donePayable = o.steps.slice(0, n).filter((st) => st.pay > 0).length;
+      const collected = Math.min(s.opaid[o.id] ?? 0, donePayable);
+      const received = o.upfront + payable.slice(0, collected).reduce((a, st) => a + st.pay, 0);
+      const due = payable.slice(collected, donePayable).reduce((a, st) => a + st.pay, 0);
+      return {
+        n: n,
+        donePayable: donePayable,
+        received: received,
+        due: due,
+        left: o.total - received,
+        nextPay: payable[donePayable] || null,
+        hasNext: n < o.steps.length
+      };
+    };
+
+    let ordersLeft = 0;
+    let dueOrder = null;
+    const orders = this.ORDERS.map((o) => {
+      const c = calc(o);
+      ordersLeft += c.left;
+      if (c.due > 0 && !dueOrder) dueOrder = { client: o.client, due: c.due };
+      const selected = o.id === s.order;
+      return {
+        title: o.title,
+        left: c.left > 0 ? this.money(c.left) + ' alınacak' : 'Tahsil edildi',
+        meta: o.client + ' · ' + (c.hasNext ? o.steps[c.n].name + ' aşamasında' : 'Teslim edildi'),
+        pressed: selected ? 'true' : 'false',
+        border: selected ? accent : 'transparent',
+        pick: () => { this.setState({ order: o.id, flash: null }); this.sfx('nav'); }
+      };
+    });
+
+    const so = this.ORDERS.find((o) => o.id === s.order) || this.ORDERS[0];
+    const sc = calc(so);
+    const selSteps = so.steps.map((st, i) => {
+      const done = i < sc.n;
+      const cur = i === sc.n;
+      return {
+        name: st.name,
+        note: st.date + (st.pay ? ' · ' + this.money(st.pay) : ''),
+        ring: done ? MINT : (cur ? accent : '#7A7F9C'),
+        bg: done ? MINT : 'transparent',
+        checkOp: done ? 1 : 0,
+        weight: cur ? 600 : 400,
+        color: done || cur ? TEXT : MUTED
+      };
+    });
+    let payNext = 'Bekleyen ödeme yok.';
+    if (sc.due > 0) payNext = 'Vadesi geldi: ' + this.money(sc.due);
+    else if (sc.nextPay) payNext = 'Sıradaki tahsilat: ' + this.money(sc.nextPay.pay) + ' · ' + sc.nextPay.name + ' sonrası';
+    const sel = {
+      desc: so.desc,
+      accent: accent,
+      paySub: this.money(sc.received) + ' / ' + this.money(so.total) + ' alındı',
+      payLeft: sc.left > 0 ? this.money(sc.left) + ' alınacak' : 'Tamamı tahsil edildi',
+      payPct: Math.round((sc.received / so.total) * 100) + '%',
+      due: sc.due > 0,
+      payNext: payNext,
+      hasNext: sc.hasNext,
+      advanceText: sc.hasNext ? so.steps[sc.n].name + ' tamam' : '',
+      advance: () => {
+        if (!sc.hasNext) return;
+        const step = so.steps[sc.n];
+        const ostep = Object.assign({}, s.ostep);
+        ostep[so.id] = sc.n + 1;
+        this.setState({ ostep: ostep });
+        if (step.pay > 0) this.flash('kutlama', '“' + step.name + '” tamam. ' + this.money(step.pay) + ' tahsilat doğdu.', 'kutlama', 2800);
+        else if (sc.n + 1 < so.steps.length) this.flash('kutlama', '“' + step.name + '” tamam. Sıradaki: ' + so.steps[sc.n + 1].name + '.', 'done');
+        else this.flash('kutlama', so.title + ' teslim edildi.', 'kutlama', 2800);
+      },
+      collect: () => {
+        if (sc.due <= 0) return;
+        const opaid = Object.assign({}, s.opaid);
+        opaid[so.id] = sc.donePayable;
+        this.setState({ opaid: opaid });
+        this.flash('kutlama', this.money(sc.due) + ' tahsil edildi. ' + so.client + ' için kalan: ' + this.money(sc.left - sc.due) + '.', 'done', 2800);
+      }
+    };
+
+    const maxV = Math.max.apply(null, this.WEEK.map((d) => d.v));
+    const bars = this.WEEK.map((d, i) => ({
+      label: d.k + ': ' + this.money(d.v),
+      pressed: i === s.bar ? 'true' : 'false',
+      h: Math.round((d.v / maxV) * 100) + 'px',
+      op: i === s.bar ? 1 : 0.45,
+      pick: () => { this.setState({ bar: i, flash: null }); this.sfx('nav'); }
+    }));
+    const selDay = this.WEEK[s.bar];
+
+    let mood = 'mutlu';
+    let line = '';
+    if (s.tab === 'ozet') {
+      if (remRest.length || suggestions.length) {
+        line ='Bugün ' + remRest.length + ' hatırlatıcın ve ' + suggestions.length + ' önerim var.';
+      } else {
+        line = 'Her şey kontrol altında.';
+      }
+    } else if (s.tab === 'para') {
+      if (left < 0) {
+        mood = 'uyari';
+        line = 'Bu ay bütçeyi ' + this.money(-left) + ' aştık.';
+      } else if (tight) {
+        mood = 'uyari';
+        line = tight.name + ' bütçesinin sonuna geldin. Ay sonuna ' + this.DAYS_LEFT + ' gün var.';
+      } else {
+        mood = 'dusunceli';
+        line = 'Bu ay ' + this.money(left) + ' kaldı. Günde ' + this.money(daily) + ' ile ay sonunu çıkarırız.';
+      }
+    } else if (s.tab === 'iliski') {
+      if (s.together) {
+        line = 'Güzel. Birlikte geçen zamanı not ettim.';
+      } else if (!s.done.rezervasyon) {
+        mood = 'dusunceli';
+        line = 'Yıl dönümüne 10 gün kaldı. Rezervasyonu bu hafta yapalım mı?';
+      } else {
+        line = 'Yıl dönümü hazır. Cumartesi de sinema var.';
+      }
+    } else if (s.tab === 'isler') {
+      if (dueOrder) {
+        mood = 'uyari';
+        line = 'Vadesi gelen tahsilat var: ' + this.money(dueOrder.due) + ' (' + dueOrder.client + ').';
+      } else if (!s.done.fatura) {
+        mood = 'uyari';
+        line = 'Elektrik faturası için yarın son gün. Müşterilerden alınacak ' + this.money(ordersLeft) + ' var.';
+      } else if (todoRest.length) {
+        mood = 'dusunceli';
+        line = todoRest.length + ' iş açık. Müşterilerden alınacak ' + this.money(ordersLeft) + ' var.';
+      } else {
+        line = 'Yapılacaklar bitti. Müşterilerden alınacak ' + this.money(ordersLeft) + ' var.';
+      }
+    } else {
+      line = 'Geçen hafta ₺5.435 harcadın ve 18 işten 14’ünü bitirdin.';
+    }
+    if (s.flash) {
+      mood = s.flash.mood;
+      line = s.flash.line;
+    }
+
+    const tabColor = (t) => (s.tab === t ? MINT : MUTED);
+    const tabPressed = (t) => (s.tab === t ? 'true' : 'false');
+    const budgetWarn = budgetRatio >= 0.9;
+
+    return {
+      accent: accent,
+      moodClass: 'm-' + mood,
+      tapClass: s.tapN === 0 ? '' : (s.tapN % 2 ? 'tik-tap-a' : 'tik-tap-b'),
+      tikAlt: 'Optik, ' + this.MOOD_NAMES[mood],
+      line: line,
+      tapTik: () => {
+        const i = s.tapI % this.TAP_LINES.length;
+        this.setState({ tapI: s.tapI + 1 });
+        this.flash('dinliyor', this.TAP_LINES[i], 'dinliyor', 1900);
+      },
+      soundLabel: s.sound ? 'Sesi kapat' : 'Sesi aç',
+      soundPressed: s.sound ? 'true' : 'false',
+      waveOp: s.sound ? 1 : 0,
+      muteOp: s.sound ? 0 : 1,
+      toggleSound: () => {
+        const on = !s.sound;
+        this.setState({ sound: on });
+        if (on) this.sfx('mutlu', true);
+      },
+      isOzet: s.tab === 'ozet',
+      isPara: s.tab === 'para',
+      isIliski: s.tab === 'iliski',
+      isIsler: s.tab === 'isler',
+      isRapor: s.tab === 'rapor',
+      goOzet: () => this.go('ozet'),
+      goPara: () => this.go('para'),
+      goIliski: () => this.go('iliski'),
+      goIsler: () => this.go('isler'),
+      goRapor: () => this.go('rapor'),
+      cOzet: tabColor('ozet'),
+      cPara: tabColor('para'),
+      cIliski: tabColor('iliski'),
+      cIsler: tabColor('isler'),
+      cRapor: tabColor('rapor'),
+      pOzet: tabPressed('ozet'),
+      pPara: tabPressed('para'),
+      pIliski: tabPressed('iliski'),
+      pIsler: tabPressed('isler'),
+      pRapor: tabPressed('rapor'),
+      reminders: reminders,
+      remCount: remRest.length + ' açık',
+      suggestions: suggestions,
+      noSuggestions: suggestions.length === 0,
+      budgetLeft: left >= 0 ? this.money(left) + ' kaldı' : this.money(-left) + ' aşıldı',
+      budgetSub: this.money(total) + ' / ' + this.money(this.BUDGET),
+      budgetPct: Math.min(100, Math.round(budgetRatio * 100)) + '%',
+      budgetFill: budgetWarn ? WARN : MINT,
+      budgetTrack: budgetWarn ? 'rgba(255,138,61,0.22)' : 'rgba(94,224,200,0.18)',
+      cats: cats,
+      quick: quick,
+      log: log,
+      togetherText: s.together ? 'Bugün' : '5 gün önce',
+      togetherPressed: s.together ? 'true' : 'false',
+      togetherBg: s.together ? '#262939' : accent,
+      togetherColor: s.together ? MINT : '#12131C',
+      togetherBtn: s.together ? 'Kaydedildi' : 'Bugün birlikteydik',
+      markTogether: () => {
+        const on = !s.together;
+        this.setState({ together: on });
+        if (on) this.flash('kutlama', 'Not ettim. Böyle günler çoğalsın.', 'done');
+        else this.sfx('nav');
+      },
+      plans: plans,
+      orders: orders,
+      ordersDue: 'Alınacak ' + this.money(ordersLeft),
+      sel: sel,
+      selSteps: selSteps,
+      todos: todos,
+      todoCount: todoRest.length + ' açık',
+      bars: bars,
+      barInfo: selDay.k + ' · ' + this.money(selDay.v)
+    };
+  }
+}
+</script>
+</body>
+</html>

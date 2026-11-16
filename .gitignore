@@ -1,0 +1,60 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcresult
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/*/.build/
+Package.resolved.bak
+
+# Kişiye özel yapılandırma (ekip kimliği, paket kimliği). Örnek dosya depoda durur.
+Config/Local.xcconfig
+*.local.xcconfig
+
+# Sırlar ve imza dosyaları: asla depoya girmez
+.env
+.env.*
+!.env.example
+*.p12
+*.p8
+*.pem
+*.key
+*.cer
+*.mobileprovision
+*.provisionprofile
+*.keychain
+*.keychain-db
+
+# Yerel veri ve ses kayıtları
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+*.db-shm
+*.db-wal
+recordings/
+*.caf
+
+# Editör ve araçlar
+.vscode/
+.idea/
+*.swp
+.claude/settings.local.json
