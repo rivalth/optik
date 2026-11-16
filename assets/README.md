@@ -17,13 +17,13 @@ Bu klasördeki her şey Optik için özgün üretildi ve doğrudan kullanılabil
 | `ikon/menubar-sablon.svg`, `.png`, `@2x.png` | Menü çubuğu ikonu, tek renk, 18 pt | `isTemplate = true` olarak yükle |
 | `arayuz-ikonlari/*.svg` | 15 çizgi ikon, 24 × 24, `currentColor` | Sekme ve düğme ikonları. Xcode'da "Preserve Vector Data" + "Template Image" |
 | `sesler/*.wav` | 9 ses efekti, 44,1 kHz, 16 bit, mono | Tablo: `docs/03-karakter.md` bölüm 7 |
-| `sesler/konusma/` | Boş. Optik'in sesiyle üretilecek sabit cümleler buraya gelecek | `llm/sabit-cumleler.json`, `llm/ses-kimligi.md` |
+| `sesler/konusma/` | Boş. Jessica (ElevenLabs) sesiyle üretilecek sabit cümleler buraya gelecek. Kişiye özel ses seçen kullanıcının cümleleri buraya değil, kendi Mac'inde `Application Support` altına yazılır | `llm/sabit-cumleler.json`, `llm/ses-kimligi.md` |
 | `tasarim-tokenlari.json`, `.css` | Renk, yazı, köşe, boşluk, adacık ölçüleri, hareket süreleri | Koda sabit olarak taşı |
 
 ## Pakette olmayanlar
 
 - **Yazı tipleri.** Space Grotesk ve Inter (ikisi de SIL Open Font License). Google Fonts'tan indirip uygulamaya göm.
-- **Optik'in konuşma sesi.** Bir konuşma sentezi hesabı gerektirir. Tarifi `llm/ses-kimligi.md` içinde.
+- **Optik'in konuşma sesi.** ElevenLabs API anahtarı gerektirir (varsayılan ses Jessica). Tarifi `llm/ses-kimligi.md` içinde.
 - **Ekran görüntüleri.** Ekran tasarımlarının kaynak dosyaları `tasarim-kaynak/` içinde, tarifleri `docs/01-urun.md` içinde.
 
 ## Kurallar

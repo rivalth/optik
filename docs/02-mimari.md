@@ -92,11 +92,13 @@ Claude API, Messages uç noktası, akışla.
 Optik'in tek, tutarlı, kendine ait bir sesi vardır. Ses kimliği tarifi `llm/ses-kimligi.md` içinde.
 
 - **Sabit cümleler** (`llm/sabit-cumleler.json`): "Efendim?", "Tamam, kaydettim." gibi sık kullanılanlar seçilen sesle bir kez üretilir, `assets/sesler/konusma/` altına konur ve gecikmesiz çalınır. 250 ms hedefini tutturan şey budur.
-- **Değişken yanıtlar:** akışla çalışan, düşük gecikmeli, Türkçe destekleyen bir konuşma sentezi servisi. Adaylar kör dinleme testiyle seçilir (`llm/ses-kimligi.md`):
-  - **ElevenLabs:** ses tasarımı (tariften yeni ses), canlı yanıt için Flash v2.5 (yaklaşık 75–100 ms, WebSocket). Bir karşılaştırma Türkçesini "sınırlı" buluyor; dinleyerek karar verilir.
-  - **Cartesia:** Sonic 3.5, karşılaştırmalarda en hızlı ilk ses (yaklaşık 110 ms), 42 dil, WebSocket. Türkçe kalitesi ve ses tasarımı denenerek görülür.
-  - Sağlayıcı `SpeechSynthesizer` protokolünün arkasında durur, sonradan değiştirilebilir.
-- **Yedek:** ağ yoksa `AVSpeechSynthesizer` Türkçe sesi. Karakter sesiyle aynı değildir, yalnızca yedektir.
+- **Değişken yanıtlar:** ElevenLabs, akışla. Kör dinleme testinde (9 aday: ElevenLabs hazır ve tasarlanmış sesler, Cartesia Sonic 3.5) seçilen ses **Jessica** (ElevenLabs hazır sesi, `cgSgspJ2msm6clMCkdW9`).
+  - Canlı yanıt `eleven_v4_turbo` ile, `language_code: tr`. Ölçülen ilk ses 260–530 ms (her istekte yeni TLS bağlantısıyla; açık bağlantı ve WebSocket ile daha düşük). Bütçe sıkışırsa `eleven_flash_v2_5` denenir.
+  - Sabit cümleler kalite modeli `eleven_v4` ile üretilir; gecikme orada önemsiz.
+  - Hazır sesler ücretsiz planda da API'den kullanılabilir. Kütüphane sesleri ve API'den ses tasarımı ücretli plan ister; arayüzde tasarlanan ya da klonlanan ses ise hesabın kendi sesidir, API'den kullanılır.
+  - Sağlayıcı `SpeechSynthesizer` protokolünün arkasında durur, sonradan değiştirilebilir. Cartesia yedek aday olarak kalır (Sonic 3.5, ölçülen ilk ses ~240 ms).
+- **Kişiye özel ses:** kullanıcı ayarlardan kendi ElevenLabs ses kimliğini (arayüzde tasarladığı ya da rızayla klonladığı ses) girebilir. O zaman sabit cümleler bu sesle kullanıcının Mac'inde yeniden üretilir, `~/Library/Application Support/Optik/konusma/` altına yazılır ve paketteki Jessica cümlelerinin yerine çalar. Bu dosyalar ve ses kimliği depoya girmez. "Varsayılana dön" Jessica'ya geri alır.
+- **Yedek:** ağ ya da ElevenLabs anahtarı yoksa sabit cümleler paketten çalmaya devam eder, değişken yanıtlar `AVSpeechSynthesizer` Türkçe sesiyle okunur. Karakter sesiyle aynı değildir, yalnızca yedektir.
 - Sentezlenen her cümle metnine göre diskte önbelleğe alınır, aynı cümle ikinci kez ücretsiz ve anında çalar.
 - Ses efektleri (`assets/sesler/*.wav`) konuşmadan ayrıdır ve her zaman yereldir.
 
@@ -152,7 +154,7 @@ Her ses turunda şu süreler ölçülür ve kaydedilir: `wake_to_island`, `wake_
 | WhisperKit | Cihazda yazıya çevirme | Kullan (paket adını doğrula) |
 | sherpa-onnx KWS (`speech-swift` ile) | Uyandırma kelimesi | Denenecek (onaylandı); ölçümü geçerse kalır |
 | Anthropic API | LLM | Resmî Swift SDK yoksa `URLSession` ile doğrudan, SSE akışı |
-| Konuşma sentezi istemcisi | Optik'in sesi | `URLSessionWebSocketTask` ile doğrudan |
+| ElevenLabs istemcisi | Optik'in sesi | Paket yok, `URLSession` / `URLSessionWebSocketTask` ile doğrudan |
 | KeyboardShortcuts (sindresorhus, MIT) | Kullanıcının kaydettiği ek kısayol, açıkken `Esc` | Kullanılıyor, 3.1.0'a sabit |
 
 Bunların dışında bağımlılık eklemeden önce sor.

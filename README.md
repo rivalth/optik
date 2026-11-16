@@ -41,7 +41,7 @@ xcodebuild -project Optik.xcodeproj -scheme Optik -destination 'platform=macOS,a
 ## Gereken hesaplar ve anahtarlar
 
 - Claude API anahtarı.
-- Bir konuşma sentezi servisi hesabı (Optik'in sesi için).
+- ElevenLabs API anahtarı (Optik'in sesi için). Varsayılan ses Jessica hazır bir ses olduğundan ücretsiz plan çalışır; günlük kullanımda aylık karakter hakkı için Starter ya da Creator gerekir. Anahtar yoksa sabit cümleler yine Optik'in sesiyle, diğer yanıtlar sistemin Türkçe sesiyle okunur.
 - Uyandırma kelimesi cihaz üzerinde, hesap ya da anahtar istemeyen açık kaynak bir modelle çalışır.
 
 Anahtarlar depoya girmez. Uygulama bunları ilk açılışta sorar ve Keychain'e yazar.
