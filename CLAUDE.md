@@ -22,7 +22,7 @@ Tasarımın çalışan referansı: `assets/animasyon/optik-demo.html` (tarayıc�
 
 ## Kararlaştırılmış teknik seçimler
 
-- **Platform (1. aşama):** macOS 14+, Apple Silicon. Swift 6, SwiftUI + AppKit. Çentik adacığı kenarlıksız bir `NSPanel`. Uygulama menü çubuğu ajanı olarak çalışır, ikinci beyin ekranları ayrı bir pencerede açılır.
+- **Platform (1. aşama):** macOS 15+, Apple Silicon. Swift 6, SwiftUI + AppKit. Çentik adacığı kenarlıksız bir `NSPanel`. Uygulama menü çubuğu ajanı olarak çalışır, ikinci beyin ekranları ayrı bir pencerede açılır.
 - **Veri:** önce yerel. SQLite (GRDB). Bütün okumalar yerelden. Arama için FTS5. Para kuruş cinsinden tamsayı tutulur.
 - **Ses hattı:** uyandırma kelimesi → konuşma sonu algılama → konuşmayı yazıya çevirme → LLM → konuşma sentezi. Uyandırma ve yazıya çevirme cihaz üzerinde çalışır.
 - **LLM:** Claude API. Hızlı kayıt ve kısa yanıt için `claude-haiku-5-5`, rapor, planlama ve öneri için `claude-sonnet-5-5`. Akış (streaming), araç kullanımı ve istem önbelleği açık.

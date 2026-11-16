@@ -5,7 +5,7 @@ Bu doküman 16 Kasım 2026 tarihli araştırmaya dayanır. "Doğrula" yazan her 
 ## 1. Genel yapı
 
 ```
-Optik.app (macOS 14+, Apple Silicon)
+Optik.app (macOS 15+, Apple Silicon)
 ├── App            giriş, menü çubuğu ajanı, ayarlar
 ├── Island         çentik NSPanel'i, adacık durum makinesi, kümes
 ├── Character      Optik çizimi (SwiftUI Shape), ruh halleri, ses efektleri

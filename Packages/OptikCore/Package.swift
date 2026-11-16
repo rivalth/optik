@@ -5,7 +5,7 @@ import PackageDescription
 // design tokens. Must not depend on any Apple UI framework (AppKit, UIKit, SwiftUI).
 let package = Package(
     name: "OptikCore",
-    platforms: [.macOS(.v14), .iOS(.v17)],
+    platforms: [.macOS(.v15), .iOS(.v17)],
     products: [
         .library(name: "OptikCore", targets: ["OptikCore"]),
     ],

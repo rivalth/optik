@@ -12,7 +12,7 @@ Karakteri altı kırık bir yumurta: kırıktan civciv ayakları çıkıyor, kab
 
 Optik tek kişilik bir asistandır ve yalnızca kendi Mac'inde çalışır. Hazır paket dağıtılmaz: depoyu klonla, kendi Apple geliştirici kimliğinle derle, kendi anahtarlarını gir, kendi asistanını kur.
 
-- macOS 14 ve üstü, Apple Silicon
+- macOS 15 ve üstü, Apple Silicon
 - Çentikli MacBook (çentiksiz ekranda yüzen bir hap olarak görünür)
 
 ## Derleme

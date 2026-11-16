@@ -88,6 +88,7 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | Optik'in sesi | Kör dinleme testinde ElevenLabs'in hazır sesi **Jessica** seçildi. Sabit cümleler Jessica ile üretilip pakete girer, canlı yanıtlar `eleven_v4_turbo` ile akışla gelir. Kullanıcı ayarlardan kendi ElevenLabs sesini girebilir; o zaman sabit cümleler onun Mac'inde yeniden üretilir. |
 | 2026-11-16 | Sabit cümlelerin lisansı | Jessica ile ElevenLabs ücretsiz planında üretildi, `assets/sesler/konusma/` altında. CC BY 4.0 dışında: yalnızca ticari olmayan kullanım, ElevenLabs atfıyla (`LICENSE-ASSETS`, `konusma/OKU.txt`). Optik ticari bir ürün olursa ücretli planla yeniden üretilir. |
 | 2026-11-16 | Kapalı adacık | 312 × 38 pt kalır (çentikten 6 pt aşağı taşar). Renk `#000000`; LCD ekranda kamera kutusundan biraz açık görünmesi ekranın arka ışığından. |
+| 2026-11-16 | En düşük macOS | macOS 15. Uyandırma kelimesi için kullanılacak `speech-swift` macOS 15 istiyor. Optik zaten Apple Silicon şartı koyuyor ve bütün Apple Silicon Mac'ler macOS 15'e güncellenebildiği için kimse dışarıda kalmıyor. |
 
 ## Açık sorular
 
