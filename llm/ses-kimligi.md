@@ -30,7 +30,7 @@ Varsayılan ses seçildi. Bu tarif kişiye özel ses tasarlayan kullanıcı ve i
    - "Kuzey Mobilya için on sekiz bin lira aldım. Kalan on sekiz bin."
    - "Elektrik faturası için yarın son gün."
 3. Kullanıcı adayları servis adı gizli olarak (kör) dinler ve birini seçer. Seçilen servis ve ses kimliği ayarlarda saklanır.
-4. `llm/sabit-cumleler.json` içindeki cümleler bu sesle üretilir, `assets/sesler/konusma/<id>.wav` olarak kaydedilir (44,1 kHz, mono). Yüksek kaliteli model kullan, gecikme burada önemli değil.
+4. `llm/sabit-cumleler.json` içindeki cümleler bu sesle üretilir, `assets/sesler/konusma/<id>.wav` olarak kaydedilir (44,1 kHz, 16 bit, mono). Yüksek kaliteli model kullan, gecikme burada önemli değil. Ücretsiz planda 44,1 kHz PCM yok: MP3 (44,1 kHz, 128 kbps) alınır, WAV'a çevrilir. Baştaki sessizlik 10 ms'ye kırpılır (gecikmeye eklenmesin), sonda 80 ms kalır, konuşmanın RMS düzeyi -20 dBFS'e eşitlenir (tepe en fazla -3 dBFS). Atıf ve lisans: `assets/sesler/konusma/OKU.txt`.
 5. Canlı yanıtlar aynı sesle, düşük gecikmeli modelle akışla üretilir.
 
 ## Kişiye özel ses

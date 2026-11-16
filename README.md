@@ -78,4 +78,5 @@ Ayrıntılar `CLAUDE.md` içindeki "Depo ve git kuralları" bölümünde.
 
 - Kod ve belgeler: [MIT](LICENSE).
 - Görseller, karakter, ses efektleri ve ekran tasarımları (`assets/`, `tasarim-kaynak/`): [CC BY 4.0](LICENSE-ASSETS). Kullanırken Optik'e atıf ver.
+- Optik'in sabit cümleleri (`assets/sesler/konusma/`): CC BY 4.0 dışında. [ElevenLabs](https://elevenlabs.io) ile üretildi, ElevenLabs koşullarına tabi: yalnızca ticari olmayan kullanım, ElevenLabs atfıyla.
 - Yazı tipleri (`Optik/Resources/Fonts/`): Space Grotesk ve Inter, [SIL Open Font License 1.1](Optik/Resources/Fonts/). Lisans metinleri dosyaların yanında.

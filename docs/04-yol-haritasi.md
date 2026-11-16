@@ -86,6 +86,7 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | "Efendim?" süresi | 250 ms bütçesi ilk ses için: `uyan` efekti. "Efendim?" efekt bittikten 60 ms sonra çalar, ikisi üst üste binmez. |
 | 2026-11-16 | Uyandırma kelimesi | Önce sherpa-onnx anahtar kelime tespiti ("optic" anahtarı, eğitimsiz) denenir. Ölçümü geçemezse kendi eğittiğimiz küçük model. Porcupine elendi (Türkçe yok, ücretsiz katman kapandı). |
 | 2026-11-16 | Optik'in sesi | Kör dinleme testinde ElevenLabs'in hazır sesi **Jessica** seçildi. Sabit cümleler Jessica ile üretilip pakete girer, canlı yanıtlar `eleven_v4_turbo` ile akışla gelir. Kullanıcı ayarlardan kendi ElevenLabs sesini girebilir; o zaman sabit cümleler onun Mac'inde yeniden üretilir. |
+| 2026-11-16 | Sabit cümlelerin lisansı | Jessica ile ElevenLabs ücretsiz planında üretildi, `assets/sesler/konusma/` altında. CC BY 4.0 dışında: yalnızca ticari olmayan kullanım, ElevenLabs atfıyla (`LICENSE-ASSETS`, `konusma/OKU.txt`). Optik ticari bir ürün olursa ücretli planla yeniden üretilir. |
 | 2026-11-16 | Kapalı adacık | 312 × 38 pt kalır (çentikten 6 pt aşağı taşar). Renk `#000000`; LCD ekranda kamera kutusundan biraz açık görünmesi ekranın arka ışığından. |
 
 ## Açık sorular
@@ -99,4 +100,3 @@ Bunlara dayanan bir iş yapmadan önce kullanıcıya sor.
 5. **Ödeme planı şablonları:** varsayılan %40 / %30 / %30 doğru mu, iş türüne göre değişiyor mu?
 6. **Para birimi:** yalnızca TL mi, döviz teklifleri var mı?
 7. **Brifing saatleri:** 08.30 ve 21.30 uygun mu?
-7. **Sabit cümlelerin lisansı:** Jessica ile üretilip depoya girecek ses dosyaları ElevenLabs çıktısıdır. Ücretsiz planda üretilen çıktı ticari kullanılamaz ve atıf ister; ücretli planda üretilen çıktı ticari lisanslıdır. Bu dosyalar ücretli bir planla mı üretilecek, `assets/` içindeki CC BY 4.0 lisansına mı girecek, ayrı bir not mu alacak?
