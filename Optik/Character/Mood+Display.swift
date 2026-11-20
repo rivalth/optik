@@ -12,6 +12,7 @@ extension Mood {
         case .alert: String(localized: "Hatırlatma")
         case .celebrating: String(localized: "Kutlama")
         case .sleepy: String(localized: "Uykulu")
+        case .asking: String(localized: "Soruyor")
         }
     }
 }

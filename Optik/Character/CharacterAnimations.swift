@@ -193,6 +193,21 @@ enum CharacterAnimations {
     /// The resting pose of `optik-egil`, used when motion is reduced.
     static let leanRest = T.make(.rotate(degrees: -8))
 
+    /// optik-merak: 2.4s ease-in-out (soru head tilt).
+    static func curiousTilt() -> CAAnimation {
+        let a = T.make(.rotate(degrees: -10)), b = T.make(.rotate(degrees: -6))
+        return transforms(duration: 2.4, keyTimes: [0, 0.5, 1], [a, b, a], timing: CSSTiming.easeInOut)
+    }
+
+    /// The resting pose of `optik-merak`, used when motion is reduced.
+    static let curiousRest = T.make(.rotate(degrees: -10))
+
+    /// optik-soru: 1.6s ease-in-out (soru "?").
+    static func questionBob() -> CAAnimation {
+        let a = T.make(.translate(0, 0), .rotate(degrees: -8)), b = T.make(.translate(0, -4), .rotate(degrees: 8))
+        return transforms(duration: 1.6, keyTimes: [0, 0.5, 1], [a, b, a], timing: CSSTiming.easeInOut)
+    }
+
     /// optik-zz: 2.7s ease-in (uykulu letters).
     static func sleepLetter() -> CAAnimation {
         let transform = transforms(duration: 2.7, keyTimes: [0, 1],

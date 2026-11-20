@@ -8,9 +8,9 @@ struct MoodTests {
         .deletingLastPathComponent().deletingLastPathComponent()
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
 
-    @Test func sevenMoodsInDesignOrder() {
+    @Test func eightMoodsInDesignOrder() {
         #expect(Mood.allCases.map(\.rawValue) == [
-            "bekliyor", "mutlu", "dinliyor", "dusunceli", "uyari", "kutlama", "uykulu",
+            "bekliyor", "mutlu", "dinliyor", "dusunceli", "uyari", "kutlama", "uykulu", "soru",
         ])
     }
 
@@ -32,7 +32,8 @@ struct MoodTests {
     @Test func soundsMatchDesignTable() {
         #expect(Mood.waiting.sound == .tik)
         #expect(Mood.alert.sound == .uyari)
-        #expect(Mood.allCases.filter { $0 != .waiting }.allSatisfy { $0.sound.rawValue == $0.rawValue })
+        #expect(Mood.asking.sound == .dinliyor)
+        #expect(Mood.allCases.filter { $0 != .waiting && $0 != .asking }.allSatisfy { $0.sound.rawValue == $0.rawValue })
     }
 
     @Test func onlyCelebratingIsTransient() {

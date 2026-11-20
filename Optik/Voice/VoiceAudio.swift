@@ -25,6 +25,8 @@ final class VoiceAudio: @unchecked Sendable {
     private var onFrame: FrameHandler?
     private var isConfigured = false
     private(set) var hasEchoCancellation = false
+    /// Voice processing was switched off while idle and comes back with the next capture.
+    private var releasedVoiceProcessing = false
     private var speechFormat: AVAudioFormat?
     /// Bumped by `stopSpeech`, so buffers scheduled before it never report completion.
     private var speechGeneration = 0
@@ -76,6 +78,13 @@ final class VoiceAudio: @unchecked Sendable {
     private func startEngine() throws {
         configureIfNeeded()
         guard !engine.isRunning else { return }
+        if releasedVoiceProcessing {
+            releasedVoiceProcessing = false
+            let hadTap = isCapturing || onFrame != nil
+            if hadTap { engine.inputNode.removeTap(onBus: 0) }
+            setVoiceProcessing(true)
+            if hadTap { installTap() }
+        }
         engine.prepare()
         do {
             try engine.start()
@@ -280,6 +289,12 @@ final class VoiceAudio: @unchecked Sendable {
     private func stopEngineIfIdle() {
         guard !isCapturing, !speechPlayer.isPlaying, engine.isRunning else { return }
         engine.stop()
+        // Voice processing keeps the microphone to itself even with the engine
+        // stopped, and the wake word listener would hear nothing.
+        if hasEchoCancellation {
+            setVoiceProcessing(false)
+            releasedVoiceProcessing = true
+        }
     }
 
     /// Releases the engine after a conversation, when nothing plays or listens.

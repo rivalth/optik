@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0F0000000000000000000050 /* OptikCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0F0000000000000000000061 /* OptikCore */; };
+		0F0000000000000000000053 /* OptikSpeaker in Frameworks */ = {isa = PBXBuildFile; productRef = 0F0000000000000000000067 /* OptikSpeaker */; };
 		0F0000000000000000000051 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 0F0000000000000000000063 /* KeyboardShortcuts */; };
 		0F0000000000000000000052 /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0F0000000000000000000065 /* WhisperKit */; };
 /* End PBXBuildFile section */
@@ -87,6 +88,7 @@
 				0F0000000000000000000050 /* OptikCore in Frameworks */,
 				0F0000000000000000000051 /* KeyboardShortcuts in Frameworks */,
 				0F0000000000000000000052 /* WhisperKit in Frameworks */,
+				0F0000000000000000000053 /* OptikSpeaker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +159,7 @@
 				0F0000000000000000000061 /* OptikCore */,
 				0F0000000000000000000063 /* KeyboardShortcuts */,
 				0F0000000000000000000065 /* WhisperKit */,
+				0F0000000000000000000067 /* OptikSpeaker */,
 			);
 			productName = Optik;
 			productReference = 0F0000000000000000000010 /* Optik.app */;
@@ -215,6 +218,7 @@
 				0F0000000000000000000060 /* XCLocalSwiftPackageReference "Packages/OptikCore" */,
 				0F0000000000000000000062 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				0F0000000000000000000064 /* XCRemoteSwiftPackageReference "argmax-oss-swift" */,
+				0F0000000000000000000066 /* XCLocalSwiftPackageReference "Packages/OptikSpeaker" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F0000000000000000000003 /* Products */;
@@ -400,6 +404,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/OptikCore;
 		};
+		0F0000000000000000000066 /* XCLocalSwiftPackageReference "Packages/OptikSpeaker" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/OptikSpeaker;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -435,6 +443,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0F0000000000000000000064 /* XCRemoteSwiftPackageReference "argmax-oss-swift" */;
 			productName = WhisperKit;
+		};
+		0F0000000000000000000067 /* OptikSpeaker */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OptikSpeaker;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

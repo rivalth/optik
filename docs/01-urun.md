@@ -153,6 +153,10 @@ Kurallar:
 - **Hafıza araması:** "geçen ay bu müşteriyle ne konuşmuştuk?" Yerel FTS5 araması, sonuçlar LLM'e bağlam olarak verilir.
 - **Çakışma uyarısı:** etkinlik eklenirken anında.
 - **Kilit:** Para ve İlişki bölümleri için Touch ID.
+- **Sessiz mod:** ⌃⌥O çentiğin altında bir yazı kutusu açar. Optik yazıyla cevap verir, mikrofon kapalı kalır. Kütüphane, kalabalık, toplantı için.
+- **İnternet:** güncel bilgi (maç saati, hava, haber, kur) için Optik internette arar, gerekirse sayfayı açıp okur. Cevap bir sayfaya dayanıyorsa "Sayfayı Dia’da açayım mı?" diye sorar (varsayılan tarayıcının adıyla); evet, ⌘⏎ ya da tıklama sayfayı açar.
+- **Uygulamaları kullanma:** "Dia'yı aç, sonra maç saati arat", "Spotify'da Tarkan çal", "şarkıyı durdur", "sonraki şarkı". Bu komutlar Claude'a gitmez, cihazda anlaşılır ve kullanıcı konuşurken her biten parça hemen yapılır (önce sesin kullanıcıya ait olduğu doğrulanır). Optik'in kendisi yapamadığı parça ("ilk sonuca tıkla") yapılanların notuyla Claude'a gider. Sonraki adım: sayfada tıklama ve form doldurma (Claude ile), "Bilgilerim" (ayarlarda girilen ve konuşmalardan öğrenilip güncellenen kişisel bilgiler). Hesap açma, form gönderme gibi geri alınması zor işlerde Optik önce ne yapacağını gösterir ve onay ister; şifreyi Optik girmez.
+- **Sesli cevap kapatılabilir:** Ayarlar → Ses → "Sesli cevap ver". Kapalıyken cevaplar yalnızca yazıyla görünür, ses üretmek için hiçbir istek gitmez.
 
 ## 8. Kapsam dışı (şimdilik)
 

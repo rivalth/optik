@@ -99,6 +99,12 @@ public enum DesignTokens {
             public let width: Double
             public let height: Double
             public let bottomCornerRadius: Double
+
+            public init(width: Double, height: Double, bottomCornerRadius: Double) {
+                self.width = width
+                self.height = height
+                self.bottomCornerRadius = bottomCornerRadius
+            }
         }
 
         /// bekliyor

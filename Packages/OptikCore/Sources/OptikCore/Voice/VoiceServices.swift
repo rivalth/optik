@@ -73,3 +73,24 @@ public struct TurnLatency: Equatable, Sendable, Codable {
         return String(decoding: data, as: UTF8.self)
     }
 }
+
+/// What the wake word listener heard. Times are ns since boot (`CLOCK_UPTIME_RAW`).
+public enum WakeWordEvent: Sendable, Equatable {
+    /// "Optik" alone: Optik answers "Efendim?" and listens.
+    case called(at: UInt64)
+    /// "Optik, bugün hava nasıl": the user keeps talking. The listener records the
+    /// rest itself and sends `sentence` when the user stops.
+    case calledWithSentence(at: UInt64)
+    /// The whole sentence, name included, 16 kHz mono.
+    case sentence([Float])
+}
+
+/// Listens for "Optik" while the island is closed (`docs/02-mimari.md` 3.1). Runs on
+/// the device; the audio never leaves it. Behind a protocol so tests use a fake.
+public protocol WakeWordDetector: AnyObject, Sendable {
+    /// Starts listening. After a `called` or a `sentence` event, listening stops
+    /// until `start` is called again.
+    func start(onEvent: @escaping @Sendable (WakeWordEvent) -> Void)
+    /// Stops listening and turns the microphone off.
+    func stop()
+}

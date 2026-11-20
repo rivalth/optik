@@ -6,16 +6,29 @@ import SwiftUI
 struct VoiceSettingsView: View {
     @AppStorage(SettingsKey.userName) private var userName = ""
     @AppStorage(SettingsKey.speechModel) private var speechModel = SpeechModel.default.rawValue
+    @AppStorage(SettingsKey.speechEngine) private var speechEngine = SpeechEngine.default.rawValue
+    /// Apple dictation's Turkish files: nil while checking.
+    @State private var dictationReady: Bool?
+    @State private var dictationInstalling = false
+    @State private var hasElevenLabsKey = KeychainStore.has(.elevenLabs)
     @State private var microphone = AVCaptureDevice.authorizationStatus(for: .audio)
     @State private var modelState: WhisperTranscriber.State = .notDownloaded
     @State private var observer: UUID?
 
     private var transcriber: WhisperTranscriber { IslandController.shared.transcriber }
 
+    @AppStorage(SettingsKey.speakReplies) private var speakReplies = true
+
     var body: some View {
         Form {
             Section {
                 TextField("Adın", text: $userName, prompt: Text("Optik sana nasıl seslensin?"))
+            }
+            Section {
+                Toggle("Sesli cevap ver", isOn: $speakReplies)
+            } footer: {
+                Text("Kapalıyken Optik cevaplarını yalnızca yazıyla gösterir, “Efendim?” de demez. Ses üretmek için hiçbir istek gönderilmez.")
+                    .foregroundStyle(.secondary)
             }
             Section {
                 APIKeyField(title: "Claude API anahtarı", key: .anthropic, prompt: "sk-ant-…")
@@ -27,16 +40,28 @@ struct VoiceSettingsView: View {
                     .foregroundStyle(.secondary)
             }
             Section {
-                Picker("Model", selection: $speechModel) {
+                Picker("Cümleni yazan", selection: $speechEngine) {
+                    ForEach(SpeechEngine.allCases.filter(\.isAvailable)) { engine in
+                        Text(engine.localizedName).tag(engine.rawValue)
+                    }
+                }
+                if selectedEngine != .whisper {
+                    LabeledContent("Durum") { engineStatus }
+                }
+            } header: {
+                Text("Konuşmayı tanıma")
+            } footer: {
+                engineFooter.foregroundStyle(.secondary)
+            }
+            Section {
+                Picker("Whisper modeli", selection: $speechModel) {
                     ForEach(SpeechModel.allCases) { model in
                         Text(model.localizedName).tag(model.rawValue)
                     }
                 }
                 LabeledContent("Durum") { modelStatus }
-            } header: {
-                Text("Konuşmayı tanıma")
             } footer: {
-                Text("Konuşman bu Mac'te yazıya çevrilir, ses dışarı çıkmaz. Model bir kez indirilir.")
+                Text("Whisper “Optik” adını her zaman bu Mac'te dinler, sen konuşurken metni canlı gösterir ve diğer seçenekler çalışmazsa onların yerine geçer. Model bir kez indirilir.")
                     .foregroundStyle(.secondary)
             }
             Section {
@@ -60,6 +85,60 @@ struct VoiceSettingsView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             microphone = AVCaptureDevice.authorizationStatus(for: .audio)
+            hasElevenLabsKey = KeychainStore.has(.elevenLabs)
+        }
+        .task(id: speechEngine) {
+            hasElevenLabsKey = KeychainStore.has(.elevenLabs)
+            if selectedEngine == .dictation, #available(macOS 26, *) {
+                dictationReady = await AppleDictation.isInstalled()
+            }
+        }
+    }
+
+    private var selectedEngine: SpeechEngine { SpeechEngine(rawValue: speechEngine) ?? .default }
+
+    @ViewBuilder
+    private var engineFooter: some View {
+        switch selectedEngine {
+        case .whisper:
+            Text("Konuşman bu Mac'te yazıya çevrilir, ses dışarı çıkmaz.")
+        case .dictation:
+            Text("Konuşman bu Mac'te, macOS'un dikte modeliyle yazıya çevrilir, ses dışarı çıkmaz. Düz Türkçede hızlı ve doğru, araya giren İngilizce kelimelerde Whisper kadar iyi değil.")
+        case .scribe:
+            Text("Bu seçenekte “Optik” dedikten sonra söylediğin cümlenin sesi ElevenLabs'e gönderilir ve orada yazıya çevrilir. “Optik” adı yine bu Mac'te dinlenir, başka hiçbir ses gönderilmez. Her konuşma yaklaşık 8–10 ElevenLabs kredisi harcar. Bağlantı ya da kredi yoksa Whisper devreye girer.")
+        }
+    }
+
+    @ViewBuilder
+    private var engineStatus: some View {
+        switch selectedEngine {
+        case .whisper:
+            EmptyView()
+        case .scribe:
+            if hasElevenLabsKey {
+                Text("Hazır").foregroundStyle(.secondary)
+            } else {
+                Text("ElevenLabs API anahtarı gerekli").foregroundStyle(.secondary)
+            }
+        case .dictation:
+            if dictationReady == true {
+                Text("Hazır").foregroundStyle(.secondary)
+            } else if dictationInstalling {
+                HStack(spacing: 6) {
+                    ProgressView().controlSize(.small)
+                    Text("İndiriliyor…").foregroundStyle(.secondary)
+                }
+            } else if dictationReady == false {
+                Button("Türkçe dikteyi indir") {
+                    guard #available(macOS 26, *) else { return }
+                    dictationInstalling = true
+                    Task {
+                        try? await AppleDictation.install()
+                        dictationReady = await AppleDictation.isInstalled()
+                        dictationInstalling = false
+                    }
+                }
+            }
         }
     }
 

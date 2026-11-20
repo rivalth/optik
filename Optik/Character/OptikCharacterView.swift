@@ -62,6 +62,7 @@ final class OptikCharacterView: NSView {
     private let sparkles = CharacterGeometry.sparkles.map { _ in CAShapeLayer() } // pul
     private let sleepLetters = (0..<3).map { _ in CATextLayer() }                 // zz
     private let alertMark = CATextLayer()                                         // unlem
+    private let questionMark = CATextLayer()                                      // soru-isareti
 
     /// Eye wrappers are this big; the eye path is centered inside.
     private static let eyeWrapSize = CGSize(width: 24, height: 24)
@@ -198,6 +199,10 @@ final class OptikCharacterView: NSView {
                           origin: CharacterGeometry.alertMarkOrigin, lineHeight: CharacterGeometry.alertMarkFontSize)
             alertMark.opacity = 0
             body.addSublayer(alertMark)
+            configureText(questionMark, "?", size: CharacterGeometry.questionMarkFontSize,
+                          origin: CharacterGeometry.questionMarkOrigin, lineHeight: CharacterGeometry.questionMarkFontSize)
+            questionMark.opacity = 0
+            body.addSublayer(questionMark)
 
             // salin (back) > ic-duvar
             setFrame(backSway, CharacterGeometry.swayFrame, anchor: CGPoint(x: 0.5, y: 1))
@@ -300,6 +305,7 @@ final class OptikCharacterView: NSView {
             rightLeg.strokeColor = accent
             beak.fillColor = accent
             alertMark.foregroundColor = NSColor(DesignTokens.Palette.warning).cgColor
+            questionMark.foregroundColor = mint
             for letter in sleepLetters { letter.foregroundColor = mint }
             for (layer, sparkle) in zip(sparkles, CharacterGeometry.sparkles) {
                 layer.fillColor = sparkle.usesAccent ? accent : mint
@@ -320,7 +326,7 @@ final class OptikCharacterView: NSView {
     private func updateTextScale() {
         let contentsScale = (window?.backingScaleFactor ?? 2) * scale
         withoutActions {
-            for text in sleepLetters + [alertMark] { text.contentsScale = contentsScale }
+            for text in sleepLetters + [alertMark, questionMark] { text.contentsScale = contentsScale }
         }
     }
 
@@ -393,7 +399,7 @@ final class OptikCharacterView: NSView {
     }
 
     private var loopLayers: [CALayer] {
-        [groundShadow, body, backSway, frontSway, leftLeg, rightLeg, leftEyeWrap, rightEyeWrap, beak, alertMark]
+        [groundShadow, body, backSway, frontSway, leftLeg, rightLeg, leftEyeWrap, rightEyeWrap, beak, alertMark, questionMark]
             + sparkles + sleepLetters
     }
 
@@ -458,6 +464,7 @@ final class OptikCharacterView: NSView {
         let swayRest: CATransform3D = switch mood {
         case .sleepy where reduceMotion: CharacterAnimations.sleepRest
         case .listening where reduceMotion: CharacterAnimations.leanRest
+        case .asking where reduceMotion: CharacterAnimations.curiousRest
         default: CATransform3DIdentity
         }
         backSway.transform = swayRest
@@ -468,6 +475,8 @@ final class OptikCharacterView: NSView {
         for wrap in [leftEyeWrap, rightEyeWrap] { wrap.transform = CATransform3DIdentity }
 
         alertMark.opacity = mood == .alert ? 1 : 0
+        questionMark.opacity = mood == .asking ? 1 : 0
+        questionMark.transform = CATransform3DIdentity
         for sparkle in sparkles { sparkle.opacity = 0 }
         for letter in sleepLetters { letter.opacity = 0 }
     }
@@ -514,6 +523,9 @@ final class OptikCharacterView: NSView {
             for (index, layer) in sparkles.enumerated() {
                 loop(layer, A.sparkle(), delay: 0.2 * Double(index), key: "\(Self.loopKey).\(index)")
             }
+        case .asking:
+            sway = A.curiousTilt()
+            loop(questionMark, A.questionBob())
         case .sleepy:
             eyeLoop = nil
             sway = A.sleepBreath()

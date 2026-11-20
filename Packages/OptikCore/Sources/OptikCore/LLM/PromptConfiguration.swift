@@ -39,6 +39,8 @@ public struct TurnContext: Sendable {
         case wakeWord = "uyandırma kelimesi"
         case shortcut = "klavye kısayolu"
         case click = "adacığa tıklama"
+        /// Silent mode: the user typed, the reply is read on screen, not spoken.
+        case typed = "yazarak (sessiz)"
     }
 
     public var userName: String?
@@ -46,12 +48,15 @@ public struct TurnContext: Sendable {
     public var trigger: Trigger
     /// Stage 2: Optik has no tools yet, so it must not claim it saved anything.
     public var toolsAvailable: Bool
+    /// The computer tools (`llm/bilgisayar-araclari.json`) are connected.
+    public var computerControl: Bool
 
-    public init(userName: String?, now: Date, trigger: Trigger, toolsAvailable: Bool = false) {
+    public init(userName: String?, now: Date, trigger: Trigger, toolsAvailable: Bool = false, computerControl: Bool = false) {
         self.userName = userName
         self.now = now
         self.trigger = trigger
         self.toolsAvailable = toolsAvailable
+        self.computerControl = computerControl
     }
 
     public static let timeZone = TimeZone(identifier: "Europe/Istanbul")!
@@ -62,7 +67,8 @@ public struct TurnContext: Sendable {
         lines.append("Şimdi: \(Self.formatted(now)) (Europe/Istanbul)")
         lines.append("Tetikleyen: \(trigger.rawValue)")
         if !toolsAvailable {
-            lines.append("Not: Bu sürümde araç yok. Veri okuyamaz, kaydedemez ve hatırlatıcı kuramazsın. Böyle bir istekte bunu tek cümleyle söyle, kaydetmiş gibi davranma.")
+            let tools = computerControl ? "internette arama ve bilgisayarı kullanma (uygulamalar, sayfalar, dosyalar)" : "internette arama"
+            lines.append("Not: Bu sürümde \(tools) dışında araç yok. Kişisel veri okuyamaz, kaydedemez ve hatırlatıcı kuramazsın. Böyle bir istekte bunu tek cümleyle söyle, kaydetmiş gibi davranma.")
         }
         return lines.joined(separator: "\n")
     }

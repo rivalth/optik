@@ -94,6 +94,7 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | Kişisel veri | Depoda gerçek kullanıcıya ait bilgi yok. Belgeler ve örnek veri uydurma örnek kullanıcı "Ada" üzerinden anlatılır. |
 | 2026-11-16 | Dil | Belgeler, arayüz ve README Türkçe. Kod, tanımlayıcılar ve commit mesajları İngilizce. |
 | 2026-11-16 | Ruh halleri | Yedi ruh hali (uykulu dahil). |
+| 2026-11-20 | Ruh halleri | Sekizinci ruh hali `soru`: Optik bir şey sorup cevap beklerken başını yana eğer, başında nane renginde "?" sallanır. Kendi sesi yok, `dinliyor` sesini kullanır. |
 | 2026-11-16 | Çağırma kısayolu | Varsayılan ⌘ ⌘ (Girdi İzleme izniyle). Kullanıcı ayarlardan ek bir kısayol kaydedebilir (`KeyboardShortcuts` paketi). |
 | 2026-11-16 | "Efendim?" süresi | 250 ms bütçesi ilk ses için: `uyan` efekti. "Efendim?" efekt bittikten 60 ms sonra çalar, ikisi üst üste binmez. |
 | 2026-11-16 | Uyandırma kelimesi | Önce sherpa-onnx anahtar kelime tespiti ("optic" anahtarı, eğitimsiz) denenir. Ölçümü geçemezse kendi eğittiğimiz küçük model. Porcupine elendi (Türkçe yok, ücretsiz katman kapandı). |
@@ -103,6 +104,10 @@ Her aşama kendi başına çalışan bir şey bırakır. Bir aşamanın kabul kr
 | 2026-11-16 | En düşük macOS | macOS 15. Uyandırma kelimesi için kullanılacak `speech-swift` macOS 15 istiyor. Optik zaten Apple Silicon şartı koyuyor ve bütün Apple Silicon Mac'ler macOS 15'e güncellenebildiği için kimse dışarıda kalmıyor. |
 | 2026-11-16 | Mesajlar ve e-posta | Optik e-postayı okur ve gönderir, iMessage gönderir: ikisi de onaydan sonra tam otomatik. WhatsApp'ta metni ve dosyaları hazırlar, kullanıcı Gönder'e basar (kişisel hesaplar için resmî arayüz yok). Önceki "Optik mesaj göndermez" kapsamı kalktı. Yeni aşama 4; sonraki aşamalar bir kaydı. |
 | 2026-11-16 | Tek nefeste çağırma | "Optik"ten sonra konuşma sürüyorsa "Efendim?" atlanır, cümle kaçırılmaz. Aşama 2'nin kabulüne eklendi. |
+| 2026-11-20 | İnternet | Optik internette arar ve sayfa okur (Claude Code'da WebSearch ve WebFetch, API'de web arama). Kaynak listesi gösterilmez; kaynak sayfa varsayılan tarayıcıda açılmak üzere önerilir. |
+| 2026-11-20 | Sesli cevap ayarı | Ayarlar'dan kapatılabilir; kapalıyken hiçbir konuşma sentezi isteği gitmez, "Efendim?" de çalmaz. |
+| 2026-11-20 | Uygulamaları kullanma | Önce yerel komutlar: uygulama aç/kapat, tarayıcıda arat, siteye git, Spotify'da çal ve denetim. Claude'a gitmez, konuşurken parça parça yapılır. Spotify'da şarkı Web API'siz, arama sayfasında Erişilebilirlik ile bulunur. Sonra: sayfada tıklama ve form doldurma (Claude ile), "Bilgilerim" (ayarlarda, konuşmalardan güncellenir). |
+| 2026-11-20 | App Sandbox | Kaldırıldı. Başka uygulamalarda tıklamak Erişilebilirlik API'si istiyor, korumalı uygulamalarda çalışmıyor. Optik App Store'a gitmiyor. |
 
 ## Açık sorular
 

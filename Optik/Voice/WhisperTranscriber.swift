@@ -36,6 +36,17 @@ enum SpeechModel: String, CaseIterable, Identifiable, Sendable {
     static var selected: SpeechModel {
         UserDefaults.standard.string(forKey: SettingsKey.speechModel).flatMap(SpeechModel.init) ?? .default
     }
+
+    /// The model that listens for "Optik". It checks every sound in the room, so it
+    /// must answer in a fraction of a second: with the large model chosen (over 7 s
+    /// per check on the GPU), the wake word uses a smaller downloaded one instead,
+    /// and only the user's sentence goes to the large one.
+    static var forWakeWord: SpeechModel {
+        let chosen = selected
+        guard chosen == .turbo else { return chosen }
+        for fast in [SpeechModel.small, .base] where ModelStorage.folder(for: fast) != nil { return fast }
+        return chosen
+    }
 }
 
 /// Where models live: `~/Library/Application Support/Optik/Models` (in the container).
@@ -80,7 +91,10 @@ actor WhisperTranscriber: Transcriber {
     private(set) var state: State = .notDownloaded
     private var stateObservers: [UUID: @Sendable (State) -> Void] = [:]
 
-    init() {
+    /// Which model this transcriber runs: the user's choice, or the wake word's.
+    private let model: @Sendable () -> SpeechModel
+    init(model: @escaping @Sendable () -> SpeechModel = { SpeechModel.selected }) {
+        self.model = model
         memoryPressure.setEventHandler { [weak self] in
             Task { await self?.unload() }
         }
@@ -101,12 +115,12 @@ actor WhisperTranscriber: Transcriber {
         case .downloading, .preparing: return state
         default: break
         }
-        if ModelStorage.folder(for: SpeechModel.selected) == nil { return state == .failed ? .failed : .notDownloaded }
+        if ModelStorage.folder(for: model()) == nil { return state == .failed ? .failed : .notDownloaded }
         return .ready
     }
 
     /// Whether the selected model is loaded and a turn will not wait for it.
-    var isLoaded: Bool { whisper != nil && loadedModel == SpeechModel.selected }
+    var isLoaded: Bool { whisper != nil && loadedModel == model() }
 
     private func publish(_ newState: State) {
         state = newState
@@ -118,7 +132,7 @@ actor WhisperTranscriber: Transcriber {
     /// Downloads the selected model from Hugging Face, then prepares it. Only text
     /// crosses the network later; this is the one time a large file comes in.
     func downloadSelectedModel() async throws {
-        let model = SpeechModel.selected
+        let model = self.model()
         if ModelStorage.folder(for: model) != nil { try await prepareSelectedModel(); return }
         if let download { _ = try await download.value; return }
         publish(.downloading(0))
@@ -149,7 +163,7 @@ actor WhisperTranscriber: Transcriber {
     /// Loads the selected model now, so the next turn does not wait. Called at launch,
     /// after a download and when the user picks another model.
     func prepareSelectedModel() async throws {
-        guard ModelStorage.folder(for: SpeechModel.selected) != nil else {
+        guard ModelStorage.folder(for: model()) != nil else {
             publish(.notDownloaded)
             return
         }
@@ -175,13 +189,30 @@ actor WhisperTranscriber: Transcriber {
         let options = DecodingOptions(
             task: .transcribe, language: "tr", temperature: 0, temperatureFallbackCount: 1,
             usePrefillPrompt: true, detectLanguage: false, skipSpecialTokens: true, withoutTimestamps: true,
-            suppressBlank: true
+            promptTokens: hintTokens(for: whisper), suppressBlank: true
         )
         let started = ContinuousClock.now
         let results = try await whisper.transcribe(audioArray: samples, decodeOptions: options)
         log.info("transcribed \(samples.count / 16_000, privacy: .public) s of audio in \(Self.milliseconds(since: started), privacy: .public) ms")
-        return results.map(\.text).joined(separator: " ").trimmingCharacters(in: .whitespacesAndNewlines)
+        let segments = results.flatMap(\.segments).map {
+            TranscriptFilter.Segment(text: $0.text, noSpeechProbability: Double($0.noSpeechProb),
+                                     averageLogProbability: Double($0.avgLogprob), compressionRatio: Double($0.compressionRatio))
+        }
+        return TranscriptFilter.text(of: segments)
     }
+
+    /// Optik's name, the user's name and the English words a developer mixes in,
+    /// as the "previous text" Whisper continues from (`SpeechHints`).
+    private func hintTokens(for whisper: WhisperKit) -> [Int]? {
+        guard let tokenizer = whisper.tokenizer else { return nil }
+        let prompt = SpeechHints.whisperPrompt(userName: UserDefaults.standard.string(forKey: SettingsKey.userName))
+        if let cached = hintCache, cached.prompt == prompt { return cached.tokens }
+        let tokens = tokenizer.encode(text: " " + prompt).filter { $0 < tokenizer.specialTokens.specialTokenBegin }
+        hintCache = (prompt, tokens)
+        return tokens
+    }
+
+    private var hintCache: (prompt: String, tokens: [Int])?
 
     func unload() async {
         loading?.cancel()
@@ -193,7 +224,7 @@ actor WhisperTranscriber: Transcriber {
     }
 
     private func loadedWhisper() async throws -> WhisperKit {
-        let model = SpeechModel.selected
+        let model = self.model()
         if let whisper, loadedModel == model { return whisper }
         // A load already under way: wait for it instead of starting a second one.
         if let loading, loadingModel == model { return try await loading.value }

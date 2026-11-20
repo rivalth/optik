@@ -13,6 +13,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard !Self.isRunningTests else { return }
         IslandController.shared.start()
+        ComputerServer.shared.start()
         #if DEBUG
         // Lets a developer summon Optik from the shell to test the voice loop.
         DistributedNotificationCenter.default().addObserver(

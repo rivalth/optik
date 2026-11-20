@@ -6,7 +6,7 @@ Bu klasördeki her şey Optik için özgün üretildi ve doğrudan kullanılabil
 
 | Klasör / dosya | Ne | Nasıl kullanılır |
 | :-- | :-- | :-- |
-| `karakter/svg/optik-<ruh hali>.svg` | 7 durağan poz: bekliyor, mutlu, dinliyor, dusunceli, uyari, kutlama, uykulu. Katmanlar kimlikli: `golge`, `ic-duvar`, `bacak-sol`, `bacak-sag`, `kabuk`, `catlaklar`, `gozler`, `gaga`, `ekler` | Ölçü kaynağı. Bildirim görseli, boş durum, belge. Görünüm kutusu `-10 -30 200 240` (karakter kutusu 180 × 200, çevresinde zıplama ve ek payı). |
+| `karakter/svg/optik-<ruh hali>.svg` | 8 durağan poz: bekliyor, mutlu, dinliyor, dusunceli, uyari, kutlama, uykulu, soru. Katmanlar kimlikli: `golge`, `ic-duvar`, `bacak-sol`, `bacak-sag`, `kabuk`, `catlaklar`, `gozler`, `gaga`, `ekler` | Ölçü kaynağı. Bildirim görseli, boş durum, belge. Görünüm kutusu `-10 -30 200 240` (karakter kutusu 180 × 200, çevresinde zıplama ve ek payı). |
 | `karakter/png/` | Aynı pozlar, saydam, 200 × 240 pt, @1x @2x @3x | Hızlı kullanım, bildirim eki, mobil |
 | `karakter/optik-ruh-halleri.png` | Bütün ruh halleri tek görselde | Göz atmak için |
 | `animasyon/optik.css` | Karakterin tam geometrisi, ruh halleri ve bütün anahtar kareler | Zamanlama ve hareket kaynağı. Web yüzeyi olursa doğrudan kullanılır |

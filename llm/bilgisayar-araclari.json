@@ -1,0 +1,154 @@
+[
+ {
+  "name": "look_at_screen",
+  "description": "Öndeki uygulamanın (ya da adı verilen uygulamanın) penceresini okur: başlık, tarayıcıdaysa sayfa adresi, ekranda görünen düğmeler, bağlantılar, metin alanları ve metinler. Her öğenin başında [numara] vardır; click ve type_text bu numarayla çalışır. Bir işe başlamadan ve emin olmadığında önce bunu çağır.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "app": {"type": "string", "description": "Uygulamanın adı, örnek Dia, Finder, Notlar. Boşsa öndeki uygulama."}
+   },
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "click",
+  "description": "Son look_at_screen çıktısındaki bir öğeye Optik'in faresiyle tıklar. Ardından ekranın yeni hâlini döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "id": {"type": "integer", "description": "Öğenin numarası."},
+    "double": {"type": "boolean", "description": "Çift tıklama (Finder'da klasör açmak gibi)."}
+   },
+   "required": ["id"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "type_text",
+  "description": "Metin yazar. id verilirse önce o alana tıklar. Şifre alanına asla yazma. Ardından ekranın yeni hâlini döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "text": {"type": "string"},
+    "id": {"type": "integer", "description": "Yazılacak alanın numarası. Boşsa odaktaki alan."},
+    "replace": {"type": "boolean", "description": "Alandaki metni silip yerine yaz."},
+    "submit": {"type": "boolean", "description": "Yazdıktan sonra Enter'a bas (arama kutuları için)."}
+   },
+   "required": ["text"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "press_keys",
+  "description": "Tuşa ya da kısayola basar: enter, tab, esc, space, backspace, up, down, left, right, pageup, pagedown, cmd+l, cmd+t, cmd+w, cmd+shift+g gibi. Ardından ekranın yeni hâlini döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "keys": {"type": "string", "description": "Örnek: enter, cmd+l, cmd+shift+n."}
+   },
+   "required": ["keys"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "scroll",
+  "description": "Öndeki pencereyi yaklaşık bir ekran aşağı ya da yukarı kaydırır. Ardından ekranın yeni hâlini döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "direction": {"type": "string", "enum": ["down", "up"]}
+   },
+   "required": ["direction"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "open_url",
+  "description": "Bir web adresini kullanıcının tarayıcısında açar. Ardından ekranın yeni hâlini döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "url": {"type": "string", "description": "https ile başlayan adres."},
+    "browser": {"type": "string", "description": "Tarayıcının adı. Boşsa varsayılan tarayıcı."}
+   },
+   "required": ["url"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "open_app",
+  "description": "Bir uygulamayı açar ya da öne getirir. Ardından ekranın yeni hâlini döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "name": {"type": "string", "description": "Uygulamanın adı, örnek Finder, Notlar, Spotify."}
+   },
+   "required": ["name"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "find_files",
+  "description": "Kullanıcının ev klasöründe Spotlight ile dosya ya da klasör arar, en yeni değişenler önce. Tam yollarını döndürür.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "query": {"type": "string", "description": "Adın bir parçası."},
+    "kind": {"type": "string", "enum": ["any", "folder", "file"], "description": "Boşsa any."},
+    "inside": {"type": "string", "description": "Yalnızca bu klasörün içinde ara, örnek ~/Desktop."}
+   },
+   "required": ["query"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "create_folder",
+  "description": "Kullanıcının ev klasörü içinde yeni bir klasör oluşturur, ara klasörlerle birlikte. Örnek ~/Desktop/Faturalar.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "path": {"type": "string"}
+   },
+   "required": ["path"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "open_path",
+  "description": "Bir dosyayı varsayılan uygulamasıyla ya da bir klasörü Finder'da açar. reveal true ise Finder'da yalnızca seçip gösterir.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "path": {"type": "string"},
+    "reveal": {"type": "boolean"}
+   },
+   "required": ["path"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "move_item",
+  "description": "Ev klasörü içinde bir dosyayı ya da klasörü taşır veya adını değiştirir. Hedefte aynı adda bir şey varsa yapmaz.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "from": {"type": "string"},
+    "to": {"type": "string", "description": "Yeni tam yol (yeni ad dahil)."}
+   },
+   "required": ["from", "to"],
+   "additionalProperties": false
+  }
+ },
+ {
+  "name": "trash_item",
+  "description": "Ev klasörü içinde bir dosyayı ya da klasörü Çöp Sepeti'ne taşır (geri alınabilir). Yalnızca kullanıcı bu konuşmada açıkça onay verdikten sonra çağır.",
+  "input_schema": {
+   "type": "object",
+   "properties": {
+    "path": {"type": "string"}
+   },
+   "required": ["path"],
+   "additionalProperties": false
+  }
+ }
+]

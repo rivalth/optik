@@ -15,7 +15,7 @@ struct IslandView: View {
     private var phase: IslandPhase { model.phase }
 
     private var shape: UnevenRoundedRectangle {
-        let bottom = phase.size.bottomCornerRadius
+        let bottom = model.size.bottomCornerRadius
         // Under the notch the top edge is the screen edge; without one it floats as a pill.
         let top = model.hasNotch ? 0 : bottom
         return UnevenRoundedRectangle(topLeadingRadius: top, bottomLeadingRadius: bottom,
@@ -28,14 +28,16 @@ struct IslandView: View {
             coop
             optik
             content
+            indicator
             microphoneDot
         }
-        .frame(width: model.width, height: phase.size.height, alignment: .topLeading)
+        .frame(width: model.width, height: model.size.height, alignment: .topLeading)
         .clipShape(shape)
         .contentShape(shape)
         .onTapGesture { model.onClick() }
         .animation(Self.spring, value: phase)
         .animation(Self.spring, value: model.width)
+        .animation(Self.spring, value: model.size)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel(Text("Optik'i çağır"))
@@ -59,6 +61,19 @@ struct IslandView: View {
             .frame(width: 90, height: 100)
             .offset(x: 84, y: 40)
             .accessibilityHidden(true)
+    }
+
+    // MARK: Indicators
+
+    /// A notice in the wings: the symbol beside the coop, a level or a word on the
+    /// right of the camera, and a line under it for songs and copied text.
+    @ViewBuilder
+    private var indicator: some View {
+        if phase == .idle, let indicator = model.indicator {
+            IndicatorView(indicator: indicator, width: model.width, notchWidth: model.notchWidth,
+                          rowHeight: IslandPhase.idle.size.height)
+                .transition(.opacity.animation(.easeOut(duration: 0.18)))
+        }
     }
 
     /// Green while the microphone is on (`CLAUDE.md`, privacy).

@@ -7,10 +7,19 @@ enum SettingsKey {
     static let soundEffectsEnabled = "soundEffectsEnabled"
     /// ⌘ ⌘ summons Optik. On by default; needs Input Monitoring.
     static let summonWithDoubleCommand = "summonWithDoubleCommand"
+    /// Saying "Optik" summons Optik. Off by default: the microphone stays on.
+    static let summonWithWakeWord = "summonWithWakeWord"
+    /// With a voice profile, Optik reacts only to the user's voice. On by default.
+    static let onlyMyVoice = "onlyMyVoice"
+    /// Optik speaks its replies. Off: replies are only shown, and no speech is
+    /// synthesized or requested at all. On by default.
+    static let speakReplies = "speakReplies"
     /// The user's name, for the model's turn context.
     static let userName = "userName"
     /// `SpeechModel` raw value.
     static let speechModel = "speechModel"
+    /// `SpeechEngine` raw value: what writes down the user's sentence.
+    static let speechEngine = "speechEngine"
 }
 
 /// The accent colors the user can pick (`vurguSecenekleri`).
