@@ -7,6 +7,9 @@ struct OptikApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     init() {
+        // Once, before anything reads a setting: the move out of the sandbox
+        // container is a rename on the same disk, so it costs no time here.
+        if !AppDelegate.isRunningTests { ContainerMigration.runIfNeeded() }
         // Decode sound effects off the main thread so the first one plays instantly.
         Task.detached(priority: .utility) {
             await SoundEffectPlayer.shared.preload()

@@ -161,6 +161,10 @@ enum CharacterGeometry {
     static let alertMarkOrigin = CGPoint(x: 150, y: 2)
     static let alertMarkFontSize: CGFloat = 30
 
+    /// soru-isareti: "?" in Space Grotesk 700, 30, line-height 1, mint.
+    static let questionMarkOrigin = CGPoint(x: 146, y: 2)
+    static let questionMarkFontSize: CGFloat = 30
+
     // MARK: Helpers
 
     private static func polygon(_ percent: [(Double, Double)], in size: CGSize) -> CGPath {

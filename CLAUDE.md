@@ -24,7 +24,7 @@ Tasarımın çalışan referansı: `assets/animasyon/optik-demo.html` (tarayıc�
 
 - **Platform (1. aşama):** macOS 15+, Apple Silicon. Swift 6, SwiftUI + AppKit. Çentik adacığı kenarlıksız bir `NSPanel`. Uygulama menü çubuğu ajanı olarak çalışır, ikinci beyin ekranları ayrı bir pencerede açılır.
 - **Veri:** önce yerel. SQLite (GRDB). Bütün okumalar yerelden. Arama için FTS5. Para kuruş cinsinden tamsayı tutulur.
-- **Ses hattı:** uyandırma kelimesi → konuşma sonu algılama → konuşmayı yazıya çevirme → LLM → konuşma sentezi. Uyandırma ve yazıya çevirme cihaz üzerinde çalışır.
+- **Ses hattı:** uyandırma kelimesi → konuşma sonu algılama → konuşmayı yazıya çevirme → LLM → konuşma sentezi. Uyandırma her zaman, yazıya çevirme varsayılan olarak cihaz üzerinde çalışır.
 - **LLM:** Claude API. Hızlı kayıt ve kısa yanıt için `claude-haiku-5-5`, rapor, planlama ve öneri için `claude-sonnet-5-5`. Akış (streaming), araç kullanımı ve istem önbelleği açık.
 - **Ses:** Optik'in kendine ait tek bir sesi var. Sabit cümleler önceden üretilip pakete konur, geri kalanı akışla sentezlenir. Sağlayıcı bir protokolün arkasında durur, değiştirilebilir.
 - **Karakter:** SwiftUI `Shape` ve Core Animation ile yerel çizilir. Web görünümü, video ya da GIF kullanılmaz.
@@ -73,6 +73,7 @@ Her ses turunda bu sürelerin ölçülüp `conversation_log.latency_ms_json` ala
 ## Gizlilik
 
 - Ses cihazdan çıkmaz. Dışarıya yalnızca yazıya çevrilmiş metin (LLM) ve seslendirilecek metin (konuşma sentezi) gider.
+- Tek istisna (2026-11-20 kararı): kullanıcı Ayarlar → Ses'te ElevenLabs Scribe'ı kendisi seçerse, "Optik" dedikten sonra söylediği cümlenin sesi yazıya çevrilmek için ElevenLabs'e gider. Varsayılan kapalı, Ayarlar bunu açıkça yazar. Uyandırma kelimesini dinlemek ve canlı metin her zaman cihazda kalır.
 - Mikrofon açıkken adacıkta yeşil nokta görünür. Tek kısayolla mikrofon tamamen kapanır.
 - Para ve İlişki bölümleri Touch ID ile kilitlenebilir. Kilitliyken LLM bağlamına bu veriler girmez.
 
@@ -100,7 +101,7 @@ CI (`.github/workflows/build.yml`) aynı üç adımı `macos-26` üzerinde çal�
 - Kişiye özel imza ayarları `Config/Local.xcconfig` dosyasında (depoya girmez). Yoksa uygulama "yalnızca bu Mac'te çalıştır" imzasıyla derlenir.
 - Kullanıcı metni ekleyince `Localizable.xcstrings` içinde göründüğünü kontrol et. Kaynak dil Türkçe.
 - Karakter `optik.css` ile birebir: geometri `CharacterGeometry`, anahtar kareler `CharacterAnimations` içinde, CSS'teki adlarıyla. CSS değişirse ikisini birlikte güncelle.
-- Karakteri referansla karşılaştırmak için: `TEST_RUNNER_OPTIK_WRITE_SNAPSHOTS=1 xcodebuild ... test -only-testing:OptikTests/CharacterSnapshotTests`. PNG'ler `~/Library/Containers/<paket kimliği>/Data/tmp/` altına düşer.
+- Karakteri referansla karşılaştırmak için: `TEST_RUNNER_OPTIK_WRITE_SNAPSHOTS=1 xcodebuild ... test -only-testing:OptikTests/CharacterSnapshotTests`. PNG'ler test çıktısında `snapshot:` satırında yazan geçici klasöre düşer.
 - Önizleme penceresini açık başlatmak için uygulamayı `--show-character-preview` argümanıyla çalıştır.
 
 ## Bitti sayılması için

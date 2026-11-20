@@ -4,6 +4,8 @@
 <dict>
 	<key>ATSApplicationFontsPath</key>
 	<string>.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Optik, senin isteğinle uygulamaları yönetir: Spotify'da şarkı çalar, Dia'da sayfa açar.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Optik seni dinlemek için mikrofonu yalnızca sen çağırdığında açar. Ses kaydı cihazından çıkmaz.</string>
 </dict>

@@ -1,3 +1,5 @@
+import Foundation
+
 /// Pure state of the notch island. The app feeds it events and renders the result;
 /// timers, sounds and speech live in the app and react to phase changes.
 public struct IslandStateMachine: Equatable, Sendable {
@@ -35,7 +37,18 @@ public struct IslandStateMachine: Equatable, Sendable {
     /// The idle island hides over full-screen apps; anything the user asked for still shows.
     public var isVisible: Bool { phase.isOpen || !isFullScreenActive }
 
-    public var mood: Mood { currentAnnouncement?.mood ?? phase.mood }
+    /// While Optik's reply asks something ("Dia’da açayım mı?") it waits with a "?".
+    public var mood: Mood {
+        if let currentAnnouncement { return currentAnnouncement.mood }
+        if phase == .replying, let replyText, Self.isQuestion(replyText) { return .asking }
+        return phase.mood
+    }
+
+    /// True when `text` ends with a question mark (closing quotes and spaces aside).
+    public static func isQuestion(_ text: String) -> Bool {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: "\"”’»)")))
+        return trimmed.hasSuffix("?")
+    }
 
     /// Returns true when anything visible changed.
     @discardableResult

@@ -160,6 +160,50 @@ import Testing
         #expect(messages == [["role": "user", "content": "Saat kaç?"]])
     }
 
+    @Test func requestCanSearchTheWeb() throws {
+        var request = LLMRequest(model: "claude-haiku-5-5", system: "Sen Optik'sin.", turnContext: "",
+                                 messages: [ChatMessage(role: .user, text: "Maç kaçta?")])
+        let json = try #require(try JSONSerialization.jsonObject(with: ClaudeMessages.body(for: request)) as? [String: Any])
+        let tools = try #require(json["tools"] as? [[String: Any]])
+        #expect(tools.count == 1)
+        #expect(tools[0]["type"] as? String == "web_search_20250305")
+        #expect(tools[0]["name"] as? String == "web_search")
+        #expect(tools[0]["max_uses"] as? Int == 3)
+        #expect((tools[0]["user_location"] as? [String: String])?["timezone"] == "Europe/Istanbul")
+
+        request.webSearch = false
+        let without = try #require(try JSONSerialization.jsonObject(with: ClaudeMessages.body(for: request)) as? [String: Any])
+        #expect(without["tools"] == nil)
+    }
+
+    @Test func textAroundASearchDoesNotRunTogether() throws {
+        let stream = """
+        data: {"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}}
+
+        data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Bakıyorum."}}
+
+        data: {"type":"content_block_start","index":1,"content_block":{"type":"server_tool_use","id":"srvtoolu_1","name":"web_search","input":{}}}
+
+        data: {"type":"content_block_start","index":2,"content_block":{"type":"web_search_tool_result","tool_use_id":"srvtoolu_1","content":[]}}
+
+        data: {"type":"content_block_start","index":3,"content_block":{"type":"text","text":""}}
+
+        data: {"type":"content_block_delta","index":3,"delta":{"type":"text_delta","text":"Maç "}}
+
+        data: {"type":"content_block_start","index":4,"content_block":{"type":"text","text":""}}
+
+        data: {"type":"content_block_delta","index":4,"delta":{"type":"text_delta","text":"20.00’de."}}
+
+        """
+        var parser = ServerSentEventParser()
+        var decoder = ClaudeMessages.StreamDecoder()
+        var text = ""
+        for line in stream.components(separatedBy: "\n") {
+            if let event = parser.feed(line: line), case .text(let delta)? = try decoder.decode(event) { text += delta }
+        }
+        #expect(text == "Bakıyorum. Maç 20.00’de.")
+    }
+
     @Test func decodesAStream() throws {
         let stream = """
         event: message_start

@@ -85,6 +85,8 @@ struct FullScreenMonitorTests {
 
     @Test func menuBarAndOverlaysAreIgnored() {
         #expect(FullScreenMonitor.contentLayers.contains(0))
+        #expect(FullScreenMonitor.contentLayers.contains(Int(CGWindowLevelForKey(.floatingWindow))))
+        #expect(!FullScreenMonitor.contentLayers.contains(Int(CGWindowLevelForKey(.dockWindow))))
         #expect(!FullScreenMonitor.contentLayers.contains(Int(CGWindowLevelForKey(.mainMenuWindow))))
         #expect(!FullScreenMonitor.contentLayers.contains(Int(CGWindowLevelForKey(.screenSaverWindow))))
     }

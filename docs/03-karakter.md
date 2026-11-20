@@ -27,7 +27,7 @@ Kutu 180 × 200 birim. Koordinatlar sol üstten. Çizim sırası alttan üste:
 | 9 | Delik | 68 × 40 kutuda düzensiz çokgen, kutunun sol üstü (56, 56) | `#2A2521` |
 | 10 | Gözler | varsayılan 10 × 13, köşe 5, merkezler (78.5, 71) ve (101.5, 71) | `#FFF4D6` |
 | 11 | Gaga | üçgen (85,81) (95,81) (90,88) | vurgu |
-| 12 | Ekler | pullar, "z" harfleri, ünlem (yalnızca ilgili ruh halinde) | nane / vurgu |
+| 12 | Ekler | pullar, "z" harfleri, ünlem, soru işareti (yalnızca ilgili ruh halinde) | nane / vurgu |
 
 Zikzak kesik (kabuk kutusunun yüzdesi olarak): `0 0, 100 0, 100 80, 90 87, 80 79, 69 88, 58 80, 47 89, 36 80, 25 88, 15 79, 6 86, 0 80`.
 
@@ -58,6 +58,7 @@ Bacaklar `salin` grubunun dışındadır: gövde sallanırken ayaklar yerde kal�
 | `uyari` | yaklaşan ya da geciken bir şey varken | 12 × 12 daire | 1,4 sn'de bir titrer | 0,36 sn'de hızlı adım | turuncu ünlem yanıp söner, gaga 1,6 kat | `uyari` |
 | `kutlama` | bir iş bitince | 11 × 11 kare, 45° döndürülmüş, parlar | 0,72 sn'de 26 birim zıplar, ezilip uzar | zıplarken ±30° iki yana açılır | 4 pul saçılır, gaga 1,5 kat | `kutlama` |
 | `uykulu` | gün bitince, adacık kapalıyken | 12 × 3 çizgi, kırpma yok | 36 birim aşağı iner (yere oturur), yavaş nefes | 0,3 katına kısalır (kabuğun içine çekilir) | "z" harfleri yükselir | `uykulu` |
+| `soru` | Optik bir şey sorup cevap beklerken ("Dia’da açayım mı?") | 11 × 14, 2 birim yukarı bakar | başını yana eğer: 2,4 sn'de -10° ile -6° arası | sabit | nane renginde "?" 1,6 sn'de 4 birim kalkıp ±8° sallanır | `dinliyor` |
 
 Dokunma ya da tetikleme zıplaması: 0,55 sn, önce ezilir (1.1 × 0.86), sonra 18 birim sıçrar, yerine oturur. Her ruh hali değişiminde bir kez oynar.
 

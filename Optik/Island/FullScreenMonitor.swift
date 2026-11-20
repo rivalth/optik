@@ -73,9 +73,10 @@ final class FullScreenMonitor {
         }
     }
 
-    /// App windows up to floating panels. Higher layers (menu bar, overlays, screen
-    /// savers) are system or utility windows that don't mean "full screen".
-    nonisolated static let contentLayers = 0..<Int(CGWindowLevelForKey(.mainMenuWindow))
+    /// App windows up to floating panels. From the Dock's layer up (the Dock, the menu
+    /// bar, overlays, screen savers) are system windows that don't mean "full screen":
+    /// the Dock keeps a window over the whole screen at times, which hid the island.
+    nonisolated static let contentLayers = 0..<Int(CGWindowLevelForKey(.dockWindow))
 
     nonisolated static func covers(_ window: CGRect, _ screen: CGRect) -> Bool {
         window.minX <= screen.minX + 1 && window.minY <= screen.minY + 1

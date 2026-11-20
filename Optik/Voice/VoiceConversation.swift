@@ -25,7 +25,7 @@ final class VoiceConversation {
 
     // MARK: Services
 
-    private let transcriber: WhisperTranscriber
+    private let transcriber: SentenceTranscriber
     private let llm: any LLMClient
     private let synthesizer: ElevenLabsSynthesizer
     private let audio = VoiceAudio()
@@ -62,11 +62,26 @@ final class VoiceConversation {
     private var speechEndedAt: Double?
     private var turnTask: Task<Void, Never>?
     private var partialTask: Task<Void, Never>?
+    /// The sentence streaming to Scribe, when Scribe is chosen.
+    private var live: LiveSentence?
+    private var isRunningLiveClauses = false
     private var partialTimer: Task<Void, Never>?
     private var silenceTimer: Task<Void, Never>?
     private var greetingTask: Task<Void, Never>?
     private var bargeInCheck: Task<Void, Never>?
     private var systemPrompt: String?
+    /// The page of the last reply, while Optik asks whether to open it in the browser.
+    private var offeredLink: URL?
+    /// Commands already done while the user was still talking ("Dia'yı aç, sonra …").
+    private var streamed = StreamedCommands()
+
+    private struct StreamedCommands {
+        var clauses = 0
+        var outcomes: [LocalActionRunner.Outcome] = []
+        /// A clause Optik can't do itself: the rest waits for the whole sentence.
+        var isBlocked = false
+        var isUserVerified: Bool?
+    }
     private var models: LLMModels?
 
     /// `docs/01-urun.md` 1.1: 8 s of silence closes the island.
@@ -82,7 +97,7 @@ final class VoiceConversation {
 
     private(set) var lastLatency: TurnLatency?
 
-    init(transcriber: WhisperTranscriber, llm: any LLMClient, synthesizer: ElevenLabsSynthesizer) {
+    init(transcriber: SentenceTranscriber, llm: any LLMClient, synthesizer: ElevenLabsSynthesizer) {
         self.transcriber = transcriber
         self.llm = llm
         self.synthesizer = synthesizer
@@ -105,28 +120,70 @@ final class VoiceConversation {
 
     /// The island opened. Starts the microphone and warms every connection while
     /// "Efendim?" plays, so nothing loads after the user stops talking.
-    func begin(trigger: TurnContext.Trigger, summonedAt: UInt64) {
+    ///
+    /// `waitsForSentence`: the user said "Optik" and kept talking. The wake word
+    /// listener records that sentence on its own microphone and hands it over with
+    /// `hear(sentence:)`; the conversation's microphone starts only then, since two
+    /// microphones at once would silence the listener's.
+    func begin(trigger: TurnContext.Trigger, summonedAt: UInt64, waitsForSentence: Bool = false) {
         self.trigger = trigger
         self.summonedAt = summonedAt
         latency = TurnLatency()
         isActive = true
-        stage = .greeting
+        stage = waitsForSentence ? .listening : .greeting
         speechEndedAt = nil
+        offeredLink = nil
+        streamed = StreamedCommands()
+        LocalActionRunner.shared.refreshIfStale()
         recorder.resetDetector()
 
         let llm = self.llm, synthesizer = self.synthesizer, transcriber = self.transcriber
+        let speaks = Self.speaksReplies
         Task.detached(priority: .userInitiated) {
             async let a: Void = llm.warmUp()
-            async let b: Void = synthesizer.warmUp()
+            async let b: Void = speaks ? synthesizer.warmUp() : ()
             async let c: Void? = try? transcriber.prepareSelectedModel()
             _ = await (a, b, c)
         }
+        if waitsForSentence {
+            // The listener sends the sentence within 15 s; never wait forever.
+            silenceTimer?.cancel()
+            silenceTimer = Task {
+                try? await Task.sleep(for: .seconds(20))
+                guard !Task.isCancelled, isActive, stage == .listening else { return }
+                onFinish()
+            }
+        } else {
+            Task { await startMicrophone() }
+        }
+    }
+
+    /// The sentence that started with "Optik", recorded by the wake word listener.
+    func hear(sentence samples: [Float]) {
+        guard isActive, stage == .listening else { return }
+        silenceTimer?.cancel()
+        let endedAt = Self.now
+        speechEndedAt = endedAt
+        stage = .responding
+        // For talking over the reply and for a follow-up question.
         Task { await startMicrophone() }
+        turnTask = Task { await respond(to: samples, endedAt: endedAt, startsWithName: true) }
+    }
+
+    /// Settings → Ses → "Sesli cevap ver". Off: nothing is spoken and no speech is
+    /// synthesized, neither by ElevenLabs nor by the system voice.
+    static var speaksReplies: Bool {
+        UserDefaults.standard.object(forKey: SettingsKey.speakReplies) as? Bool ?? true
     }
 
     /// Plays "Efendim?" (a fixed phrase), then calls `done`.
     func playGreeting(_ phrase: FixedPhrases.Phrase?, onStart: @escaping () -> Void, done: @escaping () -> Void) {
         greetingTask?.cancel()
+        guard Self.speaksReplies else {
+            // Silent replies: "Efendim?" only on screen, listening starts at once.
+            done()
+            return
+        }
         greetingTask = Task {
             if let phrase, let url = FixedPhrases.url(for: phrase.id) {
                 onStart()
@@ -157,6 +214,8 @@ final class VoiceConversation {
         bargeInCheck?.cancel()
         partialTask?.cancel()
         partialTimer?.cancel()
+        live?.cancel()
+        live = nil
         silenceTimer?.cancel()
         systemSpeaker.stop()
         audio.stopSpeech()
@@ -200,13 +259,13 @@ final class VoiceConversation {
         voiceLog.info("\(String(describing: event), privacy: .public) in stage \(String(describing: self.stage), privacy: .public)")
         switch event {
         case .speechStarted:
-            speechStarted()
+            speechStarted(utterance: utterance)
         case .speechEnded(let time):
             speechEnded(at: time, utterance: utterance)
         }
     }
 
-    private func speechStarted() {
+    private func speechStarted(utterance: Int) {
         silenceTimer?.cancel()
         switch stage {
         case .greeting:
@@ -224,7 +283,40 @@ final class VoiceConversation {
         case .listening, .off:
             break
         }
-        startPartialTranscripts()
+        if stage == .listening { startLive(utterance: utterance) } else { startPartialTranscripts() }
+    }
+
+    // MARK: Streaming to Scribe
+
+    /// With Scribe chosen, the sentence streams while the user talks and its text
+    /// arrives about 0.2 s after they stop. Otherwise the live text comes from
+    /// Whisper on this Mac.
+    private func startLive(utterance: Int) {
+        live?.cancel()
+        live = nil
+        guard SpeechEngine.selected == .scribe else { startPartialTranscripts(); return }
+        let recorder = self.recorder
+        live = LiveSentence(
+            utterance: utterance, transcriber: transcriber, recorder: recorder,
+            onPartial: { [weak self] text in self?.livePartial(text, utterance: utterance) },
+            onUnavailable: { [weak self] in
+                guard let self, self.live?.utterance == utterance else { return }
+                self.live = nil
+                self.startPartialTranscripts()
+            }
+        )
+    }
+
+    private func livePartial(_ text: String, utterance: Int) {
+        guard stage == .listening, live?.utterance == utterance else { return }
+        onTranscript(text)
+        guard !isRunningLiveClauses else { return }
+        isRunningLiveClauses = true
+        let samples = recorder.snapshot().samples
+        Task {
+            await runFinishedClauses(of: text, samples: samples)
+            isRunningLiveClauses = false
+        }
     }
 
     /// Room noise and leftover echo also cross the start threshold, so a barge-in
@@ -248,6 +340,8 @@ final class VoiceConversation {
         audio.stopSpeech()
         stage = .listening
         onListenAgain()
+        // The follow-up is already being spoken: stream it from its start.
+        if recorder.isSpeaking { startLive(utterance: recorder.snapshot().id) }
     }
 
     private func speechEnded(at time: Double, utterance: Int) {
@@ -255,19 +349,32 @@ final class VoiceConversation {
         guard stage == .listening else { return }
         speechEndedAt = time
         let samples = recorder.snapshot()
+        let live = self.live?.utterance == utterance ? self.live : nil
+        if self.live !== live { self.live?.cancel() }
+        self.live = nil
         guard samples.id == utterance, samples.samples.count > VoiceAudio.frameLength * 10 else {
+            live?.cancel()
             restartSilenceTimer()
             return
         }
         stage = .responding
         let audioSamples = samples.samples
-        turnTask = Task { await respond(to: audioSamples, endedAt: time) }
+        // The commit goes now, while the voice check below runs.
+        let transcriber = self.transcriber
+        let streamed: Task<String, Error>? = live.map { live in
+            Task {
+                guard let session = await live.finish() else { return try await transcriber.transcribe(audioSamples) }
+                return try await transcriber.finish(session, samples: audioSamples)
+            }
+        }
+        turnTask = Task { await respond(to: audioSamples, endedAt: time, streamed: streamed) }
     }
 
     // MARK: Partial transcripts
 
     private func startPartialTranscripts() {
         partialTimer?.cancel()
+        streamed = StreamedCommands()
         partialTimer = Task {
             while !Task.isCancelled {
                 try? await Task.sleep(for: Self.partialInterval)
@@ -275,20 +382,105 @@ final class VoiceConversation {
                 let snapshot = recorder.snapshot()
                 let transcriber = self.transcriber
                 partialTask = Task {
-                    let text = try? await transcriber.transcribe(snapshot.samples)
+                    let text = try? await transcriber.transcribePartial(snapshot.samples)
                     partialTask = nil
                     guard let text, !text.isEmpty, stage == .listening, recorder.snapshot().id == snapshot.id else { return }
                     onTranscript(text)
+                    await runFinishedClauses(of: text, samples: snapshot.samples)
                 }
             }
         }
     }
 
+    /// While the user talks: every clause that is finished ("Spotify'ı aç," while
+    /// the song name is still coming) and that Optik can do itself is done now.
+    private func runFinishedClauses(of partial: String, samples: [Float]) async {
+        guard !streamed.isBlocked else { return }
+        let finished = LocalCommandParser.finishedClauses(inPartial: WakePhrase.remainder(partial) ?? partial)
+        guard finished.count > streamed.clauses else { return }
+        // Someone else's "Spotify'ı kapat" in the room is not a command.
+        if streamed.isUserVerified == nil {
+            streamed.isUserVerified = await SpeakerVerifier.shared.isUser(
+                samples, leniency: SpeakerVerifier.conversationLeniency, context: "command")
+        }
+        guard streamed.isUserVerified == true, stage == .listening else {
+            streamed.isBlocked = true
+            return
+        }
+        let runner = LocalActionRunner.shared
+        for clause in finished[streamed.clauses...] {
+            guard case .local(let action)? = runner.parse(clause).first else {
+                streamed.isBlocked = true
+                return
+            }
+            streamed.clauses += 1
+            streamed.outcomes.append(await runner.run(action))
+            onReply(streamed.outcomes.map(\.text).joined(separator: "\n"))
+        }
+    }
+
+    /// Commands Optik does itself, before or instead of asking Claude. Returns false
+    /// when the sentence starts with something for Claude.
+    private func runLocalCommands(in text: String, transcriptReady: Double) async -> Bool {
+        let runner = LocalActionRunner.shared
+        let parts = LocalCommandParser.clauses(in: text)
+        var clauses = runner.parse(text)
+        var outcomes = streamed.outcomes
+        // The clauses done while speaking come first in the whole sentence too.
+        let done = min(streamed.clauses, clauses.count)
+        clauses.removeFirst(done)
+        streamed = StreamedCommands()
+
+        var rest: [String] = []
+        for (offset, clause) in clauses.enumerated() {
+            guard case .local(let action) = clause else {
+                rest = Array(parts.dropFirst(done + offset))
+                break
+            }
+            outcomes.append(await runner.run(action))
+            guard !Task.isCancelled else { return true }
+        }
+        guard !outcomes.isEmpty else { return false }
+
+        let summary = outcomes.map(\.text).joined(separator: "\n")
+        if !rest.isEmpty {
+            // Claude hears what was already done, then the rest of the sentence.
+            onReply(summary)
+            await ask("(Optik az önce yaptı: \(outcomes.map(\.text).joined(separator: "; ")).) " + rest.joined(separator: ", "),
+                      transcriptReady: transcriptReady)
+            return true
+        }
+        stage = .responding
+        onReply(summary)
+        let failure = outcomes.first { !$0.succeeded }
+        let speech = SpeechQueue(conversation: self, effect: false)
+        speech.say(failure?.text ?? String(localized: "Tamam."), firstToken: Self.now)
+        await speech.finish()
+        guard !Task.isCancelled else { speech.cancel(); return true }
+        history.append(user: text, assistant: summary)
+        finishTurn()
+        return true
+    }
+
     // MARK: A turn
 
-    private func respond(to samples: [Float], endedAt: Double) async {
+    private func respond(to samples: [Float], endedAt: Double, startsWithName: Bool = false,
+                         streamed: Task<String, Error>? = nil) async {
+        defer { if Task.isCancelled { streamed?.cancel() } }
         // A partial transcript may still be running; the final one waits behind it.
         if let partialTask { partialTask.cancel(); _ = await partialTask.value }
+
+        // In a crowd, a sentence from someone else is not the user's question.
+        if !startsWithName,
+           !(await SpeakerVerifier.shared.isUser(samples, leniency: SpeakerVerifier.conversationLeniency, context: "sentence")) {
+            streamed?.cancel()
+            guard !Task.isCancelled else { return }
+            stage = .listening
+            onTranscript("")
+            restartSilenceTimer()
+            return
+        }
+        guard !Task.isCancelled else { return }
 
         // The model may still be loading (the first time after a download it is
         // compiled for this Mac). Say so instead of going quiet.
@@ -297,9 +489,9 @@ final class VoiceConversation {
             guard !Task.isCancelled else { return }
             await say(String(localized: "Bir saniye, hazırlanıyorum."))
         }
-        let text: String
+        var text: String
         do {
-            text = try await transcriber.transcribe(samples)
+            if let streamed { text = try await streamed.value } else { text = try await transcriber.transcribe(samples) }
             notice?.cancel()
             await notice?.value
         } catch TranscriberError.modelMissing {
@@ -317,10 +509,18 @@ final class VoiceConversation {
         let transcriptReady = Self.now
         latency.speechEndToTranscript = (transcriptReady - endedAt) * 1000
         voiceLog.info("transcript \(text.count, privacy: .public) chars in \(self.latency.speechEndToTranscript ?? 0, format: .fixed(precision: 0), privacy: .public) ms")
-        #if DEBUG
-        voiceLog.debug("transcript: \(text, privacy: .public)")
-        #endif
 
+        if startsWithName {
+            // "Optik, bugün hava nasıl" → "bugün hava nasıl". The name alone (the
+            // rest was lost in noise) gets the usual "Efendim?".
+            text = WakePhrase.remainder(text) ?? text
+            if text.isEmpty {
+                stage = .listening
+                await say(String(localized: "Efendim?"))
+                restartSilenceTimer()
+                return
+            }
+        }
         guard !text.isEmpty, !Self.isNoise(text) else {
             stage = .listening
             restartSilenceTimer()
@@ -328,10 +528,27 @@ final class VoiceConversation {
         }
         onTranscript(text)
 
+        // "Sayfayı Dia’da açayım mı?" answered with a plain yes or no.
+        if let link = offeredLink {
+            offeredLink = nil
+            switch YesNoAnswer(text) {
+            case .yes:
+                DefaultBrowser.open(link)
+                await reply(withFallback: String(localized: "Açtım."))
+                return
+            case .no:
+                await reply(withFallback: String(localized: "Peki."))
+                return
+            case nil:
+                break
+            }
+        }
+
         if LocalCommand(text) == .stop {
             onFinish()
             return
         }
+        if await runLocalCommands(in: text, transcriptReady: transcriptReady) { return }
         await ask(text, transcriptReady: transcriptReady)
     }
 
@@ -343,7 +560,7 @@ final class VoiceConversation {
     }
 
     private func ask(_ userText: String, transcriptReady: Double) async {
-        guard KeychainStore.has(.anthropic) else {
+        guard KeychainStore.has(.anthropic) || ClaudeCodeClient.isInstalled else {
             await echo(userText, transcriptReady: transcriptReady)
             return
         }
@@ -352,11 +569,13 @@ final class VoiceConversation {
             return
         }
         let context = TurnContext(userName: UserDefaults.standard.string(forKey: SettingsKey.userName),
-                                  now: .now, trigger: trigger)
+                                  now: .now, trigger: trigger,
+                                  computerControl: LLMRouter.canUseComputer)
         let request = LLMRequest(model: models.voice, system: systemPrompt, turnContext: context.text,
                                  messages: history.request(adding: userText))
 
         var replyText = ""
+        var source: URL?
         var chunker = SentenceChunker()
         var limiter = SpokenReplyLimiter()
         var firstToken: Double?
@@ -376,6 +595,8 @@ final class VoiceConversation {
                     for sentence in chunker.append(delta) where limiter.shouldSpeak(sentence) {
                         speech.say(sentence, firstToken: firstToken!)
                     }
+                case .source(let url):
+                    if source == nil { source = url }
                 case .finished(let stopReason, let usage):
                     if let rest = chunker.finish(), limiter.shouldSpeak(rest) {
                         speech.say(rest, firstToken: firstToken ?? Self.now)
@@ -410,6 +631,17 @@ final class VoiceConversation {
 
         await speech.finish()
         guard !Task.isCancelled else { return }
+        if let source {
+            // Asked after the reply, so it is never cut by the spoken length limit.
+            let offer = DefaultBrowser.offer
+            replyText += "\n" + offer
+            onReply(replyText)
+            let question = SpeechQueue(conversation: self, effect: false)
+            question.say(offer, firstToken: Self.now)
+            await question.finish()
+            guard !Task.isCancelled else { question.cancel(); return }
+            offeredLink = source
+        }
         history.append(user: userText, assistant: replyText)
         finishTurn()
     }
@@ -434,6 +666,7 @@ final class VoiceConversation {
         case .http(let status, _) where status == 401: String(localized: "Claude API anahtarı geçersiz görünüyor. Ayarlar'dan kontrol eder misin?")
         case .http(let status, _) where status == 429 || status == 529: String(localized: "Claude şu an çok yoğun. Biraz sonra tekrar dener misin?")
         case .http, .malformedResponse: String(localized: "Claude'dan yanıt alamadım. Bir daha dener misin?")
+        case .claudeCodeFailed: String(localized: "Claude Code yanıt vermedi. Terminalde claude ile giriş yaptığını kontrol eder misin?")
         }
     }
 
@@ -518,6 +751,9 @@ final class VoiceConversation {
         private let measures: Bool
 
         /// `effect`: the happy sound before the voice, for real replies, not errors.
+        /// Spoken replies are off: sentences are dropped, nothing is synthesized.
+        private let isMuted = !VoiceConversation.speaksReplies
+
         init(conversation: VoiceConversation, effect: Bool = true) {
             self.conversation = conversation
             useSystemVoice = !conversation.synthesizer.hasKey
@@ -526,7 +762,7 @@ final class VoiceConversation {
         }
 
         func say(_ sentence: String, firstToken: Double) {
-            guard !cancelled else { return }
+            guard !cancelled, !isMuted else { return }
             sentences.append(SpeechText.normalized(sentence))
             guard worker == nil else { return }
             worker = Task { await run(firstToken: firstToken) }

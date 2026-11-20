@@ -23,9 +23,19 @@ final class IslandModel {
     var greeting = String(localized: "Efendim?")
     /// The microphone is on: the island shows a green dot (`CLAUDE.md`, privacy).
     var isMicrophoneOn = false
+    /// A notice in the closed island's wings: volume, charging, a new song.
+    var indicator: IslandIndicator?
+    /// The camera housing's width, which the wings' content keeps clear of.
+    var notchWidth: CGFloat = 0
     var onClick: () -> Void = {}
 
     var phase: IslandPhase { machine.phase }
+
+    /// The island's size: the phase's, or the indicator's while one shows.
+    var size: DesignTokens.Island.Size {
+        if phase == .idle, let indicator { return IndicatorLayout.size(for: indicator) }
+        return phase.size
+    }
 }
 
 /// Runs the notch island: the panel, the state machine and everything that reacts
@@ -40,11 +50,18 @@ final class IslandController {
     private var screen: IslandScreen?
     private let fullScreen = FullScreenMonitor()
     private let doubleCommand = DoubleCommandMonitor()
+    let indicators = IndicatorMonitor()
+    private var indicatorHide: DispatchWorkItem?
     let transcriber = WhisperTranscriber()
+    /// One connection to Claude for talking and typing, so both share Claude Code's memory.
+    let llm = LLMRouter()
+    private lazy var wakeWord: any WakeWordDetector = WakeWordListener(transcriber: transcriber)
     private lazy var conversation = VoiceConversation(
-        transcriber: transcriber, llm: ClaudeClient(), synthesizer: ElevenLabsSynthesizer()
+        transcriber: SentenceTranscriber(whisper: transcriber), llm: llm, synthesizer: ElevenLabsSynthesizer()
     )
     private var trigger: TurnContext.Trigger = .shortcut
+    /// "Optik, …" in one breath: no "Efendim?", the wake word listener records the sentence.
+    private var waitsForSentence = false
     private var escapeTask: Task<Void, Never>?
     private var phaseTimer: DispatchWorkItem?
     private var shrinkPanel: DispatchWorkItem?
@@ -66,6 +83,7 @@ final class IslandController {
 
     func start() {
         model.onClick = { [weak self] in self?.clicked() }
+        LocalActionRunner.shared.refreshIfStale()
 
         let panel = IslandPanel(rootView: IslandView(model: model))
         self.panel = panel
@@ -85,8 +103,13 @@ final class IslandController {
         conversation.onFinish = { [weak self] in self?.send(.dismiss) }
         conversation.onMicrophoneChange = { [weak self] on in self?.model.isMicrophoneOn = on }
 
+        indicators.onIndicator = { [weak self] indicator in self?.show(indicator) }
+        indicators.refresh()
+
         doubleCommand.onDoubleTap = { [weak self] timestamp in self?.summon(at: timestamp) }
         updateDoubleCommand()
+        updateWakeWord()
+        QuickAskController.shared.start(llm: llm)
         KeyboardShortcuts.onKeyDown(for: .summonOptik) { [weak self] in
             self?.summon(at: clock_gettime_nsec_np(CLOCK_UPTIME_RAW))
         }
@@ -108,13 +131,51 @@ final class IslandController {
 
     var isDoubleCommandRunning: Bool { doubleCommand.isRunning }
 
+    static var isWakeWordEnabled: Bool {
+        UserDefaults.standard.bool(forKey: SettingsKey.summonWithWakeWord)
+    }
+
+    /// The wake word stays off while the user records voice samples in Settings.
+    private var wakeWordPaused = false
+
+    func pauseWakeWord(_ paused: Bool) {
+        wakeWordPaused = paused
+        updateWakeWord()
+    }
+
+    /// Listens for "Optik" while the island is closed, if the user turned it on.
+    /// The conversation has its own microphone, so this one stops while Optik is awake.
+    func updateWakeWord() {
+        guard Self.isWakeWordEnabled, !wakeWordPaused, !model.phase.isOpen else { wakeWord.stop(); return }
+        let verifier = SpeakerVerifier.shared
+        Task.detached(priority: .utility) { await verifier.prepare() }
+        wakeWord.start { [weak self] event in
+            Task { @MainActor in self?.wakeWordHeard(event) }
+        }
+    }
+
+    private func wakeWordHeard(_ event: WakeWordEvent) {
+        switch event {
+        case .called(let heardAt):
+            summon(at: heardAt, trigger: .wakeWord)
+        case .calledWithSentence(let heardAt):
+            summon(at: heardAt, trigger: .wakeWord, waitsForSentence: true)
+        case .sentence(let samples):
+            waitsForSentence = false
+            conversation.hear(sentence: samples)
+            // The island closed while the sentence was recorded: listen again.
+            if !model.phase.isOpen { updateWakeWord() }
+        }
+    }
+
     // MARK: Input
 
     /// `timestamp`: when the key event happened, ns since boot (`CLOCK_UPTIME_RAW`).
     func summon(at timestamp: UInt64 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW),
-                trigger: TurnContext.Trigger = .shortcut) {
+                trigger: TurnContext.Trigger = .shortcut, waitsForSentence: Bool = false) {
         summonedAt = timestamp
         self.trigger = trigger
+        self.waitsForSentence = waitsForSentence
         lastLatencies = [:]
         send(.summon)
         logLatency("island opening")
@@ -149,14 +210,28 @@ final class IslandController {
         case .idle:
             conversation.end()
             setEscapeEnabled(false)
+            if waitsForSentence {
+                // Closed while the listener was still recording the sentence.
+                waitsForSentence = false
+                wakeWord.stop()
+            }
+            updateWakeWord()
         case .wake:
             setEscapeEnabled(true)
+            // The listener keeps its microphone while it records a one-breath sentence.
+            if !waitsForSentence { wakeWord.stop() }
             conversation.end()
-            conversation.begin(trigger: trigger, summonedAt: summonedAt ?? clock_gettime_nsec_np(CLOCK_UPTIME_RAW))
+            conversation.begin(trigger: trigger, summonedAt: summonedAt ?? clock_gettime_nsec_np(CLOCK_UPTIME_RAW),
+                               waitsForSentence: waitsForSentence)
             let effect = SoundEffect.uyan
             Task {
                 await SoundEffectPlayer.shared.play(effect)
                 self.logLatency("first sound")
+            }
+            if waitsForSentence {
+                // No "Efendim?": the user is already talking. Show listening.
+                schedule(after: effect.duration) { [weak self] in self?.send(.greeted) }
+                break
             }
             // "Efendim?" right after the wake sound, never on top of it.
             let phrase = FixedPhrases.variant("efendim")
@@ -223,6 +298,11 @@ final class IslandController {
     private func updatePanel(from previous: IslandPhase, to phase: IslandPhase) {
         guard let panel, let screen else { return }
         shrinkPanel?.cancel()
+        if phase.isOpen {
+            // Optik coming out takes the island over from any notice.
+            indicatorHide?.cancel()
+            model.indicator = nil
+        }
         model.width = IslandLayout.islandFrame(phase.size, on: screen).width
         if phase.isOpen {
             // Grow first, then let the island spring into the room.
@@ -240,9 +320,42 @@ final class IslandController {
 
     private func fitPanelToIdle() {
         shrinkPanel = nil
-        guard let panel, let screen, !model.phase.isOpen else { return }
+        guard let panel, let screen, !model.phase.isOpen, model.indicator == nil else { return }
         panel.setFrame(IslandLayout.panelFrame(IslandPhase.idle.size, on: screen, withMargin: false), display: true)
         updateVisibility()
+    }
+
+    // MARK: Indicators
+
+    /// Shows a notice in the closed island's wings for a moment. A new notice of the
+    /// same kind (the volume key held down) updates it and restarts its time.
+    func show(_ indicator: IslandIndicator) {
+        guard model.phase == .idle, model.machine.isVisible, let panel, let screen else { return }
+        log.info("indicator \(indicator.kind.rawValue, privacy: .public)")
+        shrinkPanel?.cancel()
+        shrinkPanel = nil
+        let size = IndicatorLayout.size(for: indicator)
+        panel.setFrame(IslandLayout.panelFrame(size, on: screen, withMargin: true), display: false)
+        model.width = IslandLayout.islandFrame(size, on: screen).width
+        model.indicator = indicator
+        indicatorHide?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            MainActor.assumeIsolated { self?.hideIndicator() }
+        }
+        indicatorHide = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + indicator.kind.duration, execute: work)
+    }
+
+    private func hideIndicator() {
+        guard model.indicator != nil, let screen else { return }
+        model.indicator = nil
+        guard !model.phase.isOpen else { return }
+        model.width = IslandLayout.islandFrame(IslandPhase.idle.size, on: screen).width
+        let work = DispatchWorkItem { [weak self] in
+            MainActor.assumeIsolated { self?.fitPanelToIdle() }
+        }
+        shrinkPanel = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: work)
     }
 
     /// Over a full-screen app the closed island hides, but only after it finished closing.
@@ -261,6 +374,7 @@ final class IslandController {
         guard let target = IslandLayout.preferredScreen(screens) else { return }
         screen = target
         model.hasNotch = target.hasNotch
+        model.notchWidth = target.notch?.width ?? 0
         fullScreen.screenFrame = target.frame
         let phase = model.phase
         model.width = IslandLayout.islandFrame(phase.size, on: target).width

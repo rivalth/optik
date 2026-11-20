@@ -64,6 +64,9 @@ struct EyeShape: Equatable {
         case .sleepy:
             let eye = EyeShape(width: 12, height: 3, radius: 2)
             return (eye, eye)
+        case .asking:
+            let eye = EyeShape(width: 11, height: 14, radius: 5, offset: CGSize(width: 0, height: -2))
+            return (eye, eye)
         }
     }
 

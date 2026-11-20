@@ -12,6 +12,8 @@ public enum ClaudeMessages {
     /// - The system prompt is one cached block; the per-turn context follows it in a
     ///   second block, after the cache breakpoint, so it never invalidates the cache.
     /// - Voice turns need the first words fast: thinking off, effort low.
+    /// - Web search is the basic server tool, not the one that filters results by
+    ///   running code: that adds seconds, and Haiku doesn't have it.
     public static func body(for request: LLMRequest) throws -> Data {
         let body = Body(
             model: request.model,
@@ -23,7 +25,8 @@ public enum ClaudeMessages {
             ].filter { !$0.text.isEmpty },
             messages: request.messages.map { Message(role: $0.role.rawValue, content: $0.text) },
             thinking: Thinking(type: "disabled"),
-            output_config: OutputConfig(effort: "low")
+            output_config: OutputConfig(effort: "low"),
+            tools: request.webSearch ? [WebSearchTool()] : nil
         )
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
@@ -38,6 +41,22 @@ public enum ClaudeMessages {
         var messages: [Message]
         var thinking: Thinking
         var output_config: OutputConfig
+        var tools: [WebSearchTool]?
+    }
+
+    /// Anthropic's web search, run on their side. A few searches at most, so a
+    /// spoken answer doesn't wait long; results for Turkey, in Turkish time.
+    struct WebSearchTool: Encodable {
+        var type = "web_search_20250305"
+        var name = "web_search"
+        var max_uses = 3
+        var user_location = Location()
+
+        struct Location: Encodable {
+            var type = "approximate"
+            var country = "TR"
+            var timezone = "Europe/Istanbul"
+        }
     }
 
     private struct SystemBlock: Encodable {
@@ -70,6 +89,9 @@ public enum ClaudeMessages {
     public struct StreamDecoder: Sendable {
         private var usage = LLMUsage()
         private var stopReason: String?
+        private var joiner = ReplyTextJoiner()
+        private var sources = SourceListFilter()
+        private var foundSource = false
 
         public init() {}
 
@@ -84,9 +106,17 @@ public enum ClaudeMessages {
             switch payload.type {
             case "message_start":
                 if let start = payload.message?.usage { merge(start) }
+            case "content_block_start":
+                joiner.blockStarted(isText: payload.content_block?.type == "text")
             case "content_block_delta":
                 if payload.delta?.type == "text_delta", let text = payload.delta?.text, !text.isEmpty {
-                    return .text(text)
+                    let kept = sources.filter(joiner.text(text))
+                    return kept.isEmpty ? nil : .text(kept)
+                }
+                if payload.delta?.type == "citations_delta", !foundSource,
+                   let link = payload.delta?.citation?.url.flatMap(ReplySource.firstLink(in:)) {
+                    foundSource = true
+                    return .source(link)
                 }
             case "message_delta":
                 if let reason = payload.delta?.stop_reason { stopReason = reason }
@@ -113,8 +143,13 @@ public enum ClaudeMessages {
         var type: String
         var message: StartMessage?
         var delta: Delta?
+        var content_block: ContentBlock?
         var usage: Usage?
         var error: APIError?
+    }
+
+    private struct ContentBlock: Decodable {
+        var type: String?
     }
 
     private struct StartMessage: Decodable {
@@ -125,6 +160,11 @@ public enum ClaudeMessages {
         var type: String?
         var text: String?
         var stop_reason: String?
+        var citation: Citation?
+    }
+
+    private struct Citation: Decodable {
+        var url: String?
     }
 
     struct Usage: Decodable {

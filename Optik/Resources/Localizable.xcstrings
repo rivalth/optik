@@ -1,10 +1,25 @@
 {
   "sourceLanguage" : "tr",
   "strings" : {
+    "%@ ayrıldı" : {
+
+    },
+    "%@ bağlandı" : {
+
+    },
+    "%@ bulunamadı." : {
+
+    },
+    "%lld / %lld" : {
+
+    },
     "13.00’te Yeliz ile kahve, Moda’da. 16.30’da da proje grubu toplantın var." : {
 
     },
     "20.00’de alt ağ planı ödevinin teslimi var." : {
+
+    },
+    "Ada'nın AirPods Pro'su bağlandı" : {
 
     },
     "Adacık akışını oynat" : {
@@ -13,13 +28,43 @@
     "Adın" : {
 
     },
+    "AirPods gibi kablosuz cihazlar" : {
+
+    },
     "Anahtarlar" : {
 
     },
     "Anahtarlar yalnızca bu Mac'in Anahtar Zinciri'nde durur. ElevenLabs anahtarı yoksa Optik sistemin Türkçe sesiyle konuşur." : {
 
     },
+    "Apple dikte (bu Mac'te)" : {
+
+    },
+    "Arama yapılamadı." : {
+
+    },
+    "Aranıyor: %@" : {
+
+    },
+    "Artık sesini tanıyorum." : {
+
+    },
     "Ayarlar…" : {
+
+    },
+    "Aç" : {
+
+    },
+    "Açtım." : {
+
+    },
+    "Açık" : {
+
+    },
+    "Açıldı: %@" : {
+
+    },
+    "Başla" : {
 
     },
     "Bekliyor" : {
@@ -32,6 +77,9 @@
 
     },
     "Bir şeyler ters gitti, bir daha dener misin?" : {
+
+    },
+    "Bu seçenekte “Optik” dedikten sonra söylediğin cümlenin sesi ElevenLabs'e gönderilir ve orada yazıya çevrilir. “Optik” adı yine bu Mac'te dinlenir, başka hiçbir ses gönderilmez. Her konuşma yaklaşık 8–10 ElevenLabs kredisi harcar. Bağlantı ya da kredi yoksa Whisper devreye girer." : {
 
     },
     "Bunda yardımcı olamam." : {
@@ -49,6 +97,9 @@
     "Claude API anahtarı yok. Ayarlar'daki Ses bölümünden ekler misin?" : {
 
     },
+    "Claude Code yanıt vermedi. Terminalde claude ile giriş yaptığını kontrol eder misin?" : {
+
+    },
     "Claude şu an çok yoğun. Biraz sonra tekrar dener misin?" : {
 
     },
@@ -56,6 +107,9 @@
 
     },
     "Command tuşuna art arda iki kez bas." : {
+
+    },
+    "Cümleni yazan" : {
 
     },
     "Dengeli (yaklaşık 500 MB)" : {
@@ -67,10 +121,16 @@
     "Dinliyorum" : {
 
     },
+    "Durduruldu" : {
+
+    },
     "Durum" : {
 
     },
     "Düşünceli" : {
+
+    },
+    "Düşünüyor" : {
 
     },
     "Efendim?" : {
@@ -79,10 +139,25 @@
     "Ek kısayol" : {
 
     },
+    "Ekran görüntüleri" : {
+
+    },
+    "Ekran görüntüsü klasörüne erişim ister" : {
+
+    },
     "ElevenLabs API anahtarı" : {
 
     },
+    "ElevenLabs API anahtarı gerekli" : {
+
+    },
+    "ElevenLabs Scribe (bulutta)" : {
+
+    },
     "En doğru (yaklaşık 650 MB)" : {
+
+    },
+    "Erişilebilirlik izni" : {
 
     },
     "Geliştirici" : {
@@ -94,7 +169,22 @@
     "Girdi İzleme izni gerekli" : {
 
     },
+    "Gönder" : {
+
+    },
+    "Görsel" : {
+
+    },
+    "Göstergeler" : {
+
+    },
+    "Hangi kanalın videosunu açayım?" : {
+
+    },
     "Hatırlatma" : {
+
+    },
+    "Hayır" : {
 
     },
     "Hazır" : {
@@ -106,7 +196,28 @@
     "Hızlı (yaklaşık 150 MB)" : {
 
     },
+    "Kalabalıkta başkası “Optik” deyince açılmaz, başkalarının sözlerini senin sanmaz. Ses kaydı saklanmaz." : {
+
+    },
+    "Kanalı bulamadım, YouTube’da aramayı açtım." : {
+
+    },
+    "Kanalın videolarını açtım." : {
+
+    },
+    "Kapalı" : {
+
+    },
+    "Kapalıyken Optik cevaplarını yalnızca yazıyla gösterir, “Efendim?” de demez. Ses üretmek için hiçbir istek gönderilmez." : {
+
+    },
+    "Kapatıldı: %@" : {
+
+    },
     "Karakter önizlemesi" : {
+
+    },
+    "Kaydedildi" : {
 
     },
     "Kaydet" : {
@@ -115,7 +226,22 @@
     "Kayıtlı" : {
 
     },
+    "Klavye dili" : {
+
+    },
+    "Klavye ışığı" : {
+
+    },
+    "Konuşamayacağın yerlerde: çentiğin altında bir kutu açılır, Optik yazıyla cevap verir ve mikrofon kapalı kalır." : {
+
+    },
+    "Konuşman bu Mac'te yazıya çevrilir, ses dışarı çıkmaz." : {
+
+    },
     "Konuşman bu Mac'te yazıya çevrilir, ses dışarı çıkmaz. Model bir kez indirilir." : {
+
+    },
+    "Konuşman bu Mac'te, macOS'un dikte modeliyle yazıya çevrilir, ses dışarı çıkmaz. Düz Türkçede hızlı ve doğru, araya giren İngilizce kelimelerde Whisper kadar iyi değil." : {
 
     },
     "Konuşmayı tanıma" : {
@@ -124,7 +250,16 @@
     "Konuşmayı tanıma modelini indiriyorum. Bitince seni duyabileceğim, ilerlemeyi Ayarlar'da görebilirsin." : {
 
     },
+    "Kopyalandı" : {
+
+    },
+    "Kulaklık ve hoparlör" : {
+
+    },
     "Kutlama" : {
+
+    },
+    "Mac'te bir şey değişince adacık bir anlığına gösterir. Kapattığın gösterge hiç dinlenmez." : {
 
     },
     "Mavi" : {
@@ -139,6 +274,9 @@
     "Mikrofon izni yok. Sistem Ayarları'nda Optik'e mikrofon izni verir misin?" : {
 
     },
+    "Mikrofon sürekli açık kalır ve macOS turuncu noktayı gösterir. Ses cihazdan çıkmaz." : {
+
+    },
     "Mikrofonu açamadım." : {
 
     },
@@ -151,7 +289,13 @@
     "Optik" : {
       "shouldTranslate" : false
     },
+    "Optik henüz sesini tanımıyor." : {
+
+    },
     "Optik sana nasıl seslensin?" : {
+
+    },
+    "Optik sesini tanıyor." : {
 
     },
     "Optik yalnızca ⌘ tuşunu izler, başka hiçbir tuşu okumaz." : {
@@ -166,19 +310,91 @@
     "Optik, %@" : {
 
     },
+    "Optik, akşam sekizde ödevi teslim etmeyi hatırlat." : {
+
+    },
+    "Optik, bu ayki harcamalarımı özetler misin?" : {
+
+    },
+    "Optik, yarın saat üçte Yeliz’le kahve içeceğim." : {
+
+    },
+    "Optik’e yaz" : {
+
+    },
+    "Optik’e yaz…" : {
+
+    },
+    "Optik’e yaz… sessizce cevap verir" : {
+
+    },
+    "Pano" : {
+
+    },
+    "Parlaklık" : {
+
+    },
+    "Peki." : {
+
+    },
     "Pembe" : {
+
+    },
+    "Pil" : {
+
+    },
+    "Pil azaldı, şarja tak" : {
+
+    },
+    "Pil doldu" : {
 
     },
     "Sarı" : {
 
     },
+    "Sayfayı %@ açayım mı?" : {
+
+    },
     "Seni duyamadım, bir daha söyler misin?" : {
+
+    },
+    "Seni duyamadım. Mikrofonu kontrol edip tekrar dener misin?" : {
 
     },
     "Ses" : {
 
     },
+    "Ses düzeyi" : {
+
+    },
     "Ses efektleri" : {
+
+    },
+    "Ses profilini kaydedemedim, bir daha dener misin?" : {
+
+    },
+    "Ses profilini sil" : {
+
+    },
+    "Sesim" : {
+
+    },
+    "Sesimi tanı…" : {
+
+    },
+    "Sesin öğreniliyor…" : {
+
+    },
+    "Sesini tanıyayım" : {
+
+    },
+    "Sesli cevap ver" : {
+
+    },
+    "Sessiz · mikrofon kapalı" : {
+
+    },
+    "Sessize alınınca ya da açılınca" : {
 
     },
     "Sil" : {
@@ -187,22 +403,133 @@
     "Sistem Ayarları'nı aç…" : {
 
     },
+    "Son video açıldı" : {
+
+    },
+    "Sonraki şarkı" : {
+
+    },
+    "Soruyor" : {
+
+    },
+    "Spotify açık değil." : {
+
+    },
+    "Spotify bulunamadı." : {
+
+    },
+    "Spotify ve Müzik" : {
+
+    },
+    "Spotify’a ulaşamadım. Otomasyon iznini Sistem Ayarları’ndan verebilirsin." : {
+
+    },
+    "Spotify’da aramayı açtım ama çalacak sonucu bulamadım." : {
+
+    },
+    "Spotify’da aramayı açtım. İlk sonuca tıklayabilmem için Optik’e Erişilebilirlik izni ver." : {
+
+    },
     "Sürüm" : {
+
+    },
+    "Tamam" : {
+
+    },
+    "Tamam." : {
+
+    },
+    "Tarayıcı bulunamadı." : {
+
+    },
+    "Tekrar dene" : {
 
     },
     "Turuncu" : {
 
     },
+    "Tuşla değiştirince" : {
+
+    },
+    "Türkçe Q" : {
+
+    },
+    "Türkçe dikteyi indir" : {
+
+    },
+    "Uygulamaları kullanma" : {
+
+    },
     "Uykulu" : {
+
+    },
+    "Vazgeç" : {
+
+    },
+    "Verildi" : {
 
     },
     "Vurgu rengi" : {
 
     },
+    "Whisper (bu Mac'te)" : {
+
+    },
+    "Whisper modeli" : {
+
+    },
+    "Whisper “Optik” adını her zaman bu Mac'te dinler, sen konuşurken metni canlı gösterir ve diğer seçenekler çalışmazsa onların yerine geçer. Model bir kez indirilir." : {
+
+    },
+    "Yalnızca benim sesime tepki ver" : {
+
+    },
+    "Yarın 13.00'te Leyla Hoca ile görüşme" : {
+
+    },
+    "Yazarak sor" : {
+
+    },
+    "Yazarak sormak için Claude API anahtarı ya da Claude Code gerekli." : {
+
+    },
+    "Yeni şarkı" : {
+
+    },
+    "Yeniden tanıt…" : {
+
+    },
+    "YouTube’da aranıyor: %@" : {
+
+    },
+    "YouTube’da açıldı: %@" : {
+
+    },
     "Zıplatmak için bas" : {
 
     },
+    "esc kapat" : {
+
+    },
+    "tarayıcı" : {
+
+    },
+    "tarayıcında" : {
+
+    },
+    "Çalıyor" : {
+
+    },
+    "Çalıyor: %@" : {
+
+    },
     "Çağırma" : {
+
+    },
+    "Önce beş kez “Optik” de, sonra üç kısa cümle oku. Her birini ekranda görünce, her zamanki sesinle söyle. Kayıtlar saklanmaz, yalnızca sesinin özeti bu Mac’te kalır." : {
+
+    },
+    "Önceki şarkı" : {
 
     },
     "Örnek haber (5 sn sonra)" : {
@@ -217,6 +544,9 @@
     "İndirilemedi" : {
 
     },
+    "İndiriliyor…" : {
+
+    },
     "İnternete bağlanamadım. Biraz sonra tekrar dener misin?" : {
 
     },
@@ -229,10 +559,22 @@
     "İzin ver…" : {
 
     },
+    "Şifreler gösterilmez" : {
+
+    },
     "Şunu duydum: %@" : {
 
     },
+    "“Dia’yı aç, sonra maç saati arat” ya da “Spotify’da Tarkan çal” gibi komutları Optik Claude’a sormadan yapar. Uygulama açmak ve tarayıcıda aramak izinsiz çalışır; Spotify’da çal düğmesine basmak gibi tıklamalar için Erişilebilirlik izni gerekir." : {
+
+    },
+    "“Optik” diye seslenince çık" : {
+
+    },
     "⌘ ⌘ ile çağır" : {
+
+    },
+    "⏎ gönder" : {
 
     }
   },

@@ -15,6 +15,8 @@ public enum Mood: String, CaseIterable, Sendable, Hashable {
     case celebrating = "kutlama"
     /// uykulu: day closed, island idle
     case sleepy = "uykulu"
+    /// soru: Optik asked something and waits for the answer
+    case asking = "soru"
 
     /// The sound effect played when Optik switches to this mood.
     public var sound: SoundEffect {
@@ -26,6 +28,8 @@ public enum Mood: String, CaseIterable, Sendable, Hashable {
         case .alert: .uyari
         case .celebrating: .kutlama
         case .sleepy: .uykulu
+        // No sound of its own: asking is a way of listening.
+        case .asking: .dinliyor
         }
     }
 
